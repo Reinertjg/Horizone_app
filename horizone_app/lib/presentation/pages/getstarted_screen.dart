@@ -97,7 +97,12 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                             children: [
                               Center(
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/profileSetUp'
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xff003566),
                                     padding: EdgeInsets.symmetric(horizontal: 52),
