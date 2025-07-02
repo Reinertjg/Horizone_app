@@ -7,22 +7,33 @@ class ProfileSetUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF6F1EB),
-      body: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.arrow_back, color: Color(0xff003566), size: 30,),
-                  Expanded(child: Text('Profile', style: TextStyle(color: Color(0xffFF914D), fontSize: 28, fontWeight: FontWeight.bold),)),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40.0, left: 12.0, right: 12.0),
+            child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(onPressed: (){
+                        Navigator.pushNamed(context, '/getStarted');
+                      }, icon: Icon(Icons.arrow_back, color: Color(0xff003566), size: 30),)
+                    ),
+                    Center(
+                      child: Text(
+                        'Profile',
+                        style: TextStyle(
+                          color: Color(0xffFF914D),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+          ),
+        ],
       ),
     );
   }
