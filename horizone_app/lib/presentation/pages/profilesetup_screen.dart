@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../generated/l10n.dart';
+
 class ProfileSetUpScreen extends StatefulWidget {
   const ProfileSetUpScreen({super.key});
 
@@ -8,7 +10,6 @@ class ProfileSetUpScreen extends StatefulWidget {
 }
 
 class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
-  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
         actionsIconTheme: IconThemeData(size: 30),
         centerTitle: true,
         title: Text(
-          'Profile',
+          S.of(context).profile,
           style: TextStyle(
             color: Color(0xffFF914D),
             fontSize: 28,
@@ -59,29 +60,30 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
                         children: [
                           TextSpan(text: 'Tell Us '),
                           TextSpan(
-                            text: 'Who You Are \n',
+                            text: 'Who You Are ',
                             style: TextStyle(color: Color(0xff003566)),
                           ),
                           TextSpan(
-                            text: 'And We\'ll Take You Where \nYou Want to Be',
+                            text: '\nAnd We\'ll Take You Where \nYou Want to Be',
+                              style: TextStyle(overflow: TextOverflow.ellipsis),
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 18),
-                    OrangeTextForm(nameButton: 'Name'),
+                    OrangeTextForm(nameButton: S.of(context).name),
                     SizedBox(height: 18),
                     OrangeTextBoxForm(
-                      nameButton: 'Bio',
+                      nameButton: S.of(context).bio,
                       hintText:
-                          'I am a Flutter developer at Lince Tech, creating fast and elegant mobile apps.',
+                          S.of(context).bioDescription,
                     ),
                     SizedBox(height: 18),
-                    OrangeTextForm(nameButton: 'Date'),
+                    OrangeTextForm(nameButton: S.of(context).date,),
                     SizedBox(height: 18),
-                    OrangeTextForm(nameButton: 'Gender'),
+                    OrangeTextForm(nameButton: S.of(context).gender,),
                     SizedBox(height: 18),
-                    OrangeTextForm(nameButton: 'Job Title'),
+                    OrangeTextForm(nameButton: S.of(context).jobTitle,),
                     SizedBox(height: 100),
                     ElevatedButton(
                       onPressed: () {
@@ -95,7 +97,7 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
                         ),
                       ),
                       child: Text(
-                        'Continue',
+                        S.of(context).continueButton,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -117,7 +119,7 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
 class OrangeTextForm extends StatelessWidget {
   OrangeTextForm({required this.nameButton, super.key});
 
-  String nameButton = 'Click Me';
+  String nameButton = 'Click me';
 
   @override
   Widget build(BuildContext context) {

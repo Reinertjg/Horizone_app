@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../generated/l10n.dart';
+
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
 
@@ -109,7 +111,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
                               child: Text(
-                                'Ready to explore beyond boundaries?',
+                                S.of(context).readyExplore,
                                 style: TextStyle(
                                   fontSize: 32,
                                   color: Color(0xff003566),
@@ -137,7 +139,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                       ),
                                     ),
                                     child: Text(
-                                      'Your Journey Starts Here',
+                                      S.of(context).startJourney,
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
@@ -165,5 +167,18 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
         ),
       ),
     );
+  }
+}
+
+String getLanguageName(Locale locale) {
+  switch (locale.languageCode) {
+    case 'en':
+      return 'English';
+    case 'pt':
+      return 'Português';
+    case 'es':
+      return 'Español';
+    default:
+      return 'Unknown';
   }
 }

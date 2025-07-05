@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:horizone_app/generated/l10n.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -25,8 +26,7 @@ class SplashScreen extends StatelessWidget {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
-                child: Text(
-                  'EXPLORE NOVOS HORIZONTES',
+                child: Text(S.of(context).newHorizons,
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.white,
