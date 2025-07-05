@@ -1,0 +1,14 @@
+{
+  "newHorizons": "EXPLORA NUEVOS HORIZONTES",
+  "readyExplore": "¿Listo para explorar más allá de los límites?",
+  "startJourney": "Tu Viaje Comienza Aquí",
+  "profile": "Perfil",
+  "name": "Nombre",
+  "bio": "Biografía",
+  "bioDescription": "Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.",
+  "date": "Fecha",
+  "gender": "Género",
+  "jobTitle": "Título Profesional",
+  "introMessage": "Cuéntanos quién eres y te llevaremos a donde quieras estar",
+  "continueButton": "Continuar"
+}
