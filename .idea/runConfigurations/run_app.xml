@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run_app" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/horizone_app/lib/app/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
