@@ -28,15 +28,41 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.all(30.0),
+                    padding: const EdgeInsets.only(top: 30.0, right: 10.0),
                     child: DropdownButton<String>(
                       value: selectedLanguage,
                       underline: SizedBox(),
-                      icon: Icon(Icons.arrow_drop_down, size: 22, color: Colors.white,),
-                      style: TextStyle(
+                      selectedItemBuilder: (_) {
+                        return [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              selectedLanguage,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              selectedLanguage,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              selectedLanguage,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ];
+                      },
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        size: 22,
                         color: Colors.white,
-                        fontSize: 16,
                       ),
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                       dropdownColor: Color(0xff003566),
                       items: ['English', 'Português', 'Español'].map((lang) {
                         return DropdownMenuItem(
@@ -49,7 +75,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           selectedLanguage = value!;
                         });
                       },
-                    )
+                    ),
                   ),
                 ),
                 Align(
@@ -80,7 +106,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context). size.width * 0.8,
+                            width: MediaQuery.of(context).size.width * 0.8,
                             child: Text(
                               'Ready to explore beyond boundaries?',
                               style: TextStyle(
@@ -100,34 +126,35 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                       context,
-                                      '/profileSetUp'
+                                      '/profileSetUp',
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xff003566),
-                                    padding: EdgeInsets.symmetric(horizontal: 52),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 52,
+                                    ),
                                   ),
                                   child: Text(
-                                      'Your Journey Starts Here',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    'Your Journey Starts Here',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
                               Icon(
-                                  Icons.airplanemode_on_outlined,
-                                  color: Color(0xff003566),
+                                Icons.airplanemode_on_outlined,
+                                color: Color(0xff003566),
                                 size: 26,
-                              )
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    )
-
+                    ),
                   ),
                 ),
               ],
