@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../state/locale_provider.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
@@ -10,7 +12,7 @@ class GetStartedScreen extends StatefulWidget {
 }
 
 class _GetStartedScreenState extends State<GetStartedScreen> {
-  var selectedLanguage = 'English';
+  var selectedLanguage = "Português";
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     alignment: Alignment.topRight,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 30.0, right: 10.0),
-                      child: DropdownButton<String>(
-                        value: selectedLanguage,
+                      child: DropdownButton<Locale>(
+                        value: Provider.of<LocaleProvider>(context).locale,
                         underline: SizedBox(),
                         selectedItemBuilder: (_) {
                           return [
@@ -67,17 +69,28 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                         ),
                         style: TextStyle(color: Colors.white, fontSize: 16),
                         dropdownColor: Color(0xff003566),
-                        items: ['English', 'Português', 'Español'].map((lang) {
-                          return DropdownMenuItem(
-                            value: lang,
-                            child: Text(lang),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedLanguage = value!;
-                          });
+                        onChanged: (Locale? newLocale) {
+                          if (newLocale != null) {
+                            Provider.of<LocaleProvider>(context, listen: false).setLocale(newLocale);
+                            setState(() {
+                              selectedLanguage = getLanguageName(newLocale);
+                            });
+                          }
                         },
+                        items: const [
+                          DropdownMenuItem(
+                            value: Locale('en'),
+                            child: Text('English'),
+                          ),
+                          DropdownMenuItem(
+                            value: Locale('pt'),
+                            child: Text('Português'),
+                          ),
+                          DropdownMenuItem(
+                            value: Locale('es'),
+                            child: Text('Español'),
+                          ),
+                        ],
                       ),
                     ),
                   ),
