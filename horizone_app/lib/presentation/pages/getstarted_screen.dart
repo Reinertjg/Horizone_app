@@ -12,10 +12,11 @@ class GetStartedScreen extends StatefulWidget {
 }
 
 class _GetStartedScreenState extends State<GetStartedScreen> {
-  var selectedLanguage = "Português";
 
   @override
   Widget build(BuildContext context) {
+    var selectedLanguage = getLanguageName(Provider.of<LocaleProvider>(context).locale!);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
