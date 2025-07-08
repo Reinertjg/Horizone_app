@@ -109,9 +109,14 @@ class S {
     );
   }
 
-  /// `Date`
-  String get date {
-    return Intl.message('Date', name: 'date', desc: '', args: []);
+  /// `Date of birth`
+  String get dateOfBirth {
+    return Intl.message(
+      'Date of birth',
+      name: 'dateOfBirth',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Gender`
@@ -139,13 +144,23 @@ class S {
     return Intl.message('Continue', name: 'continueButton', desc: '', args: []);
   }
 
-  /// `Tell Us {highlight1}\nAnd We'll Take You Where \nYou Want to Be`
-  String introText(Object highlight1) {
+  /// `Tell us `
+  String get tellUs {
+    return Intl.message('Tell us ', name: 'tellUs', desc: '', args: []);
+  }
+
+  /// `Who you are`
+  String get whoYouAre {
+    return Intl.message('Who you are', name: 'whoYouAre', desc: '', args: []);
+  }
+
+  /// `\nAnd we'll take you where \nyou want to be`
+  String get andWellTake {
     return Intl.message(
-      'Tell Us $highlight1\nAnd We\'ll Take You Where \nYou Want to Be',
-      name: 'introText',
-      desc: 'Introductory message with highlighted part',
-      args: [highlight1],
+      '\nAnd we\'ll take you where \nyou want to be',
+      name: 'andWellTake',
+      desc: '',
+      args: [],
     );
   }
 }

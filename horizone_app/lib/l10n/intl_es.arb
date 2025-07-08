@@ -6,9 +6,12 @@
   "name": "Nombre",
   "bio": "Biografía",
   "bioDescription": "Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.",
-  "date": "Fecha",
+  "dateOfBirth": "Fecha de nacimiento",
   "gender": "Género",
   "jobTitle": "Título Profesional",
   "introMessage": "Cuéntanos quién eres y te llevaremos a donde quieras estar",
-  "continueButton": "Continuar"
+  "continueButton": "Continuar",
+  "tellUs": "Cuéntanos ",
+  "whoYouAre": "Quién eres",
+  "andWellTake": "\nY te llevaremos a donde \nquieras estar"
 }

@@ -20,22 +20,21 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(highlight1) =>
-      "Tell Us ${highlight1}\nAnd We\'ll Take You Where \nYou Want to Be";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "andWellTake": MessageLookupByLibrary.simpleMessage(
+      "\nAnd we\'ll take you where \nyou want to be",
+    ),
     "bio": MessageLookupByLibrary.simpleMessage("Biography"),
     "bioDescription": MessageLookupByLibrary.simpleMessage(
       "Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.",
     ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continue"),
-    "date": MessageLookupByLibrary.simpleMessage("Date"),
+    "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Tell us who you are and we\'ll take you where you want to be",
     ),
-    "introText": m0,
     "jobTitle": MessageLookupByLibrary.simpleMessage("Job Title"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
@@ -46,5 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "startJourney": MessageLookupByLibrary.simpleMessage(
       "Your Journey Starts Here",
     ),
+    "tellUs": MessageLookupByLibrary.simpleMessage("Tell us "),
+    "whoYouAre": MessageLookupByLibrary.simpleMessage("Who you are"),
   };
 }

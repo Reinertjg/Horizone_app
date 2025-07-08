@@ -22,12 +22,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "andWellTake": MessageLookupByLibrary.simpleMessage(
+      "\nY te llevaremos a donde \nquieras estar",
+    ),
     "bio": MessageLookupByLibrary.simpleMessage("Biografía"),
     "bioDescription": MessageLookupByLibrary.simpleMessage(
       "Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.",
     ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continuar"),
-    "date": MessageLookupByLibrary.simpleMessage("Fecha"),
+    "dateOfBirth": MessageLookupByLibrary.simpleMessage("Fecha de nacimiento"),
     "gender": MessageLookupByLibrary.simpleMessage("Género"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Cuéntanos quién eres y te llevaremos a donde quieras estar",
@@ -44,5 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "startJourney": MessageLookupByLibrary.simpleMessage(
       "Tu Viaje Comienza Aquí",
     ),
+    "tellUs": MessageLookupByLibrary.simpleMessage("Cuéntanos "),
+    "whoYouAre": MessageLookupByLibrary.simpleMessage("Quién eres"),
   };
 }
