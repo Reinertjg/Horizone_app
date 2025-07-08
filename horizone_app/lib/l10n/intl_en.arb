@@ -1,0 +1,25 @@
+{
+  "newHorizons": "EXPLORE NEW HORIZONS",
+  "readyExplore": "Ready to explore beyond boundaries?",
+  "startJourney": "Your Journey Starts Here",
+  "profile": "Profile",
+  "name": "Name",
+  "bio": "Biography",
+  "bioDescription": "Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.",
+  "date": "Date",
+  "gender": "Gender",
+  "jobTitle": "Job Title",
+  "introMessage": "Tell us who you are and we'll take you where you want to be",
+  "continueButton": "Continue",
+  "introText": "Tell Us {highlight1}\nAnd We'll Take You Where \nYou Want to Be",
+  "@introText": {
+    "description": "Introductory message with highlighted part",
+    "placeholders": {
+      "highlight1": {
+        "example": "Who You Are"
+      }
+    }
+  }
+}
+
+
