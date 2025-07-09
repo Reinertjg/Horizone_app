@@ -50,20 +50,21 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
                         tellUs: S.of(context).tellUs,
                         whoYouAre: S.of(context).whoYouAre,
                         andWellTake: S.of(context).andWellTake,
-                      ),
-                      SizedBox(height: 24),
-                      OrangeTextForm(nameButton: S.of(context).name),
+                      ), SizedBox(height: 24),
+                      OrangeTextForm(nameButton: S.of(context).name, icon: Icon(Icons.person)),
                       SizedBox(height: 18),
                       OrangeTextBoxForm(
                         nameButton: S.of(context).bio,
                         hintText: S.of(context).bioDescription,
                       ),
                       SizedBox(height: 18),
-                      DatePickerTextFormField(nameButton: S.of(context).dateOfBirth),
+                      DatePickerTextFormField(
+                        nameButton: S.of(context).dateOfBirth,
+                      ),
                       SizedBox(height: 18),
-                      OrangeTextForm(nameButton: S.of(context).gender),
+                      OrangeTextForm(nameButton: S.of(context).gender, icon: Icon(Icons.person_outline)),
                       SizedBox(height: 18),
-                      OrangeTextForm(nameButton: S.of(context).jobTitle),
+                      OrangeTextForm(nameButton: S.of(context).jobTitle, icon: Icon(Icons.work_outline)),
                     ],
                   ),
                 ),
@@ -85,9 +86,10 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
 
 // This widget is a text form field with an orange border and label.
 class OrangeTextForm extends StatelessWidget {
-  const OrangeTextForm({required this.nameButton, super.key});
+  const OrangeTextForm({required this.nameButton, required this.icon, super.key});
 
   final String nameButton;
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +97,7 @@ class OrangeTextForm extends StatelessWidget {
       decoration: InputDecoration(
         labelText: nameButton,
         labelStyle: TextStyle(color: Color(0xff020101)),
+        prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: icon),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Color(0xffFF914D)),
@@ -147,8 +150,6 @@ class OrangeTextBoxForm extends StatelessWidget {
 
 class DatePickerTextFormField extends StatefulWidget {
   DatePickerTextFormField({required this.nameButton, super.key}) {
-    // TODO: implement DatePickerTextFormField
-    throw UnimplementedError();
   }
 
   final String nameButton;
@@ -197,7 +198,7 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
                   : widget.nameButton,
               style: TextStyle(color: Color(0xff020101), fontSize: 16),
             ),
-            Icon(Icons.date_range_outlined,)
+            Icon(Icons.date_range_outlined),
           ],
         ),
       ),
@@ -208,7 +209,11 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
 
 // This widget is a button that navigates to the next screen when pressed.
 class ContinueButton extends StatelessWidget {
-  const ContinueButton({required this.title, required this.pathRoute, super.key});
+  const ContinueButton({
+    required this.title,
+    required this.pathRoute,
+    super.key,
+  });
 
   final String title;
   final String pathRoute;
@@ -265,48 +270,6 @@ class ProfileInfoText extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _DatePickerExampleState extends StatefulWidget {
-  @override
-  State<_DatePickerExampleState> createState() =>
-      _DatePickerExampleStateState();
-}
-
-class _DatePickerExampleStateState extends State<_DatePickerExampleState> {
-  DateTime? selectedDate;
-
-  Future<void> _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2021, 7, 25),
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2022),
-    );
-
-    setState(() {
-      selectedDate = pickedDate;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: 20,
-      children: <Widget>[
-        Text(
-          selectedDate != null
-              ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
-              : 'No date selected',
-        ),
-        OutlinedButton(
-          onPressed: _selectDate,
-          child: const Text('Select Date'),
-        ),
-      ],
     );
   }
 }
