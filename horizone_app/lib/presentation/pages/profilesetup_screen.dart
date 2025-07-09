@@ -51,20 +51,21 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
                         whoYouAre: S.of(context).whoYouAre,
                         andWellTake: S.of(context).andWellTake,
                       ), SizedBox(height: 24),
-                      OrangeTextForm(nameButton: S.of(context).name, icon: Icon(Icons.person)),
+                      OrangeTextForm(nameButton: S.of(context).name, icon: Icons.person,),
                       SizedBox(height: 18),
                       OrangeTextBoxForm(
                         nameButton: S.of(context).bio,
                         hintText: S.of(context).bioDescription,
+                        icon: Icons.info_outline,
                       ),
                       SizedBox(height: 18),
                       DatePickerTextFormField(
                         nameButton: S.of(context).dateOfBirth,
                       ),
                       SizedBox(height: 18),
-                      OrangeTextForm(nameButton: S.of(context).gender, icon: Icon(Icons.person_outline)),
+                      OrangeTextForm(nameButton: S.of(context).gender, icon: Icons.person_outline,),
                       SizedBox(height: 18),
-                      OrangeTextForm(nameButton: S.of(context).jobTitle, icon: Icon(Icons.work_outline)),
+                      OrangeTextForm(nameButton: S.of(context).jobTitle, icon: Icons.work_outline),
                     ],
                   ),
                 ),
@@ -89,7 +90,7 @@ class OrangeTextForm extends StatelessWidget {
   const OrangeTextForm({required this.nameButton, required this.icon, super.key});
 
   final String nameButton;
-  final Icon icon;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,7 @@ class OrangeTextForm extends StatelessWidget {
       decoration: InputDecoration(
         labelText: nameButton,
         labelStyle: TextStyle(color: Color(0xff020101)),
-        prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: icon),
+        prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(icon, size: 20, color: Color(0xffFF914D),)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Color(0xffFF914D)),
@@ -116,24 +117,27 @@ class OrangeTextBoxForm extends StatelessWidget {
   const OrangeTextBoxForm({
     required this.hintText,
     required this.nameButton,
+    required this.icon,
     super.key,
   });
 
   final String nameButton;
   final String hintText;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 125, //     <-- TextField expands to this height.
+      height: 125,
       child: TextFormField(
-        maxLines: null, // Set this
-        expands: true, // and this
+        maxLines: null,
+        expands: true,
         keyboardType: TextInputType.multiline,
         decoration: InputDecoration(
           labelText: nameButton,
           hintText: hintText,
           labelStyle: TextStyle(color: Color(0xff020101)),
+          prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(icon, size: 20, color: Color(0xffFF914D),)),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Color(0xffFF914D)),
@@ -149,8 +153,7 @@ class OrangeTextBoxForm extends StatelessWidget {
 }
 
 class DatePickerTextFormField extends StatefulWidget {
-  DatePickerTextFormField({required this.nameButton, super.key}) {
-  }
+  const DatePickerTextFormField({required this.nameButton, super.key});
 
   final String nameButton;
 
@@ -164,6 +167,17 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
 
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Color(0xffFF914D),
+            hintColor: Color(0xffFF914D),
+            colorScheme: ColorScheme.light(primary: Color(0xffFF914D)),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
       context: context,
       initialDate: selectedDate != null
           ? selectedDate!
@@ -188,17 +202,18 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
           color: Colors.transparent,
         ),
         alignment: Alignment.centerLeft,
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 7),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Icon(Icons.date_range_outlined, size: 20, color: Color(0xffFF914D),),
+            SizedBox(width: 10),
             Text(
               selectedDate != null
                   ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
                   : widget.nameButton,
               style: TextStyle(color: Color(0xff020101), fontSize: 16),
             ),
-            Icon(Icons.date_range_outlined),
           ],
         ),
       ),
