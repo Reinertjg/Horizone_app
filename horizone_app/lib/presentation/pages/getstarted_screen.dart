@@ -123,7 +123,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               child: Text(
                                 S.of(context).readyExplore,
                                 style: TextStyle(
@@ -149,7 +149,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xff003566),
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: 52,
+                                        horizontal: 52, vertical: 16
                                       ),
                                     ),
                                     child: Text(
