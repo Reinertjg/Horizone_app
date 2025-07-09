@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "bio": MessageLookupByLibrary.simpleMessage("Biography"),
     "bioDescription": MessageLookupByLibrary.simpleMessage(
-      "Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.",
+      "I\'m a Flutter developer at Lince Tech, building fast and elegant mobile apps.",
     ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continue"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of birth"),

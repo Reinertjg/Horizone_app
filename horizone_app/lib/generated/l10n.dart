@@ -99,10 +99,10 @@ class S {
     return Intl.message('Biography', name: 'bio', desc: '', args: []);
   }
 
-  /// `Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.`
+  /// `I'm a Flutter developer at Lince Tech, building fast and elegant mobile apps.`
   String get bioDescription {
     return Intl.message(
-      'Soy desarrollador Flutter en Lince Tech, creando aplicaciones móviles rápidas y elegantes.',
+      'I\'m a Flutter developer at Lince Tech, building fast and elegant mobile apps.',
       name: 'bioDescription',
       desc: '',
       args: [],
