@@ -10,7 +10,6 @@ class ProfileSetUpScreen extends StatefulWidget {
 }
 
 class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,89 +36,58 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
       ),
 
       backgroundColor: Color(0xffF6F1EB),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 50,
-                  right: 35,
-                  bottom: 35,
-                  left: 35,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xffFF914D),
-                        ),
-                        children: [
-                          TextSpan(text: 'Tell Us '),
-                          TextSpan(
-                            text: 'Who You Are ',
-                            style: TextStyle(color: Color(0xff003566)),
-                          ),
-                          TextSpan(
-                            text: '\nAnd We\'ll Take You Where \nYou Want to Be',
-                              style: TextStyle(overflow: TextOverflow.ellipsis),
-                          ),
-                        ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(22.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ProfileInfoText(
+                        tellUs: S.of(context).tellUs,
+                        whoYouAre: S.of(context).whoYouAre,
+                        andWellTake: S.of(context).andWellTake,
                       ),
-                    ),
-                    SizedBox(height: 18),
-                    OrangeTextForm(nameButton: S.of(context).name),
-                    SizedBox(height: 18),
-                    OrangeTextBoxForm(
-                      nameButton: S.of(context).bio,
-                      hintText:
-                          S.of(context).bioDescription,
-                    ),
-                    SizedBox(height: 18),
-                    OrangeTextForm(nameButton: S.of(context).date,),
-                    SizedBox(height: 18),
-                    OrangeTextForm(nameButton: S.of(context).gender,),
-                    SizedBox(height: 18),
-                    OrangeTextForm(nameButton: S.of(context).jobTitle,),
-                    SizedBox(height: 100),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/getStarted');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff003566),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 52,
-                          vertical: 16,
-                        ),
+                      SizedBox(height: 24),
+                      OrangeTextForm(nameButton: S.of(context).name),
+                      SizedBox(height: 18),
+                      OrangeTextBoxForm(
+                        nameButton: S.of(context).bio,
+                        hintText: S.of(context).bioDescription,
                       ),
-                      child: Text(
-                        S.of(context).continueButton,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                      SizedBox(height: 18),
+                      DatePickerTextFormField(nameButton: S.of(context).dateOfBirth),
+                      SizedBox(height: 18),
+                      OrangeTextForm(nameButton: S.of(context).gender),
+                      SizedBox(height: 18),
+                      OrangeTextForm(nameButton: S.of(context).jobTitle),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(22),
+        child: ContinueButton(
+          title: S.of(context).continueButton,
+          pathRoute: "/getStarted",
         ),
       ),
     );
   }
 }
 
+// This widget is a text form field with an orange border and label.
 class OrangeTextForm extends StatelessWidget {
-  OrangeTextForm({required this.nameButton, super.key});
+  const OrangeTextForm({required this.nameButton, super.key});
 
-  String nameButton = 'Click me';
+  final String nameButton;
 
   @override
   Widget build(BuildContext context) {
@@ -140,15 +108,16 @@ class OrangeTextForm extends StatelessWidget {
   }
 }
 
+// This widget is a text box that allows multiline input with a hint text.
 class OrangeTextBoxForm extends StatelessWidget {
-  OrangeTextBoxForm({
+  const OrangeTextBoxForm({
     required this.hintText,
     required this.nameButton,
     super.key,
   });
 
-  String nameButton = 'Click me';
-  String hintText = 'Hint Text';
+  final String nameButton;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +130,7 @@ class OrangeTextBoxForm extends StatelessWidget {
         decoration: InputDecoration(
           labelText: nameButton,
           hintText: hintText,
-          labelStyle: TextStyle(color: Color(0xff020101), ),
+          labelStyle: TextStyle(color: Color(0xff020101)),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Color(0xffFF914D)),
@@ -172,6 +141,172 @@ class OrangeTextBoxForm extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DatePickerTextFormField extends StatefulWidget {
+  DatePickerTextFormField({required this.nameButton, super.key}) {
+    // TODO: implement DatePickerTextFormField
+    throw UnimplementedError();
+  }
+
+  final String nameButton;
+
+  @override
+  State<DatePickerTextFormField> createState() =>
+      _DatePickerTextFormFieldState();
+}
+
+class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
+  DateTime? selectedDate;
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate != null
+          ? selectedDate!
+          : DateTime.now().subtract(Duration(days: 365 * 18)),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().subtract(Duration(days: 365 * 18)),
+    );
+
+    setState(() {
+      selectedDate = pickedDate;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Color(0xffFF914D)),
+          color: Colors.transparent,
+        ),
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              selectedDate != null
+                  ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
+                  : widget.nameButton,
+              style: TextStyle(color: Color(0xff020101), fontSize: 16),
+            ),
+            Icon(Icons.date_range_outlined,)
+          ],
+        ),
+      ),
+      onTap: () => {_selectDate()},
+    );
+  }
+}
+
+// This widget is a button that navigates to the next screen when pressed.
+class ContinueButton extends StatelessWidget {
+  const ContinueButton({required this.title, required this.pathRoute, super.key});
+
+  final String title;
+  final String pathRoute;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0xff003566),
+        padding: EdgeInsets.symmetric(horizontal: 52, vertical: 16),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+// This widget displays the introductory text on the Profile Setup screen.
+class ProfileInfoText extends StatelessWidget {
+  const ProfileInfoText({
+    required this.tellUs,
+    required this.whoYouAre,
+    required this.andWellTake,
+    super.key,
+  });
+
+  final String tellUs;
+  final String whoYouAre;
+  final String andWellTake;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(fontSize: 16, color: Color(0xffFF914D)),
+        children: [
+          TextSpan(text: tellUs),
+          TextSpan(
+            text: whoYouAre,
+            style: TextStyle(color: Color(0xff003566)),
+          ),
+          TextSpan(
+            text: andWellTake,
+            style: TextStyle(overflow: TextOverflow.ellipsis),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DatePickerExampleState extends StatefulWidget {
+  @override
+  State<_DatePickerExampleState> createState() =>
+      _DatePickerExampleStateState();
+}
+
+class _DatePickerExampleStateState extends State<_DatePickerExampleState> {
+  DateTime? selectedDate;
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2021, 7, 25),
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2022),
+    );
+
+    setState(() {
+      selectedDate = pickedDate;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 20,
+      children: <Widget>[
+        Text(
+          selectedDate != null
+              ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
+              : 'No date selected',
+        ),
+        OutlinedButton(
+          onPressed: _selectDate,
+          child: const Text('Select Date'),
+        ),
+      ],
     );
   }
 }
