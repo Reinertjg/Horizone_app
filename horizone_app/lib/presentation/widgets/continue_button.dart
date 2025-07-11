@@ -18,7 +18,7 @@ class ContinueButton extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).primaryColor,
-        padding: const EdgeInsets.symmetric(horizontal: 52, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 52, vertical: 12),
       ),
       child: Text(
         title,
