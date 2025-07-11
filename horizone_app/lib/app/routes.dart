@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../generated/l10n.dart';
 import '../presentation/app_theme.dart';
+import '../presentation/pages/dashboard_screen.dart';
 import '../presentation/pages/splash_screen.dart';
 import '../presentation/state/locale_provider.dart';
 import '../presentation/state/theme_provider.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/getStarted': (context) => const GetStartedScreen(),
         '/profileSetUp': (context) => const ProfileSetUpScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
       },
     );
   }
