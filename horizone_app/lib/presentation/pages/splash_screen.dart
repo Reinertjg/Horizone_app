@@ -7,7 +7,9 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/getStarted');
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, '/getStarted');
+      }
     });
     return Scaffold(
       backgroundColor: Color(0xff003566),

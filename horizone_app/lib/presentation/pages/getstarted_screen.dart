@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import '../../generated/l10n.dart';
 import '../state/locale_provider.dart';
 
-import '../../generated/l10n.dart';
-
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
 
