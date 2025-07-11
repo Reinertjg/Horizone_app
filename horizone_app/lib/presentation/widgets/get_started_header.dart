@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../generated/l10n.dart';
 import '../state/locale_provider.dart';
 
 class GetStartedHeader extends StatelessWidget {

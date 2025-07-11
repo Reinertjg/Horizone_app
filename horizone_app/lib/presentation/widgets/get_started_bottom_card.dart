@@ -28,7 +28,7 @@ class GetStartedBottomCard extends StatelessWidget {
                 child: Text(
                   S.of(context).readyExplore,
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: MediaQuery.of(context).size.width * 0.07,
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -46,7 +46,7 @@ class GetStartedBottomCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 52, vertical: 16),
+                          horizontal: 52, vertical: 12),
                     ),
                     child: Text(
                       S.of(context).startJourney,
