@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../state/theme_provider.dart';
 
 class ProfileSetUpScreen extends StatefulWidget {
   const ProfileSetUpScreen({super.key});
@@ -14,15 +16,15 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffF6F1EB),
-        foregroundColor: Color(0xff003566),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).primaryColor,
 
         actionsIconTheme: IconThemeData(size: 30),
         centerTitle: true,
         title: Text(
           S.of(context).profile,
           style: TextStyle(
-            color: Color(0xffFF914D),
+            color: Theme.of(context).hintColor,
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
@@ -33,9 +35,17 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
             Navigator.pushNamed(context, '/getStarted'); // Default back action
           },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+                themeProvider.toggleTheme(!themeProvider.isDarkMode);
+              },
+              icon: Icon(Icons.light_mode))
+        ],
       ),
 
-      backgroundColor: Color(0xffF6F1EB),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -95,17 +105,18 @@ class OrangeTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(color: Theme.of(context).primaryColor),
       decoration: InputDecoration(
         labelText: nameButton,
-        labelStyle: TextStyle(color: Color(0xff020101)),
-        prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(icon, size: 20, color: Color(0xffFF914D),)),
+        labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+        prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(icon, size: 20, color: Theme.of(context).hintColor,)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Color(0xffFF914D)),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Color(0xffFF914D)),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
         ),
       ),
     );
@@ -133,18 +144,20 @@ class OrangeTextBoxForm extends StatelessWidget {
         maxLines: null,
         expands: true,
         keyboardType: TextInputType.multiline,
+        style: TextStyle(color: Theme.of(context).primaryColor),
         decoration: InputDecoration(
           labelText: nameButton,
           hintText: hintText,
-          labelStyle: TextStyle(color: Color(0xff020101)),
-          prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(icon, size: 20, color: Color(0xffFF914D),)),
+          labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+          hintStyle: TextStyle(color: Theme.of(context).primaryColor.withOpacity(0.5) ),
+          prefixIcon: Align(widthFactor: 1.0, heightFactor: 1.0, child: Icon(icon, size: 20, color: Theme.of(context).hintColor,)),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Color(0xffFF914D)),
+            borderSide: BorderSide(color: Theme.of(context).hintColor),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Color(0xffFF914D)),
+            borderSide: BorderSide(color: Theme.of(context).hintColor),
           ),
         ),
       ),
@@ -170,9 +183,9 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: Color(0xffFF914D),
-            hintColor: Color(0xffFF914D),
-            colorScheme: ColorScheme.light(primary: Color(0xffFF914D)),
+            primaryColor: Theme.of(context).hintColor,
+            hintColor: Theme.of(context).primaryColor,
+            colorScheme: ColorScheme.light(primary: Theme.of(context).hintColor),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
@@ -198,7 +211,7 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
         height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Color(0xffFF914D)),
+          border: Border.all(color: Theme.of(context).hintColor),
           color: Colors.transparent,
         ),
         alignment: Alignment.centerLeft,
@@ -206,13 +219,13 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.date_range_outlined, size: 20, color: Color(0xffFF914D),),
+            Icon(Icons.date_range_outlined, size: 20, color: Theme.of(context).hintColor,),
             SizedBox(width: 10),
             Text(
               selectedDate != null
                   ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
                   : widget.nameButton,
-              style: TextStyle(color: Color(0xff020101), fontSize: 16),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
             ),
           ],
         ),
@@ -240,14 +253,14 @@ class ContinueButton extends StatelessWidget {
         Navigator.pop(context);
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xff003566),
+        backgroundColor: Theme.of(context).primaryColor,
         padding: EdgeInsets.symmetric(horizontal: 52, vertical: 16),
       ),
       child: Text(
         title,
         style: TextStyle(
           fontSize: 16,
-          color: Colors.white,
+          color: Theme.of(context).highlightColor,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -272,12 +285,12 @@ class ProfileInfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        style: TextStyle(fontSize: 16, color: Color(0xffFF914D)),
+        style: TextStyle(fontSize: 16, color: Theme.of(context).hintColor),
         children: [
           TextSpan(text: tellUs),
           TextSpan(
             text: whoYouAre,
-            style: TextStyle(color: Color(0xff003566)),
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           TextSpan(
             text: andWellTake,

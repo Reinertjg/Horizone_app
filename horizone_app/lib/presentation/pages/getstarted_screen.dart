@@ -117,7 +117,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         ),
-                        color: Color(0xffF6F1EB),
+                        color: Theme.of(context).scaffoldBackgroundColor,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -130,7 +130,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                 S.of(context).readyExplore,
                                 style: TextStyle(
                                   fontSize: 32,
-                                  color: Color(0xff003566),
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
@@ -149,7 +149,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xff003566),
+                                      backgroundColor: Theme.of(context).primaryColor,
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 52, vertical: 16
                                       ),
@@ -158,7 +158,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                       S.of(context).startJourney,
                                       style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.white,
+                                        color: Theme.of(context).highlightColor,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -166,7 +166,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                                 ),
                                 Icon(
                                   Icons.airplanemode_on_outlined,
-                                  color: Color(0xff003566),
+                                  color: Theme.of(context).primaryColor,
                                   size: 26,
                                 ),
                               ],
