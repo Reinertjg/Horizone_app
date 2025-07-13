@@ -19,15 +19,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           'Hi, %name%',
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
-        leading: Material(
-          color: Theme.of(context).primaryColor,
-          shape: const CircleBorder(),
-          child: ClipOval(
-            child: Image.network(
-              'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
-              width: 60, // defina uma largura
-              height: 60, // e uma altura iguais
-              fit: BoxFit.cover,
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 28, left: 10.0, bottom: 25.0),
+          child: Material(
+            color: Theme.of(context).primaryColor,
+            shape: const CircleBorder(),
+            child: ClipOval(
+              child: Image.network(
+                'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
