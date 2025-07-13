@@ -9,8 +9,8 @@ class GetStartedBottomCard extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        width: 430,
-        height: 300,
+        width: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * 0.3,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),

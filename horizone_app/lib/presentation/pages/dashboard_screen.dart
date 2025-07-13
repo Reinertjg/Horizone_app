@@ -32,35 +32,198 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         actions: [
-          Row(
-            children: [
-              Material(
-                color: Theme.of(context).primaryColor,
-                shape: CircleBorder(),
-                child: IconButton(
-                  onPressed: () {
-
-                  },
-                  icon: Icon(
-                    Icons.settings,
-                    color: Theme.of(context).highlightColor,
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                Material(
+                  color: Theme.of(context).primaryColor,
+                  shape: CircleBorder(),
+                  child: IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (context) {
+                          return Consumer<ThemeProvider>(
+                            builder: (context, themeProvider, child) {
+                              return Container(
+                                color: Theme.of(
+                                  context,
+                                ).scaffoldBackgroundColor,
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      S.of(context).settings,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ListTile(
+                                      title: Text(
+                                        S.of(context).theme,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      trailing: Icon(
+                                        Icons.arrow_forward,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 20,
+                                      ),
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                S.of(context).selectTheme,
+                                              ),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  ListTile(
+                                                    title: Text(
+                                                      S.of(context).lightTheme,
+                                                    ),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        themeProvider.setTheme(
+                                                          ThemeMode.light,
+                                                        );
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text(
+                                                      S.of(context).darkTheme,
+                                                    ),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        themeProvider.setTheme(
+                                                          ThemeMode.dark,
+                                                        );
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text(
+                                                      S.of(context).systemTheme,
+                                                    ),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        themeProvider.setTheme(
+                                                          ThemeMode.system,
+                                                        );
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                    ListTile(
+                                      title: Text(
+                                        S.of(context).language,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      trailing: Icon(
+                                        Icons.arrow_forward,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 20,
+                                      ),
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                S.of(context).selectLanguage,
+                                              ),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  ListTile(
+                                                    title: Text('English'),
+                                                    onTap: () {
+                                                      localeProvider.setLocale(
+                                                        Locale('en'),
+                                                      );
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('Português'),
+                                                    onTap: () {
+                                                      localeProvider.setLocale(
+                                                        Locale('pt'),
+                                                      );
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('Español'),
+                                                    onTap: () {
+                                                      localeProvider.setLocale(
+                                                        Locale('es'),
+                                                      );
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      Icons.settings,
+                      color: Theme.of(context).highlightColor,
+                    ),
                   ),
                 ),
-              ),
-              Material(
-                color: Theme.of(context).primaryColor,
-                shape: CircleBorder(),
-                child: IconButton(
-                  onPressed: () {
-                    print('Notifications tapped');
-                  },
-                  icon: Icon(
-                    Icons.notifications_none,
-                    color: Theme.of(context).highlightColor,
+                const SizedBox(width: 10),
+                Material(
+                  color: Theme.of(context).primaryColor,
+                  shape: CircleBorder(),
+                  child: IconButton(
+                    onPressed: () {
+                    },
+                    icon: Icon(
+                      Icons.notifications_none,
+                      color: Theme.of(context).highlightColor,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
