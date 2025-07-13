@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../generated/l10n.dart';
+import '../state/locale_provider.dart';
+import '../state/theme_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -10,13 +15,16 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
+        toolbarHeight: 100,
         title: Text(
-          'Hi, %name%',
+          '${S.of(context).welcome}, John Willans',
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         leading: Padding(
@@ -241,10 +249,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        unselectedItemColor: Theme.of(context).hintColor,
+        selectedItemColor: Theme.of(context).hintColor,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home, color: Theme.of(context).primaryColor),
-            label: 'Home',
+            label: S.of(context).home,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           ),
           BottomNavigationBarItem(
@@ -273,16 +283,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onTap: (index) {
           switch (index) {
             case 0:
-              print('Home tapped');
               break;
             case 1:
-              print('Search tapped');
               break;
             case 2:
-              print('Notifications tapped');
               break;
             case 3:
-              print('Profile tapped');
               break;
           }
         },
