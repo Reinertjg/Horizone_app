@@ -30,22 +30,32 @@ class MessageLookup extends MessageLookupByLibrary {
       "I\'m a Flutter developer at Lince Tech, building fast and elegant mobile apps.",
     ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continue"),
+    "darkTheme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
+    "home": MessageLookupByLibrary.simpleMessage("Home"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Tell us who you are and we\'ll take you where you want to be",
     ),
     "jobTitle": MessageLookupByLibrary.simpleMessage("Job Title"),
+    "language": MessageLookupByLibrary.simpleMessage("Language"),
+    "lightTheme": MessageLookupByLibrary.simpleMessage("Light Theme"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "Ready to explore beyond boundaries?",
     ),
+    "selectLanguage": MessageLookupByLibrary.simpleMessage("Select Language"),
+    "selectTheme": MessageLookupByLibrary.simpleMessage("Select Theme"),
+    "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "startJourney": MessageLookupByLibrary.simpleMessage(
       "Your Journey Starts Here",
     ),
+    "systemTheme": MessageLookupByLibrary.simpleMessage("System Theme"),
     "tellUs": MessageLookupByLibrary.simpleMessage("Tell us "),
+    "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+    "welcome": MessageLookupByLibrary.simpleMessage("Hi"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Who you are"),
   };
 }

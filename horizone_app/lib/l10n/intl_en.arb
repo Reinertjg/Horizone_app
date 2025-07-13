@@ -13,7 +13,17 @@
   "continueButton": "Continue",
   "tellUs": "Tell us ",
   "whoYouAre": "Who you are",
-  "andWellTake": "\nAnd we'll take you where \nyou want to be"
+  "andWellTake": "\nAnd we'll take you where \nyou want to be",
+  "welcome": "Hi",
+  "settings": "Settings",
+  "language": "Language",
+  "selectLanguage": "Select Language",
+  "theme": "Theme",
+  "selectTheme": "Select Theme",
+  "lightTheme": "Light Theme",
+  "darkTheme": "Dark Theme",
+  "systemTheme": "System Theme",
+  "home": "Home"
 }
 
 

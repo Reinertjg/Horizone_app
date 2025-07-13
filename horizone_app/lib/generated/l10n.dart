@@ -163,6 +163,71 @@ class S {
       args: [],
     );
   }
+
+  /// `Hi`
+  String get welcome {
+    return Intl.message('Hi', name: 'welcome', desc: '', args: []);
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message('Settings', name: 'settings', desc: '', args: []);
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message('Language', name: 'language', desc: '', args: []);
+  }
+
+  /// `Select Language`
+  String get selectLanguage {
+    return Intl.message(
+      'Select Language',
+      name: 'selectLanguage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Theme`
+  String get theme {
+    return Intl.message('Theme', name: 'theme', desc: '', args: []);
+  }
+
+  /// `Select Theme`
+  String get selectTheme {
+    return Intl.message(
+      'Select Theme',
+      name: 'selectTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light Theme`
+  String get lightTheme {
+    return Intl.message('Light Theme', name: 'lightTheme', desc: '', args: []);
+  }
+
+  /// `Dark Theme`
+  String get darkTheme {
+    return Intl.message('Dark Theme', name: 'darkTheme', desc: '', args: []);
+  }
+
+  /// `System Theme`
+  String get systemTheme {
+    return Intl.message(
+      'System Theme',
+      name: 'systemTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get home {
+    return Intl.message('Home', name: 'home', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

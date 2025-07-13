@@ -13,5 +13,15 @@
   "continueButton": "Continuar",
   "tellUs": "Conte-nos ",
   "whoYouAre": "Quem é você",
-  "andWellTake": "\nE nós te levaremos para onde \nvocê quiser estar"
+  "andWellTake": "\nE nós te levaremos para onde \nvocê quiser estar",
+  "welcome": "Olá",
+  "settings": "Configurações",
+  "language": "Idioma",
+  "selectLanguage": "Selecione o Idioma",
+  "theme": "Tema",
+  "selectTheme": "Selecione o Tema",
+  "lightTheme": "Tema Claro",
+  "darkTheme": "Tema Escuro",
+  "systemTheme": "Tema do Sistema",
+  "home": "Início"
 }

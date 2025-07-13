@@ -30,12 +30,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sou desenvolvedor Flutter na Lince Tech, criando apps móveis rápidos e elegantes.",
     ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continuar"),
+    "darkTheme": MessageLookupByLibrary.simpleMessage("Tema Escuro"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Data de nascimento"),
     "gender": MessageLookupByLibrary.simpleMessage("Gênero"),
+    "home": MessageLookupByLibrary.simpleMessage("Início"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Diga quem você é e nós levaremos você onde quiser estar",
     ),
     "jobTitle": MessageLookupByLibrary.simpleMessage("Cargo"),
+    "language": MessageLookupByLibrary.simpleMessage("Idioma"),
+    "lightTheme": MessageLookupByLibrary.simpleMessage("Tema Claro"),
     "name": MessageLookupByLibrary.simpleMessage("Nome"),
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORE NOVOS HORIZONTES",
@@ -44,10 +48,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "Pronto para explorar além dos limites?",
     ),
+    "selectLanguage": MessageLookupByLibrary.simpleMessage(
+      "Selecione o Idioma",
+    ),
+    "selectTheme": MessageLookupByLibrary.simpleMessage("Selecione o Tema"),
+    "settings": MessageLookupByLibrary.simpleMessage("Configurações"),
     "startJourney": MessageLookupByLibrary.simpleMessage(
       "Sua Jornada Começa Aqui",
     ),
+    "systemTheme": MessageLookupByLibrary.simpleMessage("Tema do Sistema"),
     "tellUs": MessageLookupByLibrary.simpleMessage("Conte-nos "),
+    "theme": MessageLookupByLibrary.simpleMessage("Tema"),
+    "welcome": MessageLookupByLibrary.simpleMessage("Olá"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Quem é você"),
   };
 }
