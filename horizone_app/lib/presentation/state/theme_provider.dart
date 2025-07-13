@@ -18,6 +18,13 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTheme(ThemeMode mode) {
+    if (_themeMode == mode) return;
+    _themeMode = mode;
+    _saveTheme(mode);
+    notifyListeners();
+  }
+
   Future<void> _loadTheme() async {
     final perfs = await SharedPreferences.getInstance();
     final isDarkMode = perfs.getBool('isDarkMode') ?? false;
