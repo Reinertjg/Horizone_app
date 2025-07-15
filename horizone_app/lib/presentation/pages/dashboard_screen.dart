@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
 import '../state/locale_provider.dart';
 import '../state/theme_provider.dart';
@@ -40,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         toolbarHeight: 100,
         title: Text(
-          '${S.of(context).welcome}, John Willans',
+          '${S.of(context).welcome}, ${profiles != null && profiles.isNotEmpty ? profiles[0]['name'] : 'User'}',
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         leading: Padding(
@@ -106,7 +107,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         title: Text(
                                           S.of(context).theme,
                                           style: TextStyle(
-                                            color: Theme.of(context).primaryColor,
+                                            color: Theme.of(
+                                              context,
+                                            ).primaryColor,
                                           ),
                                         ),
                                         trailing: Icon(
@@ -123,17 +126,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   S.of(context).selectTheme,
                                                 ),
                                                 content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     ListTile(
                                                       title: Text(
-                                                        S.of(context).lightTheme,
+                                                        S
+                                                            .of(context)
+                                                            .lightTheme,
                                                       ),
                                                       onTap: () {
                                                         setState(() {
-                                                          themeProvider.setTheme(
-                                                            ThemeMode.light,
-                                                          );
+                                                          themeProvider
+                                                              .setTheme(
+                                                                ThemeMode.light,
+                                                              );
                                                         });
                                                         Navigator.pop(context);
                                                       },
@@ -144,22 +151,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       ),
                                                       onTap: () {
                                                         setState(() {
-                                                          themeProvider.setTheme(
-                                                            ThemeMode.dark,
-                                                          );
+                                                          themeProvider
+                                                              .setTheme(
+                                                                ThemeMode.dark,
+                                                              );
                                                         });
                                                         Navigator.pop(context);
                                                       },
                                                     ),
                                                     ListTile(
                                                       title: Text(
-                                                        S.of(context).systemTheme,
+                                                        S
+                                                            .of(context)
+                                                            .systemTheme,
                                                       ),
                                                       onTap: () {
                                                         setState(() {
-                                                          themeProvider.setTheme(
-                                                            ThemeMode.system,
-                                                          );
+                                                          themeProvider
+                                                              .setTheme(
+                                                                ThemeMode
+                                                                    .system,
+                                                              );
                                                         });
                                                         Navigator.pop(context);
                                                       },
@@ -175,7 +187,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         title: Text(
                                           S.of(context).language,
                                           style: TextStyle(
-                                            color: Theme.of(context).primaryColor,
+                                            color: Theme.of(
+                                              context,
+                                            ).primaryColor,
                                           ),
                                         ),
                                         trailing: Icon(
@@ -192,32 +206,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   S.of(context).selectLanguage,
                                                 ),
                                                 content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     ListTile(
                                                       title: Text('English'),
                                                       onTap: () {
-                                                        localeProvider.setLocale(
-                                                          Locale('en'),
-                                                        );
+                                                        localeProvider
+                                                            .setLocale(
+                                                              Locale('en'),
+                                                            );
                                                         Navigator.pop(context);
                                                       },
                                                     ),
                                                     ListTile(
                                                       title: Text('Português'),
                                                       onTap: () {
-                                                        localeProvider.setLocale(
-                                                          Locale('pt'),
-                                                        );
+                                                        localeProvider
+                                                            .setLocale(
+                                                              Locale('pt'),
+                                                            );
                                                         Navigator.pop(context);
                                                       },
                                                     ),
                                                     ListTile(
                                                       title: Text('Español'),
                                                       onTap: () {
-                                                        localeProvider.setLocale(
-                                                          Locale('es'),
-                                                        );
+                                                        localeProvider
+                                                            .setLocale(
+                                                              Locale('es'),
+                                                            );
                                                         Navigator.pop(context);
                                                       },
                                                     ),
@@ -232,23 +250,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         onPressed: () {
                                           showDialog(
                                             context: context,
-                                            builder: (BuildContext context) => AlertDialog(
-                                              title: const Text('Excluir conta ?'),
-                                              content: const Text('Todos os dados seram apagados permanentemente.'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                                                  child: const Text('Cancelar'),
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                                  title: const Text(
+                                                      'Excluir conta ?'),
+                                                  content: const Text(
+                                                      'Todos os dados seram apagados permanentemente.'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(context,
+                                                              'Cancel'),
+                                                      child: const Text(
+                                                          'Cancelar'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        await profileDao
+                                                            .deleteProfile();
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            '/getStarted');
+                                                      },
+                                                      child: const Text(
+                                                          'Deletar'),
+                                                    ),
+                                                  ],
                                                 ),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    await profileDao.deleteProfile();
-                                                    Navigator.pushNamed(context, '/getStarted');
-                                                  },
-                                                  child: const Text('Deletar'),
-                                                ),
-                                              ],
-                                            ),
                                           );
                                         },
                                         child: Text(
@@ -283,7 +311,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: Theme.of(context).highlightColor,
                       ),
                       onPressed: () {},
-
                     ),
                   ),
                 ),
