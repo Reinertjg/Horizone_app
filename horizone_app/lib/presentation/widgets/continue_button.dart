@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../database/daos/profile_dao.dart';
+
 class ContinueButton extends StatelessWidget {
-  const ContinueButton({
+   ContinueButton({
     required this.title,
     required this.pathRoute,
     super.key,
@@ -9,11 +11,21 @@ class ContinueButton extends StatelessWidget {
 
   final String title;
   final String pathRoute;
+  final profileDao = ProfileDao();
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
+        await profileDao.insertPorfile(
+          {
+            'name': 'John Doe',
+            'biography': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'birthDate': '1990-01-01',
+            'gender': 'Male',
+            'jobTitle': 'Software Engineer'
+          }
+        );
         Navigator.pushReplacementNamed(context, pathRoute);
       },
       style: ElevatedButton.styleFrom(
