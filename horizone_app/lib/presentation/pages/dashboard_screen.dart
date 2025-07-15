@@ -13,6 +13,22 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final profileDao = ProfileDao();
+  var profiles;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarPerfil();
+  }
+
+  Future<void> _carregarPerfil() async {
+    final perfilBuscado = await profileDao.getProfile();
+    setState(() {
+      profiles = perfilBuscado;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
