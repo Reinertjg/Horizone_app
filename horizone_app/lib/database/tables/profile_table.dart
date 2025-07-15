@@ -6,9 +6,9 @@ class ProfileTable {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       biography TEXT UNIQUE NOT NULL,
-      date_of_birth TEXT NOT NULL,
+      birthDate TEXT NOT NULL,
       gender TEXT NOT NULL,
-      job_title TEXT NOT NULL,
+      job_title TEXT NOT NULL
     )
   ''';
 }
