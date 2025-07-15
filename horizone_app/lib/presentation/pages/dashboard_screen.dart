@@ -228,6 +228,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           );
                                         },
                                       ),
+                                      TextButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                              title: const Text('Excluir conta ?'),
+                                              content: const Text('Todos os dados seram apagados permanentemente.'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                                  child: const Text('Cancelar'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    await profileDao.deleteProfile();
+                                                    Navigator.pushNamed(context, '/getStarted');
+                                                  },
+                                                  child: const Text('Deletar'),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Deletar Conta',
+                                          style: TextStyle(
+                                            color: Color(0xFFA50101),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
