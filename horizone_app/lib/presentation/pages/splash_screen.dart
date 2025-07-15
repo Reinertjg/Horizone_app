@@ -1,14 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:horizone_app/generated/l10n.dart';
 
-class SplashScreen extends StatelessWidget {
+import '../../database/daos/profile_dao.dart';
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  final profileDao = ProfileDao();
+  var profiles;
+
+  void initState() {
+    super.initState();
+    _carregarPerfil();
+  }
+
+  Future<void> _carregarPerfil() async {
+    final perfilBuscado = await profileDao.getProfile();
+    setState(() {
+      profiles = perfilBuscado;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 2), () {
       if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/getStarted');
+        if(profiles.isNotEmpty) {
+          Navigator.pushNamed(context, '/dashboard');
+        } else {
+          Navigator.pushReplacementNamed(context, '/getStarted');
+        }
       }
     });
     return Scaffold(
