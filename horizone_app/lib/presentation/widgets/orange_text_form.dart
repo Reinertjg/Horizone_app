@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class OrangeTextForm extends StatelessWidget {
-  const OrangeTextForm({required this.nameButton, required this.icon, super.key, required this.controller, this.validator});
+  const OrangeTextForm({
+    required this.nameButton,
+    required this.icon,
+    super.key,
+    required this.controller,
+    this.validator,
+  });
 
   final String nameButton;
   final IconData icon;
@@ -26,6 +32,15 @@ class OrangeTextForm extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Theme.of(context).hintColor),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
+        ),
+
       ),
     );
   }
