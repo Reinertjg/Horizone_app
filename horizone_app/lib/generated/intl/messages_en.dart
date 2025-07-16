@@ -29,18 +29,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "bioDescription": MessageLookupByLibrary.simpleMessage(
       "I\'m a Flutter developer at Lince Tech, building fast and elegant mobile apps.",
     ),
+    "bioRequired": MessageLookupByLibrary.simpleMessage(
+      "Biography is required.",
+    ),
+    "bioTooShort": MessageLookupByLibrary.simpleMessage(
+      "Biography must be at least 10 characters long.",
+    ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continue"),
     "darkTheme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
+    "dateOfBirthRequired": MessageLookupByLibrary.simpleMessage(
+      "Date of birth is required.",
+    ),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
+    "genderRequired": MessageLookupByLibrary.simpleMessage(
+      "Gender is required.",
+    ),
     "home": MessageLookupByLibrary.simpleMessage("Home"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Tell us who you are and we\'ll take you where you want to be",
     ),
     "jobTitle": MessageLookupByLibrary.simpleMessage("Job Title"),
+    "jobTitleRequired": MessageLookupByLibrary.simpleMessage(
+      "Job title is required.",
+    ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "lightTheme": MessageLookupByLibrary.simpleMessage("Light Theme"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
+    "nameRequired": MessageLookupByLibrary.simpleMessage("Name is required."),
+    "nameTooShort": MessageLookupByLibrary.simpleMessage(
+      "Name must be at least 3 characters long.",
+    ),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
     "readyExplore": MessageLookupByLibrary.simpleMessage(

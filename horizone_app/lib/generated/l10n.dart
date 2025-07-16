@@ -228,6 +228,76 @@ class S {
   String get home {
     return Intl.message('Home', name: 'home', desc: '', args: []);
   }
+
+  /// `Name is required.`
+  String get nameRequired {
+    return Intl.message(
+      'Name is required.',
+      name: 'nameRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name must be at least 3 characters long.`
+  String get nameTooShort {
+    return Intl.message(
+      'Name must be at least 3 characters long.',
+      name: 'nameTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biography is required.`
+  String get bioRequired {
+    return Intl.message(
+      'Biography is required.',
+      name: 'bioRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biography must be at least 10 characters long.`
+  String get bioTooShort {
+    return Intl.message(
+      'Biography must be at least 10 characters long.',
+      name: 'bioTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date of birth is required.`
+  String get dateOfBirthRequired {
+    return Intl.message(
+      'Date of birth is required.',
+      name: 'dateOfBirthRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gender is required.`
+  String get genderRequired {
+    return Intl.message(
+      'Gender is required.',
+      name: 'genderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Job title is required.`
+  String get jobTitleRequired {
+    return Intl.message(
+      'Job title is required.',
+      name: 'jobTitleRequired',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

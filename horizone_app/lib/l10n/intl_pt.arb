@@ -23,5 +23,12 @@
   "lightTheme": "Tema Claro",
   "darkTheme": "Tema Escuro",
   "systemTheme": "Tema do Sistema",
-  "home": "Início"
+  "home": "Início",
+  "nameRequired": "O nome é obrigatorio.",
+  "nameTooShort": "O nome deve ter pelo menos 3 caracteres.",
+  "bioRequired": "A biografia é obrigatória.",
+  "bioTooShort": "A biografia deve ter pelo menos 10 caracteres.",
+  "dateOfBirthRequired": "A data de nascimento é obrigatória.",
+  "genderRequired": "O gênero é obrigatório.",
+  "jobTitleRequired": "O cargo é obrigatório."
 }

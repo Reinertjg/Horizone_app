@@ -29,18 +29,39 @@ class MessageLookup extends MessageLookupByLibrary {
     "bioDescription": MessageLookupByLibrary.simpleMessage(
       "Sou desenvolvedor Flutter na Lince Tech, criando apps móveis rápidos e elegantes.",
     ),
+    "bioRequired": MessageLookupByLibrary.simpleMessage(
+      "A biografia é obrigatória.",
+    ),
+    "bioTooShort": MessageLookupByLibrary.simpleMessage(
+      "A biografia deve ter pelo menos 10 caracteres.",
+    ),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continuar"),
     "darkTheme": MessageLookupByLibrary.simpleMessage("Tema Escuro"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Data de nascimento"),
+    "dateOfBirthRequired": MessageLookupByLibrary.simpleMessage(
+      "A data de nascimento é obrigatória.",
+    ),
     "gender": MessageLookupByLibrary.simpleMessage("Gênero"),
+    "genderRequired": MessageLookupByLibrary.simpleMessage(
+      "O gênero é obrigatório.",
+    ),
     "home": MessageLookupByLibrary.simpleMessage("Início"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Diga quem você é e nós levaremos você onde quiser estar",
     ),
     "jobTitle": MessageLookupByLibrary.simpleMessage("Cargo"),
+    "jobTitleRequired": MessageLookupByLibrary.simpleMessage(
+      "O cargo é obrigatório.",
+    ),
     "language": MessageLookupByLibrary.simpleMessage("Idioma"),
     "lightTheme": MessageLookupByLibrary.simpleMessage("Tema Claro"),
     "name": MessageLookupByLibrary.simpleMessage("Nome"),
+    "nameRequired": MessageLookupByLibrary.simpleMessage(
+      "O nome é obrigatorio.",
+    ),
+    "nameTooShort": MessageLookupByLibrary.simpleMessage(
+      "O nome deve ter pelo menos 3 caracteres.",
+    ),
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORE NOVOS HORIZONTES",
     ),
