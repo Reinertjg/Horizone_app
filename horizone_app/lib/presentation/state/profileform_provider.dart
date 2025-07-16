@@ -29,41 +29,41 @@ class ProfileFormProvider extends ChangeNotifier {
 
   String? validateName(String? value) {
     if (value == null || value.isEmpty){
-      return 'Nome e obrigatorio';
+      return S.current.nameRequired;
     }
     if (value.length < 3) {
-      return 'Nome deve ter pelo menos 3 caracteres';
+      return S.current.nameTooShort;
     }
     return null;
   }
 
   String? validateBio(String? value) {
     if (value == null || value.isEmpty){
-      return 'Biografia e obrigatorio';
+      return S.current.bioRequired;
     }
     if (value.length < 10) {
-      return 'A biografia deve ter pelo menos 10 caracteres.';
+      return S.current.bioTooShort;
     }
     return null;
   }
 
   String? validateDateOfBirth(String? value) {
     if (value == null || value.isEmpty) {
-      return 'A data de nascimento é obrigatória.';
+      return S.current.dateOfBirthRequired;
     }
     return null;
   }
 
   String? validateGender(String? value) {
     if (value == null || value.isEmpty) {
-      return 'O gênero é obrigatório.';
+      return S.current.genderRequired;
     }
     return null;
   }
 
   String? validateJobTitle(String? value) {
     if (value == null || value.isEmpty) {
-      return 'O título de trabalho é obrigatório.';
+      return S.current.jobTitleRequired;
     }
     return null;
   }

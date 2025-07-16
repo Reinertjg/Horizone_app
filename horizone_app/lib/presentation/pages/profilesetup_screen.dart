@@ -46,10 +46,13 @@ class ProfileSetUpScreen extends StatelessWidget {
                     nameButton: S.of(context).bio,
                     hintText: S.of(context).bioDescription,
                     icon: Icons.info_outline,
+                    controller: formProvider.bioController,
+                    validator: formProvider.validateBio,
                   ),
                   const SizedBox(height: 18),
                   DatePickerTextFormField(
                     nameButton: S.of(context).dateOfBirth,
+                    validator: formProvider.validateDateOfBirth,
                   ),
                   const SizedBox(height: 18),
                   OrangeTextForm(

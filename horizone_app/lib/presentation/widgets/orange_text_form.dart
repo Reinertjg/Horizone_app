@@ -4,9 +4,9 @@ class OrangeTextForm extends StatelessWidget {
   const OrangeTextForm({
     required this.nameButton,
     required this.icon,
-    super.key,
     required this.controller,
     this.validator,
+    super.key,
   });
 
   final String nameButton;
