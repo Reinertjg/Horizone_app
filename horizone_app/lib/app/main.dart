@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../generated/l10n.dart';
 import '../presentation/app_theme.dart';
 import '../presentation/state/locale_provider.dart';
+import '../presentation/state/profileform_provider.dart';
 import '../presentation/state/theme_provider.dart';
 
 void main() {
@@ -16,6 +17,7 @@ void main() {
           create: (_) => LocaleProvider(const Locale('pt')),
         ),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileFormProvider()),
       ],
       child: const MyApp(),
     ),

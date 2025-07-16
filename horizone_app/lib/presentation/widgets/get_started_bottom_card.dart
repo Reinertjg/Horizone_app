@@ -41,7 +41,7 @@ class GetStartedBottomCard extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/profileSetUp');
+                      Navigator.pushReplacementNamed(context, '/profileSetup');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,

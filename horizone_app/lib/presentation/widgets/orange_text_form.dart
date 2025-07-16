@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 class OrangeTextForm extends StatelessWidget {
-  const OrangeTextForm({required this.nameButton, required this.icon, super.key});
+  const OrangeTextForm({required this.nameButton, required this.icon, super.key, required this.controller, this.validator});
 
   final String nameButton;
   final IconData icon;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      validator: validator,
       style: TextStyle(color: Theme.of(context).primaryColor),
       decoration: InputDecoration(
         labelText: nameButton,
