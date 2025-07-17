@@ -7,7 +7,6 @@ import '../widgets/date_picker_text_form_field.dart';
 import '../widgets/profile_info_text.dart';
 import '../widgets/orange_text_form.dart';
 import '../widgets/orange_text_box_form.dart';
-import '../widgets/date_picker_text_form_field.dart';
 import '../widgets/continue_button.dart';
 
 class ProfileSetUpScreen extends StatelessWidget {
@@ -16,7 +15,7 @@ class ProfileSetUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<ProfileFormProvider>(context);
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -26,7 +25,7 @@ class ProfileSetUpScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(22.0),
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -81,7 +80,7 @@ class ProfileSetUpScreen extends StatelessWidget {
         child: ContinueButton(
           title: S.of(context).continueButton,
           pathRoute: "/dashboard",
-          formKey: _formKey,
+          formKey: formKey,
         ),
       ),
     );
