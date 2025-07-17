@@ -71,6 +71,7 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
         style: TextStyle(color: Theme.of(context).primaryColor),
       decoration: InputDecoration(
         hintText: widget.nameButton,
+        hintStyle: TextStyle(color: Theme.of(context).primaryColor),
         labelStyle: TextStyle(color: Theme.of(context).primaryColor),
         prefixIcon: Icon(
           Icons.calendar_month,

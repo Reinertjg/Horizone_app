@@ -1,6 +1,8 @@
   import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
   import '../../database/daos/profile_dao.dart';
+import '../state/profileform_provider.dart';
 
   class ContinueButton extends StatelessWidget {
     ContinueButton({
@@ -17,20 +19,24 @@
 
     @override
     Widget build(BuildContext context) {
+      final formProvider = Provider.of<ProfileFormProvider>(context);
+
       return ElevatedButton(
         onPressed: () async {
           if (formKey.currentState!.validate()) {
+            await profileDao.insertPorfile(
+                {
+                  'name': formProvider.nameController.text,
+                  'biography': formProvider.bioController.text,
+                  'birthDate': formProvider.dateOfBirthController.text,
+                  'gender': formProvider.genderController.text,
+                  'jobTitle': formProvider.jobTitleController.text
+                }
+            );
             Navigator.pushReplacementNamed(context, pathRoute);
           }
-          // await profileDao.insertPorfile(
-          //   {
-          //     'name': 'John Doe',
-          //     'biography': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          //     'birthDate': '1990-01-01',
-          //     'gender': 'Male',
-          //     'jobTitle': 'Software Engineer'
-          //   }
-          // );
+
+          print(formProvider.nameController.text);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).primaryColor,
