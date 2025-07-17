@@ -5,11 +5,13 @@ import '../../generated/l10n.dart';
 class DatePickerTextFormField extends StatefulWidget {
   const DatePickerTextFormField({
     super.key,
+    required this.controller,
     required this.validator,
     required this.nameButton,
   });
 
   final String nameButton;
+  final TextEditingController controller;
   final String? Function(String?) validator;
 
   @override
@@ -21,8 +23,8 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
   DateTime? selectedDate;
 
   // This method is called when the user taps on the date picker.
-  Future<void> _selectDate() async {
-    final DateTime? picked = await showDatePicker(
+  Future<DateTime?> _selectDate(BuildContext context) async {
+    return await showDatePicker(
       context: context,
       initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
       firstDate: DateTime(1900),
@@ -45,73 +47,55 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
           child: child!,
         );
       },
+
     );
-    if (picked != null) setState(() => selectedDate = picked);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormField<String>(
+    return TextFormField(
+      controller: widget.controller,
+      readOnly: true,
       validator: widget.validator,
-      builder: (field) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            GestureDetector(
-              onTap: _selectDate,
-              child: Container(
-                height: 50,
-                padding: const EdgeInsets.symmetric(horizontal: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Theme
-                      .of(context)
-                      .hintColor),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.date_range_outlined,
-                      color: Theme
-                          .of(context)
-                          .hintColor,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      selectedDate != null
-                          ? '${selectedDate!.day}/${selectedDate!
-                          .month}/${selectedDate!.year}'
-                          : widget.nameButton,
-                      style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            if (field.hasError)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, left: 13),
-                child: Text(
-                  field.errorText ?? '',
-                  style: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .colorScheme
-                        .error,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+        onTap: () async {
+          final pickedDate = await _selectDate(context);
+
+          if (pickedDate != null) {
+            setState(() {
+              selectedDate = pickedDate;
+              widget.controller.text =
+              '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+            });
+          }
+        },
+        style: TextStyle(color: Theme.of(context).primaryColor),
+      decoration: InputDecoration(
+        hintText: widget.nameButton,
+        labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+        prefixIcon: Icon(
+          Icons.calendar_month,
+          color: Theme.of(context).hintColor,
+          size: 20,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).hintColor),
+        ),
+      ),
     );
   }
 }
+
+
