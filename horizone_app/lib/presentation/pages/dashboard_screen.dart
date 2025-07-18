@@ -5,6 +5,8 @@ import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
 import '../state/locale_provider.dart';
 import '../state/theme_provider.dart';
+import '../widgets/bottom_navigationbar.dart';
+import '../widgets/settings_widgets/delete_accoun_ttile.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -103,86 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 20),
-                                      ListTile(
-                                        title: Text(
-                                          S.of(context).theme,
-                                          style: TextStyle(
-                                            color: Theme.of(
-                                              context,
-                                            ).primaryColor,
-                                          ),
-                                        ),
-                                        trailing: Icon(
-                                          Icons.arrow_forward,
-                                          color: Theme.of(context).primaryColor,
-                                          size: 20,
-                                        ),
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: Text(
-                                                  S.of(context).selectTheme,
-                                                ),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    ListTile(
-                                                      title: Text(
-                                                        S
-                                                            .of(context)
-                                                            .lightTheme,
-                                                      ),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          themeProvider
-                                                              .setTheme(
-                                                                ThemeMode.light,
-                                                              );
-                                                        });
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(
-                                                        S.of(context).darkTheme,
-                                                      ),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          themeProvider
-                                                              .setTheme(
-                                                                ThemeMode.dark,
-                                                              );
-                                                        });
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(
-                                                        S
-                                                            .of(context)
-                                                            .systemTheme,
-                                                      ),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          themeProvider
-                                                              .setTheme(
-                                                                ThemeMode
-                                                                    .system,
-                                                              );
-                                                        });
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
+
                                       ListTile(
                                         title: Text(
                                           S.of(context).language,
@@ -202,15 +125,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
+                                                backgroundColor: Theme.of(
+                                                  context,
+                                                ).scaffoldBackgroundColor,
                                                 title: Text(
                                                   S.of(context).selectLanguage,
+                                                  style: TextStyle(
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).primaryColor,
+                                                  ),
                                                 ),
                                                 content: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
                                                     ListTile(
-                                                      title: Text('English'),
+                                                      title: Text(
+                                                        'English',
+                                                        style: TextStyle(
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).primaryColor,
+                                                        ),
+                                                      ),
                                                       onTap: () {
                                                         localeProvider
                                                             .setLocale(
@@ -220,7 +158,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       },
                                                     ),
                                                     ListTile(
-                                                      title: Text('Português'),
+                                                      title: Text(
+                                                        'Português',
+                                                        style: TextStyle(
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).primaryColor,
+                                                        ),
+                                                      ),
                                                       onTap: () {
                                                         localeProvider
                                                             .setLocale(
@@ -230,7 +175,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       },
                                                     ),
                                                     ListTile(
-                                                      title: Text('Español'),
+                                                      title: Text(
+                                                        'Español',
+                                                        style: TextStyle(
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).primaryColor,
+                                                        ),
+                                                      ),
                                                       onTap: () {
                                                         localeProvider
                                                             .setLocale(
@@ -246,46 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           );
                                         },
                                       ),
-                                      TextButton(
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                                  title: const Text(
-                                                      'Excluir conta ?'),
-                                                  content: const Text(
-                                                      'Todos os dados seram apagados permanentemente.'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(context,
-                                                              'Cancel'),
-                                                      child: const Text(
-                                                          'Cancelar'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () async {
-                                                        await profileDao
-                                                            .deleteProfile();
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            '/getStarted');
-                                                      },
-                                                      child: const Text(
-                                                          'Deletar'),
-                                                    ),
-                                                  ],
-                                                ),
-                                          );
-                                        },
-                                        child: Text(
-                                          'Deletar Conta',
-                                          style: TextStyle(
-                                            color: Color(0xFFA50101),
-                                          ),
-                                        ),
-                                      ),
+                                      DeleteAccountTile(),
                                     ],
                                   ),
                                 );
@@ -330,53 +243,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        unselectedItemColor: Theme.of(context).hintColor,
-        selectedItemColor: Theme.of(context).hintColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Theme.of(context).primaryColor),
-            label: S.of(context).home,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.travel_explore,
-              color: Theme.of(context).primaryColor,
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.calendar_month,
-              color: Theme.of(context).primaryColor,
-            ),
-            label: 'Notifications',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_pin_rounded,
-              color: Theme.of(context).primaryColor,
-            ),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: 0,
-        // Set the current index to the first item
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              break;
-            case 1:
-              break;
-            case 2:
-              break;
-            case 3:
-              break;
-          }
-        },
-      ),
+      bottomNavigationBar: bottomNavigationBar(context),
     );
   }
 }
