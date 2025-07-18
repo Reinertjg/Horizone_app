@@ -4,6 +4,7 @@ import '../../../generated/l10n.dart';
 import '../state/profileform_provider.dart';
 import '../state/theme_provider.dart';
 import '../widgets/date_picker_text_form_field.dart';
+import '../widgets/orange_dropdownform.dart';
 import '../widgets/profile_info_text.dart';
 import '../widgets/orange_text_form.dart';
 import '../widgets/orange_text_box_form.dart';
@@ -56,10 +57,10 @@ class ProfileSetUpScreen extends StatelessWidget {
                     validator: formProvider.validateDateOfBirth,
                   ),
                   const SizedBox(height: 18),
-                  OrangeTextForm(
-                    nameButton: S.of(context).gender,
+                  OrangeDropdownform(
+                    label: S.of(context).gender,
+                    items: ['Masculino', 'Feminino', 'Outro'],
                     icon: Icons.person_outline,
-                    controller: formProvider.genderController,
                     validator: formProvider.validateGender,
                   ),
                   const SizedBox(height: 18),
