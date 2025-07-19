@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../presentation/pages/dashboard_screen.dart';
 import '../presentation/pages/getstarted_screen.dart';
+import '../presentation/pages/interview_screen.dart';
 import '../presentation/pages/profilesetup_screen.dart';
 import '../presentation/pages/splash_screen.dart';
 
@@ -11,5 +12,6 @@ class AppRoutes {
     '/getStarted': (context) => const GetStartedScreen(),
     '/profileSetup': (context) => const ProfileSetUpScreen(),
     '/dashboard': (context) => const DashboardScreen(),
+    '/interview': (context) => const InterviewScreen(),
   };
 }
