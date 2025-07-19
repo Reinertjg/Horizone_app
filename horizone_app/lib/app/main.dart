@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:horizone_app/app/routes.dart';
 import 'package:provider/provider.dart';
 
+import '../database/daos/profile_dao.dart';
 import '../generated/l10n.dart';
 import '../presentation/app_theme.dart';
 import '../presentation/state/locale_provider.dart';
@@ -18,6 +19,7 @@ void main() {
         ),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => ProfileFormProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileDao())
       ],
       child: const MyApp(),
     ),
