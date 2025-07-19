@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:horizone_app/presentation/widgets/iconbutton_notifications.dart';
 import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
 import '../widgets/bottom_navigationbar.dart';
-import '../widgets/settings_widgets/settingsbottom_sheetcontent.dart';
+import '../widgets/iconbutton_settings.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -30,7 +31,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -59,41 +59,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             padding: const EdgeInsets.all(12.0),
             child: Row(
               children: [
-                Material(
-                  color: Theme.of(context).primaryColor,
-                  shape: CircleBorder(),
-                  child: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(
-                        Icons.settings,
-                        color: Theme.of(context).highlightColor,
-                      ),
-                      onPressed: () {
-                        SettingsBottomSheetContent();
-                      },
-                    ),
-                  ),
-                ),
+                IconbuttonSettings(),
                 const SizedBox(width: 10),
-                Material(
-                  color: Theme.of(context).primaryColor,
-                  shape: CircleBorder(),
-                  child: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(
-                        Icons.notifications_none,
-                        color: Theme.of(context).highlightColor,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                ),
+                IconbuttonNotifications(),
               ],
             ),
           ),
@@ -110,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(context),
+      bottomNavigationBar: bottomNavigationBar(context, 0),
     );
   }
 }
