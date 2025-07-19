@@ -11,70 +11,42 @@ class LanguageSelectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Theme.of(
-        context,
-      ).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       title: Text(
         S.of(context).selectLanguage,
-        style: TextStyle(
-          color: Theme.of(
-            context,
-          ).primaryColor,
-        ),
+        style: TextStyle(color: Theme.of(context).primaryColor),
       ),
       content: Column(
-        mainAxisSize:
-        MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             title: Text(
               'English',
-              style: TextStyle(
-                color: Theme.of(
-                  context,
-                ).primaryColor,
-              ),
+              style: TextStyle(color: Theme.of(context).primaryColor),
             ),
             onTap: () {
-              localeProvider
-                  .setLocale(
-                Locale('en'),
-              );
+              localeProvider.setLocale(Locale('en'));
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text(
               'Português',
-              style: TextStyle(
-                color: Theme.of(
-                  context,
-                ).primaryColor,
-              ),
+              style: TextStyle(color: Theme.of(context).primaryColor),
             ),
             onTap: () {
-              localeProvider
-                  .setLocale(
-                Locale('pt'),
-              );
+              localeProvider.setLocale(Locale('pt'));
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text(
               'Español',
-              style: TextStyle(
-                color: Theme.of(
-                  context,
-                ).primaryColor,
-              ),
+              style: TextStyle(color: Theme.of(context).primaryColor),
             ),
             onTap: () {
-              localeProvider
-                  .setLocale(
-                Locale('es'),
-              );
-              Navigator.pop(context);
+              localeProvider.setLocale(Locale('es'));
+              Navigator.pushNamed(context, '/interview');
             },
           ),
         ],
