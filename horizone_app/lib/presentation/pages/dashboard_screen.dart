@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
-import '../state/locale_provider.dart';
-import '../state/theme_provider.dart';
 import '../widgets/bottom_navigationbar.dart';
-import '../widgets/settings_widgets/delete_accoun_ttile.dart';
+import '../widgets/settings_widgets/settingsbottom_sheetcontent.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -17,7 +13,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final profileDao = ProfileDao();
-  var profiles;
+  List<Map<String, dynamic>> profiles = [];
 
   @override
   void initState() {
@@ -34,7 +30,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -43,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         toolbarHeight: 100,
         title: Text(
-          '${S.of(context).welcome}, ${profiles != null && profiles.isNotEmpty ? profiles[0]['name'] : 'User'}',
+          '${S.of(context).welcome}, ${profiles.isNotEmpty ? profiles[0]['name'] : 'User'}',
           style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         leading: Padding(
@@ -77,135 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: Theme.of(context).highlightColor,
                       ),
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
-                          ),
-                          builder: (context) {
-                            return Consumer<ThemeProvider>(
-                              builder: (context, themeProvider, child) {
-                                return Container(
-                                  color: Theme.of(
-                                    context,
-                                  ).scaffoldBackgroundColor,
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        S.of(context).settings,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Theme.of(context).primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
-
-                                      ListTile(
-                                        title: Text(
-                                          S.of(context).language,
-                                          style: TextStyle(
-                                            color: Theme.of(
-                                              context,
-                                            ).primaryColor,
-                                          ),
-                                        ),
-                                        trailing: Icon(
-                                          Icons.arrow_forward,
-                                          color: Theme.of(context).primaryColor,
-                                          size: 20,
-                                        ),
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                backgroundColor: Theme.of(
-                                                  context,
-                                                ).scaffoldBackgroundColor,
-                                                title: Text(
-                                                  S.of(context).selectLanguage,
-                                                  style: TextStyle(
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).primaryColor,
-                                                  ),
-                                                ),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    ListTile(
-                                                      title: Text(
-                                                        'English',
-                                                        style: TextStyle(
-                                                          color: Theme.of(
-                                                            context,
-                                                          ).primaryColor,
-                                                        ),
-                                                      ),
-                                                      onTap: () {
-                                                        localeProvider
-                                                            .setLocale(
-                                                              Locale('en'),
-                                                            );
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(
-                                                        'Português',
-                                                        style: TextStyle(
-                                                          color: Theme.of(
-                                                            context,
-                                                          ).primaryColor,
-                                                        ),
-                                                      ),
-                                                      onTap: () {
-                                                        localeProvider
-                                                            .setLocale(
-                                                              Locale('pt'),
-                                                            );
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    ListTile(
-                                                      title: Text(
-                                                        'Español',
-                                                        style: TextStyle(
-                                                          color: Theme.of(
-                                                            context,
-                                                          ).primaryColor,
-                                                        ),
-                                                      ),
-                                                      onTap: () {
-                                                        localeProvider
-                                                            .setLocale(
-                                                              Locale('es'),
-                                                            );
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                      DeleteAccountTile(),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
+                        SettingsBottomSheetContent();
                       },
                     ),
                   ),
