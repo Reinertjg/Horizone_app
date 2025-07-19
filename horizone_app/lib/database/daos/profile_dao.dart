@@ -1,8 +1,9 @@
 
+import 'package:flutter/material.dart';
 import 'package:horizone_app/database/horizone_database.dart';
 import 'package:horizone_app/database/tables/profile_table.dart';
 
-class ProfileDao {
+class ProfileDao extends ChangeNotifier{
   final dbFuture = HorizoneDatabase().database;
 
   Future<int> insertPorfile(Map<String, dynamic> profile) async {
