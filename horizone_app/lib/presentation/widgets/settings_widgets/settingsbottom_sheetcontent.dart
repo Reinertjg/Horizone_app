@@ -1,5 +1,3 @@
-// Exemplo de estrutura
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:horizone_app/presentation/widgets/settings_widgets/theme_settings_tile.dart';
 import 'package:provider/provider.dart';
@@ -8,15 +6,18 @@ import '../../../database/daos/profile_dao.dart';
 import '../../../generated/l10n.dart';
 import '../../state/locale_provider.dart';
 import '../../state/theme_provider.dart';
+import 'delete_accoun_ttile.dart';
+import 'language_settings_tile.dart';
 
 class SettingsBottomSheetContent extends StatelessWidget {
+  const SettingsBottomSheetContent({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>( // Ou passe o themeProvider via construtor
+    return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        // Supondo que você também tenha um LocaleProvider
         final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
-        final profileDao = Provider.of<ProfileDao>(context, listen: false); // Exemplo
+        final profileDao = Provider.of<ProfileDao>(context, listen: false);
 
         return Container(
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -34,8 +35,8 @@ class SettingsBottomSheetContent extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ThemeSettingsTile(themeProvider: themeProvider),
-              // LanguageSettingsTile(localeProvider: localeProvider), // Widget desmembrado
-              // DeleteAccountTile(profileDao: profileDao), // Widget desmembrado
+              LanguageSettingsTile(localeProvider: localeProvider),
+              DeleteAccountTile(profileDao: profileDao),
             ],
           ),
         );
