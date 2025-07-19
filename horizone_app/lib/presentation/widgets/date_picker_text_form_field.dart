@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../generated/l10n.dart';
-
 class DatePickerTextFormField extends StatefulWidget {
   const DatePickerTextFormField({
     super.key,

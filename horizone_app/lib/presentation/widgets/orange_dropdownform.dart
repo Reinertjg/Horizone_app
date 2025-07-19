@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../generated/l10n.dart';
-
 class OrangeDropdownform extends StatefulWidget {
   const OrangeDropdownform ({super.key, required this.label, required this.items, required this.icon, this.validator});
 
