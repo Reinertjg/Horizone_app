@@ -6,7 +6,7 @@ import 'package:horizone_app/database/tables/profile_table.dart';
 class ProfileDao extends ChangeNotifier{
   final dbFuture = HorizoneDatabase().database;
 
-  Future<int> insertPorfile(Map<String, dynamic> profile) async {
+  Future<int> insertProfile(Map<String, dynamic> profile) async {
     final db = await dbFuture;
     return await db.insert(ProfileTable.tableName, {
       'name': profile['name'],
@@ -22,7 +22,7 @@ class ProfileDao extends ChangeNotifier{
     return await db.query(ProfileTable.tableName);
   }
 
-  Future<void> deleteProfile() async {
+  Future<void> deleteTableProfile() async {
     final db = await dbFuture;
     await db.delete(
       ProfileTable.tableName,
