@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 class OrangeDropdownform extends StatefulWidget {
-  const OrangeDropdownform ({super.key, required this.label, required this.items, required this.icon, this.validator});
+  const OrangeDropdownform({
+    super.key,
+    required this.label,
+    required this.items,
+    required this.icon,
+    this.validator,
+  });
 
   final String label;
   final List<String> items;
-  final IconData icon; // exemplo
+  final IconData icon;
   final String? Function(String?)? validator;
 
   @override
@@ -39,7 +45,11 @@ class _OrangeDropdownformState extends State<OrangeDropdownform> {
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-        prefixIcon: Icon(widget.icon, color: Theme.of(context).hintColor, size: 20),
+        prefixIcon: Icon(
+          widget.icon,
+          color: Theme.of(context).hintColor,
+          size: 20,
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Theme.of(context).hintColor),
@@ -60,7 +70,5 @@ class _OrangeDropdownformState extends State<OrangeDropdownform> {
       dropdownColor: Theme.of(context).scaffoldBackgroundColor,
       iconEnabledColor: Theme.of(context).hintColor,
     );
-
   }
 }
-
