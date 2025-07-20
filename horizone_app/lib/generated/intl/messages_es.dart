@@ -35,11 +35,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "bioTooShort": MessageLookupByLibrary.simpleMessage(
       "La biografía debe tener al menos 10 caracteres.",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continuar"),
     "darkTheme": MessageLookupByLibrary.simpleMessage("Tema Oscuro"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Fecha de nacimiento"),
     "dateOfBirthRequired": MessageLookupByLibrary.simpleMessage(
       "La fecha de nacimiento es obligatoria.",
+    ),
+    "delete": MessageLookupByLibrary.simpleMessage("Borrar"),
+    "deleteAccount": MessageLookupByLibrary.simpleMessage("Eliminar Cuenta"),
+    "deleteAccountAsk": MessageLookupByLibrary.simpleMessage(
+      "Eliminar Cuenta ?",
+    ),
+    "deleteMessage": MessageLookupByLibrary.simpleMessage(
+      "Todos los datos serán eliminados de forma permanente.",
     ),
     "gender": MessageLookupByLibrary.simpleMessage("Género"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(

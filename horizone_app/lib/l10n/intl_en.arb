@@ -32,5 +32,10 @@
   "genderRequired": "Gender is required.",
   "jobTitleRequired": "Job title is required.",
   "planning": "Planning",
-  "planningTravel": "Planning a Travel"
+  "planningTravel": "Planning a Travel",
+  "deleteAccountAsk": "Delete Account ?",
+  "deleteAccount": "Delete Account",
+  "deleteMessage": "All data will be permanently deleted.",
+  "cancel": "Cancel",
+  "delete": "Delete"
 }

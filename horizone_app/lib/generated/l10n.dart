@@ -313,6 +313,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Delete Account ?`
+  String get deleteAccountAsk {
+    return Intl.message(
+      'Delete Account ?',
+      name: 'deleteAccountAsk',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Account`
+  String get deleteAccount {
+    return Intl.message(
+      'Delete Account',
+      name: 'deleteAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All data will be permanently deleted.`
+  String get deleteMessage {
+    return Intl.message(
+      'All data will be permanently deleted.',
+      name: 'deleteMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message('Delete', name: 'delete', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
