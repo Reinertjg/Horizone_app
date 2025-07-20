@@ -1,7 +1,10 @@
   import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-  import '../../database/daos/profile_dao.dart';
+  import '../../data/repositories/profile_repository_impl.dart';
+import '../../database/daos/profile_dao.dart';
+import '../../domain/repositories/profile_repository.dart';
+import '../../domain/usecases/profile_usecase.dart';
 import '../state/profileform_provider.dart';
 
   class ContinueButton extends StatelessWidget {
@@ -14,29 +17,26 @@ import '../state/profileform_provider.dart';
 
     final String title;
     final String pathRoute;
-    final profileDao = ProfileDao();
     final GlobalKey<FormState> formKey;
 
     @override
     Widget build(BuildContext context) {
       final formProvider = Provider.of<ProfileFormProvider>(context);
 
+
       return ElevatedButton(
         onPressed: () async {
           if (formKey.currentState!.validate()) {
-            await profileDao.insertPorfile(
-                {
-                  'name': formProvider.nameController.text,
-                  'biography': formProvider.bioController.text,
-                  'birthDate': formProvider.dateOfBirthController.text,
-                  'gender': formProvider.genderController.text,
-                  'jobTitle': formProvider.jobTitleController.text
-                }
-            );
+            final profile = formProvider.toEntity();
+
+            final dao = ProfileDao();
+            final repository = ProfileRepositoryImpl(dao);
+            final useCase = ProfileUseCase(repository);
+
+            await useCase.insert(profile);
+
             Navigator.pushReplacementNamed(context, pathRoute);
           }
-
-          print(formProvider.nameController.text);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).primaryColor,
