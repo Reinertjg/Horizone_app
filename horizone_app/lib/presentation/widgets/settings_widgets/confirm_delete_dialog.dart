@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../data/repositories/profile_repository_impl.dart';
 import '../../../database/daos/profile_dao.dart';
+import '../../../domain/usecases/profile_usecase.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
   const ConfirmDeleteDialog({super.key, required this.profileDao});
@@ -20,7 +22,12 @@ class ConfirmDeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-            await profileDao.deleteProfile();
+
+            final dao = ProfileDao();
+            final repository = ProfileRepositoryImpl(dao);
+            final useCase = ProfileUseCase(repository);
+
+            await useCase.delete();
             if (context.mounted) {
               Navigator.pushNamed(context, '/getStarted');
             }
