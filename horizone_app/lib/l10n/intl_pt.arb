@@ -30,5 +30,7 @@
   "bioTooShort": "A biografia deve ter pelo menos 10 caracteres.",
   "dateOfBirthRequired": "A data de nascimento é obrigatória.",
   "genderRequired": "O gênero é obrigatório.",
-  "jobTitleRequired": "O cargo é obrigatório."
+  "jobTitleRequired": "O cargo é obrigatório.",
+  "planning": "Planejamento",
+  "planningTravel": "Planejamento de Viaje"
 }

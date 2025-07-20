@@ -61,6 +61,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Name must be at least 3 characters long.",
     ),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
+    "planning": MessageLookupByLibrary.simpleMessage("Planning"),
+    "planningTravel": MessageLookupByLibrary.simpleMessage("Planning a Travel"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "Ready to explore beyond boundaries?",

@@ -65,6 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORA NUEVOS HORIZONTES",
     ),
+    "planning": MessageLookupByLibrary.simpleMessage("Planificación"),
+    "planningTravel": MessageLookupByLibrary.simpleMessage(
+      "Planificación de Viaje",
+    ),
     "profile": MessageLookupByLibrary.simpleMessage("Perfil"),
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "¿Listo para explorar más allá de los límites?",

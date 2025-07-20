@@ -30,5 +30,7 @@
   "bioTooShort": "Biography must be at least 10 characters long.",
   "dateOfBirthRequired": "Date of birth is required.",
   "genderRequired": "Gender is required.",
-  "jobTitleRequired": "Job title is required."
+  "jobTitleRequired": "Job title is required.",
+  "planning": "Planning",
+  "planningTravel": "Planning a Travel"
 }

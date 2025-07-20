@@ -298,6 +298,21 @@ class S {
       args: [],
     );
   }
+
+  /// `Planning`
+  String get planning {
+    return Intl.message('Planning', name: 'planning', desc: '', args: []);
+  }
+
+  /// `Planning a Travel`
+  String get planningTravel {
+    return Intl.message(
+      'Planning a Travel',
+      name: 'planningTravel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
