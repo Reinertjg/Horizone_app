@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 
+import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
 
 class ProfileFormProvider extends ChangeNotifier {
@@ -21,6 +22,15 @@ class ProfileFormProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  Profile toEntity() {
+    return Profile(
+      name: nameController.text.trim(),
+      biography: bioController.text.trim(),
+      birthDate: dateOfBirthController.text.trim(),
+      gender: genderController.text.trim(),
+      jobTitle: jobTitleController.text.trim(),
+    );
+  }
 
   bool validateAll(GlobalKey<FormState> formKey) {
     final isValid = formKey.currentState?.validate() ?? false;
