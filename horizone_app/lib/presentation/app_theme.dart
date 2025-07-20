@@ -4,7 +4,7 @@ ThemeData lightTheme() {
   return ThemeData(
     scaffoldBackgroundColor: Color(0xFFF4F8FB),
     primaryColor: Color(0xFF005BB1), // Azul vívido, moderno
-    hintColor: Color(0xFFFF9900), // Cinza claro, neutro
+    hintColor: Color(0xFFFF8800), // Cinza claro, neutro
     highlightColor: Color(0xFFFFFFFF), // Azul suave para interações
   );
 }
