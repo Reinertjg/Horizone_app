@@ -23,7 +23,7 @@ BottomNavigationBar bottomNavigationBar(
           color: Theme.of(context).primaryColor,
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        label: 'Search',
+        label: S.of(context).planning,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.calendar_month, color: Theme.of(context).primaryColor),
@@ -34,7 +34,7 @@ BottomNavigationBar bottomNavigationBar(
           Icons.person_pin_rounded,
           color: Theme.of(context).primaryColor,
         ),
-        label: 'Profile',
+        label: S.of(context).profile,
       ),
     ],
     currentIndex: currentIndex,
