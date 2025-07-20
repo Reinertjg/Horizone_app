@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../database/daos/profile_dao.dart';
+import '../../generated/l10n.dart';
 import '../widgets/bottom_navigationbar.dart';
 import '../widgets/iconbutton_settings.dart';
 
@@ -37,15 +38,19 @@ class _InterviewScreenState extends State<InterviewScreen> {
         elevation: 0,
         toolbarHeight: 100,
         automaticallyImplyLeading: false,
-        title: Text('Planejamento de viagem'),
+        title: Text(
+          S.of(context).planningTravel,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
-              children: [
-                IconbuttonSettings(),
-                const SizedBox(width: 10),
-              ],
+              children: [IconbuttonSettings(), const SizedBox(width: 10)],
             ),
           ),
         ],
