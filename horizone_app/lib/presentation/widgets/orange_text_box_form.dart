@@ -32,7 +32,7 @@ class OrangeTextBoxForm extends StatelessWidget {
           hintText: hintText,
           labelStyle: TextStyle(color: Theme.of(context).primaryColor),
           hintStyle: TextStyle(color: Theme.of(context).primaryColor.withAlpha(128)),
-          prefixIcon: Icon(icon, color: Theme.of(context).hintColor, size: 20),
+          prefixIcon: Icon(icon, color: Theme.of(context).hintColor, size: 25),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Theme.of(context).hintColor),
