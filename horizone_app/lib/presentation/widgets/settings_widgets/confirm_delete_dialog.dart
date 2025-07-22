@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../data/repositories/profile_repository_impl.dart';
 import '../../../database/daos/profile_dao.dart';
 import '../../../domain/usecases/profile_usecase.dart';
+import '../../../generated/l10n.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
   const ConfirmDeleteDialog({super.key, required this.profileDao});
@@ -13,12 +14,12 @@ class ConfirmDeleteDialog extends StatelessWidget {
 
     return AlertDialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      title: const Text('Excluir conta ?'),
-      content: const Text('Todos os dados seram apagados permanentemente.'),
+      title: Text(S.of(context).deleteAccountAsk),
+        content: Text(S.of(context).deleteMessage),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('Cancelar'),
+          child: Text(S.of(context).cancel, style: TextStyle(color: Theme.of(context).primaryColor),),
         ),
         TextButton(
           onPressed: () async {
@@ -32,7 +33,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
               Navigator.pushNamed(context, '/getStarted');
             }
           },
-          child: const Text('Deletar'),
+          child: Text(S.of(context).delete, style: TextStyle(color: Theme.of(context).primaryColor),),
         ),
       ],
     );

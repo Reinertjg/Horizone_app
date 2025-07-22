@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../database/daos/profile_dao.dart';
+import '../../../generated/l10n.dart';
 import 'confirm_delete_dialog.dart';
 
 class DeleteAccountTile extends StatelessWidget {
@@ -19,7 +20,7 @@ class DeleteAccountTile extends StatelessWidget {
         );
       },
       child: Text(
-        'Deletar Conta',
+        S.of(context).deleteAccount,
         style: TextStyle(
           color: Color(0xFFA50101),
         ),
