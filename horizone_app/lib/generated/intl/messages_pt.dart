@@ -74,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "planning": MessageLookupByLibrary.simpleMessage("Planejamento"),
     "planningTravel": MessageLookupByLibrary.simpleMessage(
-      "Planejamento de Viaje",
+      "Planejamento de Viagem",
     ),
     "profile": MessageLookupByLibrary.simpleMessage("Perfil"),
     "readyExplore": MessageLookupByLibrary.simpleMessage(
