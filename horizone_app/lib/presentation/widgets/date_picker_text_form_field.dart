@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 enum DatePickerMode { birthdate, futureOnly }
@@ -6,25 +7,50 @@ class CupertinoDatePickerField extends StatefulWidget {
   const CupertinoDatePickerField({
     super.key,
     required this.controller,
-    required this.validator,
-    required this.nameButton,
+    required this.label,
+    required this.icon,
+    required this.mode,
+    this.fontSize = 16,
+    this.validator,
   });
 
-  final String nameButton;
   final TextEditingController controller;
-  final String? Function(String?) validator;
+  final String label;
+  final IconData icon;
+  final double fontSize;
+  final DatePickerMode mode;
+  final String? Function(String?)? validator;
 
   @override
-  State<DatePickerTextFormField> createState() =>
-      _DatePickerTextFormFieldState();
+  State<CupertinoDatePickerField> createState() => _CupertinoDatePickerFieldState();
 }
 
-class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
-  DateTime? selectedDate;
+class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
+  late DateTime initialDate;
+  late DateTime minDate;
+  late DateTime maxDate;
 
-  // This method is called when the user taps on the date picker.
-  Future<DateTime?> _selectDate(BuildContext context) async {
-    return await showDatePicker(
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+
+    switch (widget.mode) {
+      case DatePickerMode.birthdate:
+        maxDate = DateTime(now.year - 18, now.month, now.day);
+        minDate = DateTime(1900);
+        initialDate = maxDate;
+        break;
+      case DatePickerMode.futureOnly:
+        minDate = now;
+        maxDate = DateTime(2100);
+        initialDate = now;
+        break;
+    }
+  }
+
+  void _showDatePicker() {
+    showCupertinoModalPopup(
       context: context,
       builder: (_) => Container(
         height: MediaQuery.of(context).size.height * 0.30,
@@ -49,29 +75,18 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      readOnly: true,
       validator: widget.validator,
-        onTap: () async {
-          final pickedDate = await _selectDate(context);
-
-          if (pickedDate != null) {
-            setState(() {
-              selectedDate = pickedDate;
-              widget.controller.text =
-              '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
-            });
-          }
-        },
-        style: TextStyle(color: Theme.of(context).primaryColor),
+      readOnly: true,
+      onTap: _showDatePicker,
+      style: TextStyle(color: Theme.of(context).primaryColor),
       decoration: InputDecoration(
-        hintText: widget.nameButton,
-        hintStyle: TextStyle(color: Theme.of(context).primaryColor),
-        labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-        prefixIcon: Icon(
-          Icons.calendar_month,
-          color: Theme.of(context).hintColor,
-          size: 20,
+        label: Text(widget.label),
+        labelStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+          fontSize: widget.fontSize,
         ),
+        prefixIcon: Icon(widget.icon, color: Theme.of(context).hintColor, size: 25),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Theme.of(context).hintColor),
@@ -82,15 +97,9 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: Colors.red),
         ),
       ),
     );
   }
 }
-
-
