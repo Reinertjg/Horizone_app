@@ -26,28 +26,22 @@ class _DatePickerTextFormFieldState extends State<DatePickerTextFormField> {
   Future<DateTime?> _selectDate(BuildContext context) async {
     return await showDatePicker(
       context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
-
-      builder: (context, child) {
-        final currentTheme = Theme.of(context);
-        return Theme(
-          data: currentTheme.copyWith(
-            colorScheme: currentTheme.colorScheme.copyWith(
-              primary: currentTheme.primaryColor,
-              onPrimary: currentTheme.colorScheme.onPrimary,
-              surface: currentTheme.scaffoldBackgroundColor,
-              onSurface: currentTheme.textTheme.bodyLarge?.color,
-            ),
-            dialogTheme: DialogThemeData(
-              backgroundColor: currentTheme.scaffoldBackgroundColor,
-            ),
-          ),
-          child: child!,
-        );
-      },
-
+      builder: (_) => Container(
+        height: MediaQuery.of(context).size.height * 0.30,
+        color: Theme.of(context).highlightColor,
+        child: CupertinoDatePicker(
+          mode: CupertinoDatePickerMode.date,
+          initialDateTime: initialDate,
+          minimumDate: minDate,
+          maximumDate: maxDate,
+          onDateTimeChanged: (DateTime value) {
+            setState(() {
+              widget.controller.text =
+              '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
+            });
+          },
+        ),
+      ),
     );
   }
 
