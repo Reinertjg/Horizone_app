@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class DatePickerTextFormField extends StatefulWidget {
-  const DatePickerTextFormField({
+enum DatePickerMode { birthdate, futureOnly }
+
+class CupertinoDatePickerField extends StatefulWidget {
+  const CupertinoDatePickerField({
     super.key,
     required this.controller,
     required this.validator,
