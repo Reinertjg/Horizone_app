@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:provider/provider.dart';
 import '../../../generated/l10n.dart';
 import '../state/profileform_provider.dart';
@@ -51,8 +51,11 @@ class ProfileSetUpScreen extends StatelessWidget {
                     validator: formProvider.validateBio,
                   ),
                   const SizedBox(height: 18),
-                  DatePickerTextFormField(
-                    nameButton: S.of(context).dateOfBirth,
+                  CupertinoDatePickerField(
+                    label: S.of(context).dateOfBirth,
+                    fontSize: 16,
+                    mode: DatePickerMode.birthdate,
+                    icon: Icons.calendar_today_outlined,
                     controller: formProvider.dateOfBirthController,
                     validator: formProvider.validateDateOfBirth,
                   ),
