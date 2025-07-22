@@ -19,11 +19,11 @@ class OrangeTextForm extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
-      style: TextStyle(color: Theme.of(context).primaryColor),
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
       decoration: InputDecoration(
         labelText: nameButton,
-        labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-        prefixIcon: Icon(icon, color: Theme.of(context).hintColor, size: 20),
+        labelStyle: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
+        prefixIcon: Icon(icon, color: Theme.of(context).hintColor, size: 28),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Theme.of(context).hintColor),
