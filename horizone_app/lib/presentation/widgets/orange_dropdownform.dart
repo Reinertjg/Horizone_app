@@ -48,7 +48,7 @@ class _OrangeDropdownformState extends State<OrangeDropdownform> {
         prefixIcon: Icon(
           widget.icon,
           color: Theme.of(context).hintColor,
-          size: 20,
+          size: 25,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
