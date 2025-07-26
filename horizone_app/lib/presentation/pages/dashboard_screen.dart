@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:horizone_app/AppColors.dart';
 import 'package:horizone_app/presentation/widgets/iconbutton_notifications.dart';
 import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
@@ -31,20 +33,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colors.primary,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: colors.primary,
         elevation: 0,
         toolbarHeight: 100,
         title: Text(
           '${S.of(context).welcome}, ${profiles.isNotEmpty ? profiles[0]['name'] : 'User'}',
-          style: TextStyle(color: Theme.of(context).primaryColor),
+          style: GoogleFonts.nunito(color: colors.secondary),
         ),
         leading: Padding(
           padding: const EdgeInsets.only(top: 28, left: 10.0, bottom: 25.0),
           child: Material(
-            color: Theme.of(context).primaryColor,
+            color: colors.secondary,
             shape: const CircleBorder(),
             child: ClipOval(
               child: Image.network(
