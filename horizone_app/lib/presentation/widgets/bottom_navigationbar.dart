@@ -1,38 +1,41 @@
 import 'package:flutter/material.dart';
 
+import '../../AppColors.dart';
 import '../../generated/l10n.dart';
 
 BottomNavigationBar bottomNavigationBar(
   BuildContext context,
   int currentIndex,
-) {
+)
+{
+  final colors = Theme.of(context).extension<AppColors>()!;
   return BottomNavigationBar(
-    backgroundColor: Theme.of(context).primaryColor,
-    unselectedItemColor: Theme.of(context).hintColor,
-    selectedItemColor: Theme.of(context).hintColor,
+    backgroundColor: colors.primary,
+    unselectedItemColor: colors.tertiary,
+    selectedItemColor: colors.tertiary,
     elevation: 0,
     items: [
       BottomNavigationBarItem(
-        icon: Icon(Icons.home, color: Theme.of(context).primaryColor),
+        icon: Icon(Icons.home, color: colors.secondary),
         label: S.of(context).home,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: colors.primary,
       ),
       BottomNavigationBarItem(
         icon: Icon(
           Icons.mode_of_travel_outlined,
-          color: Theme.of(context).primaryColor,
+          color: colors.secondary,
         ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: colors.primary,
         label: S.of(context).planning,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.calendar_month, color: Theme.of(context).primaryColor),
+        icon: Icon(Icons.calendar_month, color: colors.secondary),
         label: 'Notifications',
       ),
       BottomNavigationBarItem(
         icon: Icon(
           Icons.person_pin_rounded,
-          color: Theme.of(context).primaryColor,
+          color: colors.secondary,
         ),
         label: S.of(context).profile,
       ),
