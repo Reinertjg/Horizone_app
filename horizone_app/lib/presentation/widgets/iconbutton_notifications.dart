@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import '../../AppColors.dart';
 
 class IconbuttonNotifications extends StatelessWidget {
   const IconbuttonNotifications({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Material(
-      color: Theme.of(context).primaryColor,
+      color: colors.secondary,
       shape: CircleBorder(),
       child: SizedBox(
         height: 35,
@@ -15,7 +17,7 @@ class IconbuttonNotifications extends StatelessWidget {
           padding: EdgeInsets.zero,
           icon: Icon(
             Icons.notifications_none,
-            color: Theme.of(context).highlightColor,
+            color: colors.quaternary,
           ),
           onPressed: () {},
         ),
