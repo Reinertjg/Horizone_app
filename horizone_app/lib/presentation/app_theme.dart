@@ -1,25 +1,49 @@
 import 'package:flutter/material.dart';
 
+import '../AppColors.dart';
+
+/// Semantic color variables for light theme
+const Color lightPrimaryColor = Color(0xFFF6F1EB);
+const Color lightSecondaryColor = Color(0xFF0087FF);
+const Color lightTertiaryColor = Color(0xFFFF914D);
+const Color lightQuaternaryColor = Color(0xFF292929);
+const Color lightquinaryColor = Color(0xFFFFFFFF);
+
+/// Semantic color variables for dark theme
+const Color darkPrimaryColor = Color(0xFF292929);
+const Color darkSecondaryColor = Color(0xFF6DB7FD);
+const Color darkTertiaryColor = Color(0xFFFF914D);
+const Color darkQuaternaryColor = Color(0xFFF6F1EB);
+const Color darkquinaryColor = Color(0xFF494949);
+
+
+/// Theme data for light theme
 ThemeData lightTheme() {
   return ThemeData(
-    scaffoldBackgroundColor: Color(0xFFF6F1EB),
-    primaryColor: Color(0xFF005BB1),
-    hintColor: Color(0xFFFF981F),
-    highlightColor: Color(0xFFFFFFFF),
-    focusColor: Color(0xFFFFD29F), // Verde para foco
-    disabledColor: Color(0xFFBDBDBD), // Cinza para desabilitado
-    shadowColor: Color(0xFF000000),
+    extensions: [
+      const AppColors(
+        primary: lightPrimaryColor,
+        secondary: lightSecondaryColor,
+        tertiary: lightTertiaryColor,
+        quaternary: lightQuaternaryColor,
+        quinary: lightquinaryColor,
+      ),
+    ],
   );
 }
 
+/// Theme data for dark theme
 ThemeData darkTheme() {
   return ThemeData(
-    scaffoldBackgroundColor: Color(0xFF1C1C1E),
-    primaryColor: Color(0xFF90CAF9),
-    hintColor: Color(0xFFFFB74D),
-    highlightColor: Color(0xFF2C2C2E),
-    focusColor: Color(0xFFFF8800), // Verde claro para foco
-    disabledColor: Color(0xFF616161), // Cinza escuro para desabilitado
-    shadowColor: Color(0xFFFFFFFF),
+    extensions: [
+      const AppColors(
+        primary: darkPrimaryColor,
+        secondary: darkSecondaryColor,
+        tertiary: darkTertiaryColor,
+        quaternary: darkQuaternaryColor,
+        quinary: darkquinaryColor,
+      ),
+    ],
+    // Card background
   );
 }
