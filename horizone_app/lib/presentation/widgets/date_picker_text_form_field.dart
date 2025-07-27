@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../AppColors.dart';
+
 enum DatePickerMode { birthdate, futureOnly }
 
 class CupertinoDatePickerField extends StatefulWidget {
@@ -22,7 +24,8 @@ class CupertinoDatePickerField extends StatefulWidget {
   final String? Function(String?)? validator;
 
   @override
-  State<CupertinoDatePickerField> createState() => _CupertinoDatePickerFieldState();
+  State<CupertinoDatePickerField> createState() =>
+      _CupertinoDatePickerFieldState();
 }
 
 class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
@@ -54,7 +57,7 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
       context: context,
       builder: (_) => Container(
         height: MediaQuery.of(context).size.height * 0.30,
-        color: Theme.of(context).highlightColor,
+        color: Theme.of(context).extension<AppColors>()!.primary,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.date,
           initialDateTime: initialDate,
@@ -63,7 +66,7 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
           onDateTimeChanged: (DateTime value) {
             setState(() {
               widget.controller.text =
-              '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
+                  '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
             });
           },
         ),
@@ -73,27 +76,28 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return TextFormField(
       controller: widget.controller,
       validator: widget.validator,
       readOnly: true,
       onTap: _showDatePicker,
-      style: TextStyle(color: Theme.of(context).primaryColor),
+      style: TextStyle(color: colors.secondary),
       decoration: InputDecoration(
         label: Text(widget.label),
         labelStyle: TextStyle(
-          color: Theme.of(context).primaryColor,
+          color: colors.secondary,
           fontSize: widget.fontSize,
         ),
-        prefixIcon: Icon(widget.icon, color: Theme.of(context).hintColor, size: 25),
+        prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 25),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: colors.tertiary),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: colors.tertiary),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
