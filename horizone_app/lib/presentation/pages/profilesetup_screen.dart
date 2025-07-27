@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:provider/provider.dart';
 import '../../../generated/l10n.dart';
+import '../../AppColors.dart';
 import '../state/profileform_provider.dart';
 import '../state/theme_provider.dart';
 import '../widgets/date_picker_text_form_field.dart';
@@ -16,11 +17,12 @@ class ProfileSetUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<ProfileFormProvider>(context);
+    final colors = Theme.of(context).extension<AppColors>()!;
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: _buildAppBar(context),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colors.primary,
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -65,6 +67,7 @@ class ProfileSetUpScreen extends StatelessWidget {
                     items: ['Masculino', 'Feminino', 'Outro'],
                     icon: Icons.person_outline,
                     validator: formProvider.validateGender,
+                    onChanged: formProvider.setGender,
                   ),
                   const SizedBox(height: 18),
                   OrangeTextForm(
@@ -91,15 +94,16 @@ class ProfileSetUpScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return AppBar(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      foregroundColor: Theme.of(context).primaryColor,
+      backgroundColor: colors.primary,
+      foregroundColor: colors.secondary,
       centerTitle: true,
       toolbarHeight: 80,
       title: Text(
         S.of(context).profile,
         style: TextStyle(
-          color: Theme.of(context).hintColor,
+          color: colors.tertiary,
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),

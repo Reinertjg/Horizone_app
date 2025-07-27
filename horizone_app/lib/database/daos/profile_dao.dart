@@ -17,7 +17,7 @@ class ProfileDao extends ChangeNotifier{
     });
   }
 
-  Future<List<Map<String, dynamic>>> getProfile() async {
+  Future<List<Map<String, Object?>>> getProfile() async {
     final db = await dbFuture;
     return await db.query(ProfileTable.tableName);
   }

@@ -1,14 +1,32 @@
 class ProfileTable {
   static const tableName = 'profiles';
 
+  // Primary key (auto-incremented integer)
+  static const String profileId = 'id';
+
+  // User's full name (text, required)
+  static const String profileName = 'name';
+
+  // Short biography or description (text, required, must be unique)
+  static const String biography = 'biography';
+
+  // Date of birth in string format (text, required)
+  static const String birthDate = 'birthDate';
+
+  // Gender identity (text, required)
+  static const String gender = 'gender';
+
+  // Professional job title or role (text, required)
+  static const String jobTitle = 'job_title';
+
   static const createTable = '''
     CREATE TABLE $tableName (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      biography TEXT UNIQUE NOT NULL,
-      birthDate TEXT NOT NULL,
-      gender TEXT NOT NULL,
-      job_title TEXT NOT NULL
+      $profileId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $profileName TEXT NOT NULL,
+      $biography TEXT UNIQUE NOT NULL,
+      $birthDate TEXT NOT NULL,
+      $gender TEXT NOT NULL,
+      $jobTitle TEXT NOT NULL
     )
   ''';
 }

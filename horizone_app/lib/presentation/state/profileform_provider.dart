@@ -1,17 +1,26 @@
-
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
 
 class ProfileFormProvider extends ChangeNotifier {
-
+  /// Controllers for the form fields.
   final nameController = TextEditingController();
   final bioController = TextEditingController();
   final dateOfBirthController = TextEditingController();
   final genderController = TextEditingController();
   final jobTitleController = TextEditingController();
 
+  /// Gender options.
+  String? _gender;
+
+  String? get gender => _gender;
+
+  void setGender(String? value) {
+    _gender = value;
+  }
+
+  /// Dispose the controller when the widget is disposed.
   @override
   void dispose() {
     nameController.dispose();
@@ -22,12 +31,13 @@ class ProfileFormProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Convert the form data to a [Profile] entity.
   Profile toEntity() {
     return Profile(
       name: nameController.text.trim(),
       biography: bioController.text.trim(),
       birthDate: dateOfBirthController.text.trim(),
-      gender: genderController.text.trim(),
+      gender: _gender ?? '',
       jobTitle: jobTitleController.text.trim(),
     );
   }
@@ -37,8 +47,15 @@ class ProfileFormProvider extends ChangeNotifier {
     return isValid;
   }
 
+  /// Validators
+  ///
+  /// @param value The value to validate name
+  /// @param value The value to validate bio
+  /// @param value The value to validate date of birth
+  /// @param value The value to validate gender
+  /// @param value The value to validate job title
   String? validateName(String? value) {
-    if (value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       return S.current.nameRequired;
     }
     if (value.length < 3) {
@@ -48,7 +65,7 @@ class ProfileFormProvider extends ChangeNotifier {
   }
 
   String? validateBio(String? value) {
-    if (value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       return S.current.bioRequired;
     }
     if (value.length < 10) {

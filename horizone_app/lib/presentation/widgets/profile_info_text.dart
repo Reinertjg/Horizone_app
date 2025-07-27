@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../AppColors.dart';
+
 class ProfileInfoText extends StatelessWidget {
   const ProfileInfoText({
     required this.tellUs,
@@ -14,14 +16,15 @@ class ProfileInfoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return RichText(
       text: TextSpan(
-        style: TextStyle(fontSize: 16, color: Theme.of(context).hintColor),
+        style: TextStyle(fontSize: 16, color: colors.tertiary),
         children: [
           TextSpan(text: tellUs),
           TextSpan(
             text: whoYouAre,
-            style: TextStyle(color: Theme.of(context).primaryColor),
+            style: TextStyle(color: colors.secondary),
           ),
           TextSpan(
             text: andWellTake,

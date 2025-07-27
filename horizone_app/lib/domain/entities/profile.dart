@@ -1,4 +1,5 @@
 class Profile {
+  final int? id;
   final String name;
   final String biography;
   final String birthDate;
@@ -6,6 +7,7 @@ class Profile {
   final String jobTitle;
 
   Profile({
+    this.id,
     required this.name,
     required this.biography,
     required this.birthDate,
@@ -13,15 +15,20 @@ class Profile {
     required this.jobTitle,
   });
 
-  Map<String, dynamic> toMap() => {
-    'name': name,
-    'biography': biography,
-    'birthDate': birthDate,
-    'gender': gender,
-    'jobTitle': jobTitle,
-  };
+  Map<String, dynamic> toMap() {
+    final map = {
+      'id': id,
+      'name': name,
+      'biography': biography,
+      'birthDate': birthDate,
+      'gender': gender,
+      'jobTitle': jobTitle,
+    };
+    return map;
+  }
 
   factory Profile.fromMap(Map<String, dynamic> map) => Profile(
+    id: map['id'],
     name: map['name'],
     biography: map['biography'],
     birthDate: map['birthDate'],
