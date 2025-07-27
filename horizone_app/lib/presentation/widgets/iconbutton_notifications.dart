@@ -15,10 +15,7 @@ class IconbuttonNotifications extends StatelessWidget {
         width: 35,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(
-            Icons.notifications_none,
-            color: colors.quaternary,
-          ),
+          icon: Icon(Icons.notifications_none, color: colors.quaternary),
           onPressed: () {},
         ),
       ),

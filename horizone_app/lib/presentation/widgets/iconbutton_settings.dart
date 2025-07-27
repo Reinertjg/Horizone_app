@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:horizone_app/presentation/widgets/settings_widgets/settingsbottom_sheetcontent.dart';
 import '../../AppColors.dart';
@@ -17,17 +16,13 @@ class IconbuttonSettings extends StatelessWidget {
         width: 35,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(
-            Icons.settings,
-            color: colors.quaternary,
-          ),
+          icon: Icon(Icons.settings, color: colors.quaternary),
           onPressed: () {
             showModalBottomSheet(
-              context: context, // Contexto do IconbuttonSettings
+              context: context,
               builder: (BuildContext innerContext) {
-                return SettingsBottomSheetContent(); // Retorna a instância do seu widget
+                return SettingsBottomSheetContent();
               },
-              // Outras propriedades como isScrollControlled, shape, etc.
             );
           },
         ),
