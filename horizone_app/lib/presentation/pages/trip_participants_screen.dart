@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horizone_app/presentation/state/interview_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../AppColors.dart';
+import '../theme_color/AppColors.dart';
 import '../../generated/l10n.dart';
 import '../widgets/interview_widgets/interview_textfield.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/get_started_bottom_card.dart';
-import '../widgets/get_started_header.dart';
-import '../widgets/get_started_logo.dart';
+import '../widgets/getstarted_widgets/get_started_bottom_card.dart';
+import '../widgets/getstarted_widgets/get_started_header.dart';
+import '../widgets/getstarted_widgets/get_started_logo.dart';
 
 class GetStartedScreen extends StatelessWidget {
   const GetStartedScreen({super.key});

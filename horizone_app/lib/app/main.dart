@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../database/daos/trip_dao.dart';
 import '../database/daos/profile_dao.dart';
 import '../generated/l10n.dart';
-import '../presentation/app_theme.dart';
+import '../presentation/theme_color/app_theme.dart';
 import '../presentation/state/interview_provider.dart';
 import '../presentation/state/locale_provider.dart';
 import '../presentation/state/profileform_provider.dart';

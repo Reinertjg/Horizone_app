@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../AppColors.dart';
+import '../../theme_color/AppColors.dart';
 
 class InterviewTextField extends StatefulWidget {
   const InterviewTextField({

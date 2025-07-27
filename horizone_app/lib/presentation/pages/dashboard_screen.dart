@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horizone_app/AppColors.dart';
+import 'package:horizone_app/presentation/theme_color/AppColors.dart';
 import 'package:horizone_app/presentation/widgets/iconbutton_notifications.dart';
 import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
-import '../widgets/bottom_navigationbar.dart';
+import '../widgets/profile_widgets/bottom_navigationbar.dart';
 import '../widgets/iconbutton_settings.dart';
 
 class DashboardScreen extends StatefulWidget {

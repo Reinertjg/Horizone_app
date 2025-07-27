@@ -4,11 +4,11 @@ import 'package:horizone_app/database/daos/trip_dao.dart';
 import 'package:horizone_app/presentation/widgets/interview_widgets/build_dropdownform.dart';
 import 'package:horizone_app/presentation/widgets/interview_widgets/interview_textfield.dart';
 import 'package:provider/provider.dart';
-import '../../AppColors.dart';
+import '../theme_color/AppColors.dart';
 import '../../database/daos/profile_dao.dart';
 import '../../generated/l10n.dart';
 import '../state/interview_provider.dart';
-import '../widgets/bottom_navigationbar.dart';
+import '../widgets/profile_widgets/bottom_navigationbar.dart';
 import '../widgets/interview_widgets/cupertino_textfield.dart';
 
 class InterviewScreen extends StatefulWidget {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:provider/provider.dart';
 import '../../../generated/l10n.dart';
-import '../../AppColors.dart';
+import '../theme_color/AppColors.dart';
 import '../state/profileform_provider.dart';
 import '../state/theme_provider.dart';
 import '../widgets/date_picker_text_form_field.dart';
 import '../widgets/orange_dropdownform.dart';
-import '../widgets/profile_info_text.dart';
+import '../widgets/profile_widgets/profile_info_text.dart';
 import '../widgets/orange_text_form.dart';
 import '../widgets/orange_text_box_form.dart';
 import '../widgets/continue_button.dart';

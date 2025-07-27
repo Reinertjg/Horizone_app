@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../AppColors.dart';
-import '../../generated/l10n.dart';
+import '../../theme_color/AppColors.dart';
+import '../../../generated/l10n.dart';
 
 BottomNavigationBar bottomNavigationBar(
   BuildContext context,

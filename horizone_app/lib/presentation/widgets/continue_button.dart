@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../AppColors.dart';
+import '../theme_color/AppColors.dart';
 import '../../data/repositories/profile_repository_impl.dart';
 import '../../database/daos/profile_dao.dart';
 import '../../domain/usecases/profile_usecase.dart';

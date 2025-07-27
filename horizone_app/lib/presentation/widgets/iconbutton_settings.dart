@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:horizone_app/presentation/widgets/settings_widgets/settingsbottom_sheetcontent.dart';
-import '../../AppColors.dart';
+import '../theme_color/AppColors.dart';
 
 class IconbuttonSettings extends StatelessWidget {
   const IconbuttonSettings({super.key});

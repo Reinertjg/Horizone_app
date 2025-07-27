@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../AppColors.dart';
+import 'AppColors.dart';
 
 /// Semantic color variables for light theme
 const Color lightPrimaryColor = Color(0xFFF6F1EB);

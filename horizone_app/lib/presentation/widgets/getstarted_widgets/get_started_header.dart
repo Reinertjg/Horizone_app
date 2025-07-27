@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../AppColors.dart';
-import '../state/locale_provider.dart';
+import '../../theme_color/AppColors.dart';
+import '../../state/locale_provider.dart';
 
 class GetStartedHeader extends StatelessWidget {
   const GetStartedHeader({super.key});
