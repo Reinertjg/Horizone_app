@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../AppColors.dart';
+
 class OrangeTextBoxForm extends StatelessWidget {
   const OrangeTextBoxForm({
     required this.hintText,
@@ -18,6 +20,7 @@ class OrangeTextBoxForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return SizedBox(
       height: 125,
       child: TextFormField(
@@ -26,28 +29,28 @@ class OrangeTextBoxForm extends StatelessWidget {
         maxLines: null,
         expands: true,
         keyboardType: TextInputType.multiline,
-        style: TextStyle(color: Theme.of(context).primaryColor),
+        style: TextStyle(color: colors.secondary),
         decoration: InputDecoration(
           labelText: nameButton,
           hintText: hintText,
-          labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-          hintStyle: TextStyle(color: Theme.of(context).primaryColor.withAlpha(128)),
-          prefixIcon: Icon(icon, color: Theme.of(context).hintColor, size: 25),
+          labelStyle: TextStyle(color: colors.secondary),
+          hintStyle: TextStyle(color: colors.secondary.withAlpha(128)),
+          prefixIcon: Icon(icon, color: colors.tertiary, size: 25),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Theme.of(context).hintColor),
+            borderSide: BorderSide(color: colors.tertiary),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Theme.of(context).hintColor),
+            borderSide: BorderSide(color: colors.tertiary),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Theme.of(context).hintColor),
+            borderSide: BorderSide(color: colors.tertiary),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Theme.of(context).hintColor),
+            borderSide: BorderSide(color: colors.tertiary),
           ),
         ),
       ),

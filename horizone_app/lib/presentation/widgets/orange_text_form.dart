@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../AppColors.dart';
+
 class OrangeTextForm extends StatelessWidget {
   const OrangeTextForm({
     required this.nameButton,
@@ -16,31 +18,31 @@ class OrangeTextForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return TextFormField(
       controller: controller,
       validator: validator,
-      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
+      style: TextStyle(color: colors.secondary, fontSize: 16),
       decoration: InputDecoration(
         labelText: nameButton,
-        labelStyle: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16),
-        prefixIcon: Icon(icon, color: Theme.of(context).hintColor, size: 28),
+        labelStyle: TextStyle(color: colors.secondary, fontSize: 16),
+        prefixIcon: Icon(icon, color: colors.tertiary, size: 28),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: colors.tertiary),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: colors.tertiary),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: colors.tertiary),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).hintColor),
+          borderSide: BorderSide(color: colors.tertiary),
         ),
-
       ),
     );
   }
