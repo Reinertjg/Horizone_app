@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../AppColors.dart';
 import '../../data/repositories/profile_repository_impl.dart';
 import '../../database/daos/profile_dao.dart';
 import '../../domain/usecases/profile_usecase.dart';
@@ -20,6 +21,7 @@ class ContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<ProfileFormProvider>(context);
+    final colors = Theme.of(context).extension<AppColors>()!;
 
     return ElevatedButton(
       onPressed: () async {
@@ -32,20 +34,22 @@ class ContinueButton extends StatelessWidget {
 
           await useCase.insert(profile);
 
+          final getProfile = await ProfileDao().getProfile();
+          print(getProfile);
           if (context.mounted) {
             Navigator.pushNamed(context, pathRoute);
           }
         }
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: colors.secondary,
         padding: const EdgeInsets.symmetric(horizontal: 52, vertical: 12),
       ),
       child: Text(
         title,
         style: TextStyle(
           fontSize: 16,
-          color: Theme.of(context).highlightColor,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
       ),
