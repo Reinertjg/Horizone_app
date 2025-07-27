@@ -1,3 +1,4 @@
+import 'package:horizone_app/database/tables/trips_table.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'tables/profile_table.dart';
@@ -24,10 +25,14 @@ class HorizoneDatabase {
       path,
       version: 1,
       onCreate: _onCreate,
+      onConfigure: (onConfigure) async {
+        await onConfigure.execute('PRAGMA foreign_keys = ON');
+      }
     );
   }
 
   Future _onCreate(Database db, int version) async {
     await db.execute(ProfileTable.createTable);
+    await db.execute(TripTable.createTable);
   }
 }
