@@ -6,8 +6,7 @@ import '../../generated/l10n.dart';
 BottomNavigationBar bottomNavigationBar(
   BuildContext context,
   int currentIndex,
-)
-{
+) {
   final colors = Theme.of(context).extension<AppColors>()!;
   return BottomNavigationBar(
     backgroundColor: colors.primary,
@@ -21,10 +20,7 @@ BottomNavigationBar bottomNavigationBar(
         backgroundColor: colors.primary,
       ),
       BottomNavigationBarItem(
-        icon: Icon(
-          Icons.mode_of_travel_outlined,
-          color: colors.secondary,
-        ),
+        icon: Icon(Icons.mode_of_travel_outlined, color: colors.secondary),
         backgroundColor: colors.primary,
         label: S.of(context).planning,
       ),
@@ -33,10 +29,7 @@ BottomNavigationBar bottomNavigationBar(
         label: 'Notifications',
       ),
       BottomNavigationBarItem(
-        icon: Icon(
-          Icons.person_pin_rounded,
-          color: colors.secondary,
-        ),
+        icon: Icon(Icons.person_pin_rounded, color: colors.secondary),
         label: S.of(context).profile,
       ),
     ],
