@@ -3,9 +3,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:horizone_app/app/routes.dart';
 import 'package:provider/provider.dart';
 
+import '../database/daos/trip_dao.dart';
 import '../database/daos/profile_dao.dart';
 import '../generated/l10n.dart';
 import '../presentation/app_theme.dart';
+import '../presentation/state/interview_provider.dart';
 import '../presentation/state/locale_provider.dart';
 import '../presentation/state/profileform_provider.dart';
 import '../presentation/state/theme_provider.dart';
@@ -14,17 +16,33 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        /// Provides the current app locale (e.g., 'pt' for Portuguese)
         ChangeNotifierProvider(
           create: (_) => LocaleProvider(const Locale('pt')),
         ),
+
+        /// Manages light/dark theme switching
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+
+        /// Manages the state of the profile form (e.g., ProfileFormScreen)
         ChangeNotifierProvider(create: (_) => ProfileFormProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileDao())
+
+        /// Handles database operations for profiles
+        ChangeNotifierProvider(create: (_) => ProfileDao()),
+
+        /// Manages interview-related state and logic
+        ChangeNotifierProvider(create: (_) => InterviewProvider()),
+
+        /// Handles database operations for trips
+        ChangeNotifierProvider(create: (_) => TripDao()),
       ],
+
+      /// Root widget of the app
       child: const MyApp(),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
