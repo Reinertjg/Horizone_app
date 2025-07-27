@@ -12,21 +12,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final profileDao = ProfileDao();
-  var profiles;
+  late List<Map<String, Object?>> profiles;
 
   @override
   void initState() {
     super.initState();
     _carregarPerfil();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (context.mounted) {
-        if(profiles.isNotEmpty) {
-          Navigator.pushNamed(context, '/dashboard');
-        } else {
-          Navigator.pushReplacementNamed(context, '/getStarted');
-        }
-      }
-    });
   }
 
   Future<void> _carregarPerfil() async {
@@ -34,11 +25,16 @@ class _SplashScreenState extends State<SplashScreen> {
     setState(() {
       profiles = perfilBuscado;
     });
+
+    if (profiles.isNotEmpty) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      Navigator.pushReplacementNamed(context, '/getStarted');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Color(0xff003566),
       body: SafeArea(
@@ -56,7 +52,8 @@ class _SplashScreenState extends State<SplashScreen> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
-                child: Text(S.of(context).newHorizons,
+                child: Text(
+                  S.of(context).newHorizons,
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.white,
