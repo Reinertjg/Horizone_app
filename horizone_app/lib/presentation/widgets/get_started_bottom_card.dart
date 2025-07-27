@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../generated/l10n.dart';
+import '../../AppColors.dart';
 
 class GetStartedBottomCard extends StatelessWidget {
   const GetStartedBottomCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -16,7 +18,7 @@ class GetStartedBottomCard extends StatelessWidget {
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: colors.primary,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -29,7 +31,7 @@ class GetStartedBottomCard extends StatelessWidget {
                   S.of(context).readyExplore,
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.width * 0.07,
-                    color: Theme.of(context).primaryColor,
+                    color: colors.quaternary,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -44,22 +46,24 @@ class GetStartedBottomCard extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, '/profileSetup');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: colors.secondary,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 52, vertical: 12),
+                        horizontal: 52,
+                        vertical: 12,
+                      ),
                     ),
                     child: Text(
                       S.of(context).startJourney,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Theme.of(context).highlightColor,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   Icon(
                     Icons.airplanemode_on_outlined,
-                    color: Theme.of(context).primaryColor,
+                    color: colors.secondary,
                     size: 26,
                   ),
                 ],

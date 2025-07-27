@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../AppColors.dart';
 import '../state/locale_provider.dart';
 
 class GetStartedHeader extends StatelessWidget {
@@ -10,6 +11,7 @@ class GetStartedHeader extends StatelessWidget {
     final localeProvider = Provider.of<LocaleProvider>(context);
     final locale = localeProvider.locale!;
     final selectedLanguage = getLanguageName(locale);
+    final colors = Theme.of(context).extension<AppColors>()!;
 
     return Align(
       alignment: Alignment.topRight,
@@ -29,7 +31,7 @@ class GetStartedHeader extends StatelessWidget {
           }),
           icon: Icon(Icons.arrow_drop_down, size: 22, color: Colors.white),
           style: TextStyle(color: Colors.white, fontSize: 16),
-          dropdownColor: const Color(0xff003566),
+          dropdownColor: colors.secondary,
           onChanged: (newLocale) {
             if (newLocale != null) {
               localeProvider.setLocale(newLocale);
@@ -47,10 +49,14 @@ class GetStartedHeader extends StatelessWidget {
 
   String getLanguageName(Locale locale) {
     switch (locale.languageCode) {
-      case 'en': return 'English';
-      case 'pt': return 'Português';
-      case 'es': return 'Español';
-      default: return 'Unknown';
+      case 'en':
+        return 'English';
+      case 'pt':
+        return 'Português';
+      case 'es':
+        return 'Español';
+      default:
+        return 'Unknown';
     }
   }
 }
