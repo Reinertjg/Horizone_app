@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays the Horizone logo at the top center of the screen.
+///
+/// Typically used on onboarding or splash screens like Get Started.
 class GetStartedLogo extends StatelessWidget {
+  /// Creates a [GetStartedLogo] widget.
   const GetStartedLogo({super.key});
 
   @override

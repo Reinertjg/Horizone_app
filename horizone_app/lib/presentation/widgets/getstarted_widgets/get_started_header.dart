@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../theme_color/AppColors.dart';
-import '../../state/locale_provider.dart';
 
+import '../../state/locale_provider.dart';
+import '../../theme_color/app_colors.dart';
+
+/// A widget displayed at the top right of the Get Started screen,
+/// allowing the user to select the app's language.
 class GetStartedHeader extends StatelessWidget {
+  /// Creates a [GetStartedHeader] widget.
   const GetStartedHeader({super.key});
 
   @override
@@ -47,6 +51,7 @@ class GetStartedHeader extends StatelessWidget {
     );
   }
 
+  /// Returns the human-readable name of the given [locale].
   String getLanguageName(Locale locale) {
     switch (locale.languageCode) {
       case 'en':

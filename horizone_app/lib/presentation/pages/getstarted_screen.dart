@@ -3,7 +3,10 @@ import '../widgets/getstarted_widgets/get_started_bottom_card.dart';
 import '../widgets/getstarted_widgets/get_started_header.dart';
 import '../widgets/getstarted_widgets/get_started_logo.dart';
 
+/// The initial screen presented to the user,
+/// typically used to introduce the app and guide them to onboarding or login.
 class GetStartedScreen extends StatelessWidget {
+  /// Creates a [GetStartedScreen] widget.
   const GetStartedScreen({super.key});
 
   @override

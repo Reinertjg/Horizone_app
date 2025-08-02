@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n.dart';
-import '../../theme_color/AppColors.dart';
+import '../../theme_color/app_colors.dart';
 
+/// A widget displayed at the bottom of the Get Started screen,
+/// containing a title and a button to start the profile setup flow.
 class GetStartedBottomCard extends StatelessWidget {
+  /// Creates a [GetStartedBottomCard] widget.
   const GetStartedBottomCard({super.key});
 
   @override
