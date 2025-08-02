@@ -1,14 +1,20 @@
 import '../entities/profile.dart';
 import '../repositories/profile_repository.dart';
 
+/// Use case class responsible for handling business logic related to [Profile].
 class ProfileUseCase {
+  /// The repository used to access profile data.
   final ProfileRepository repository;
 
+  /// Creates a [ProfileUseCase] with the given [repository].
   ProfileUseCase(this.repository);
 
+  /// Inserts a new [profile] into the data source.
   Future<void> insert(Profile profile) => repository.insertProfile(profile);
 
+  /// Deletes all profile entries from the data source.
   Future<void> delete() => repository.deleteTableProfile();
 
+  /// Retrieves all profiles from the data source.
   Future<List<Profile>> getAll() => repository.getAllProfiles();
 }

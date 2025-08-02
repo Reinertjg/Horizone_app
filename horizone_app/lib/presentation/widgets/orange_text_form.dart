@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../theme_color/AppColors.dart';
+import '../theme_color/app_colors.dart';
 
+/// A customized single-line text input used throughout the app.
+///
+/// Applies consistent orange-themed styling.
 class OrangeTextForm extends StatelessWidget {
+  /// Creates a custom [OrangeTextForm] with the given parameters.
   const OrangeTextForm({
     required this.nameButton,
     required this.icon,
@@ -11,10 +15,18 @@ class OrangeTextForm extends StatelessWidget {
     super.key,
   });
 
+  /// Label text displayed above the input.
   final String nameButton;
+
+  /// Icon shown on the left of the input field.
   final IconData icon;
+
+  /// Text controller that handles the input value.
   final TextEditingController controller;
+
+  /// Optional validator for form validation.
   final String? Function(String?)? validator;
+
 
   @override
   Widget build(BuildContext context) {

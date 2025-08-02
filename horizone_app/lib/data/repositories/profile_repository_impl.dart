@@ -1,25 +1,28 @@
-import '../../database/daos/profile_dao.dart';
+import '../../database/horizone_database.dart';
+import '../../database/tables/profile_table.dart';
 import '../../domain/entities/profile.dart';
 import '../../domain/repositories/profile_repository.dart';
 
+/// Implementation of the [ProfileRepository] interface.
 class ProfileRepositoryImpl implements ProfileRepository {
-  final ProfileDao dao;
-
-  ProfileRepositoryImpl(this.dao);
+  final _dbFuture = HorizoneDatabase().database;
 
   @override
-  Future<void> insertProfile(Profile profile) async {
-    await dao.insertProfile(profile.toMap());
-  }
-
-  @override
-  Future<void> deleteTableProfile() async {
-    await dao.deleteTableProfile();
+  Future<int> insertProfile(Profile profile) async {
+    final db = await _dbFuture;
+    return await db.insert(ProfileTable.tableName, profile.toMap());
   }
 
   @override
   Future<List<Profile>> getAllProfiles() async {
-    final maps = await dao.getProfile();
-    return maps.map((e) => Profile.fromMap(e)).toList();
+    final db = await _dbFuture;
+    final result = await db.query(ProfileTable.tableName);
+    return result.map(Profile.fromMap).toList();
+  }
+
+  @override
+  Future<void> deleteTableProfile() async {
+    final db = await _dbFuture;
+    await db.delete(ProfileTable.tableName);
   }
 }

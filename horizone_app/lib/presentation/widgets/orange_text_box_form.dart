@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../theme_color/AppColors.dart';
+import '../theme_color/app_colors.dart';
 
+/// A custom multiline text input field with a styled orange theme.
+///
+/// Useful for large text inputs such as descriptions or comments.
 class OrangeTextBoxForm extends StatelessWidget {
+  /// Creates an [OrangeTextBoxForm] with the given parameters.
   const OrangeTextBoxForm({
     required this.hintText,
     required this.nameButton,
@@ -12,10 +16,19 @@ class OrangeTextBoxForm extends StatelessWidget {
     super.key,
   });
 
+  /// The label that appears above the field.
   final String nameButton;
+
+  /// The hint shown inside the input.
   final String hintText;
+
+  /// The icon shown at the beginning of the field.
   final IconData icon;
+
+  /// Controller that manages the text being edited.
   final TextEditingController controller;
+
+  /// Optional validation logic.
   final String? Function(String?)? validator;
 
   @override

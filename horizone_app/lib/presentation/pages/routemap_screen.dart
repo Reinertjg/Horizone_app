@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Screen that displays the route map and its visual representation.
 class RouteMapScreen extends StatefulWidget {
+  /// Creates a [RouteMapScreen] widget.
   const RouteMapScreen({super.key});
 
   @override
@@ -19,7 +21,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                  color: Theme.of(context).primaryColor.withAlpha(10),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
@@ -39,7 +41,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
               ),
             ],
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Card(
             elevation: 2,
             shape: RoundedRectangleBorder(
@@ -55,7 +57,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Theme.of(context).hintColor.withValues(alpha: 0.5),
+                    Theme.of(context).hintColor.withAlpha(50),
                     Theme.of(context).focusColor,
                   ],
                 ),
@@ -85,7 +87,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                         fontWeight: FontWeight.bold,
                         color: Theme.of(
                           context,
-                        ).primaryColor.withValues(alpha: 0.8),
+                        ).primaryColor.withAlpha(204), // 0.8 * 255
                       ),
                     ),
                     Text(
@@ -95,7 +97,7 @@ class _RouteMapScreenState extends State<RouteMapScreen> {
                         fontWeight: FontWeight.bold,
                         color: Theme.of(
                           context,
-                        ).primaryColor.withValues(alpha: 0.3),
+                        ).primaryColor.withAlpha(76), // 0.3 * 255
                       ),
                     ),
                   ],

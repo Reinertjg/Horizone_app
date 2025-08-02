@@ -1,26 +1,38 @@
 import 'package:flutter/cupertino.dart';
-
 import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
 
+/// Provider class for managing the state and validation of the profile form.
 class ProfileFormProvider extends ChangeNotifier {
-  /// Controllers for the form fields.
+  /// Controller for the name input field.
   final nameController = TextEditingController();
+
+  /// Controller for the biography input field.
   final bioController = TextEditingController();
+
+  /// Controller for the date of birth input field.
   final dateOfBirthController = TextEditingController();
+
+  /// Controller for the gender input field.
   final genderController = TextEditingController();
+
+  /// Controller for the job title input field.
   final jobTitleController = TextEditingController();
 
-  /// Gender options.
+  /// Selected gender value.
   String? _gender;
 
+  /// Gets the selected gender.
   String? get gender => _gender;
 
-  void setGender(String? value) {
+  /// Sets the gender property with the provided [value].
+  set gender(String? value) {
     _gender = value;
+    notifyListeners();
   }
 
-  /// Dispose the controller when the widget is disposed.
+
+  /// Disposes all text controllers to free up resources.
   @override
   void dispose() {
     nameController.dispose();
@@ -31,7 +43,7 @@ class ProfileFormProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Convert the form data to a [Profile] entity.
+  /// Converts the form data into a [Profile] entity.
   Profile toEntity() {
     return Profile(
       name: nameController.text.trim(),
@@ -42,18 +54,14 @@ class ProfileFormProvider extends ChangeNotifier {
     );
   }
 
+  /// Validates all form fields using the given [formKey].
   bool validateAll(GlobalKey<FormState> formKey) {
     final isValid = formKey.currentState?.validate() ?? false;
     return isValid;
   }
 
-  /// Validators
-  ///
-  /// @param value The value to validate name
-  /// @param value The value to validate bio
-  /// @param value The value to validate date of birth
-  /// @param value The value to validate gender
-  /// @param value The value to validate job title
+  /// Checks if the [Profile.name] matches the required rules:
+  /// cannot be empty / min length of 3 chars
   String? validateName(String? value) {
     if (value == null || value.isEmpty) {
       return S.current.nameRequired;
@@ -64,6 +72,8 @@ class ProfileFormProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Checks if the [Profile.biography] matches the required rules:
+  /// cannot be empty / min length of 10 chars
   String? validateBio(String? value) {
     if (value == null || value.isEmpty) {
       return S.current.bioRequired;
@@ -74,6 +84,8 @@ class ProfileFormProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Checks if the [Profile.birthDate] matches the required rules:
+  /// cannot be empty
   String? validateDateOfBirth(String? value) {
     if (value == null || value.isEmpty) {
       return S.current.dateOfBirthRequired;
@@ -81,6 +93,8 @@ class ProfileFormProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Checks if the [Profile.gender] matches the required rules:
+  /// cannot be empty
   String? validateGender(String? value) {
     if (value == null || value.isEmpty) {
       return S.current.genderRequired;
@@ -88,6 +102,8 @@ class ProfileFormProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Checks if the [Profile.jobTitle] matches the required rules:
+  /// cannot be empty
   String? validateJobTitle(String? value) {
     if (value == null || value.isEmpty) {
       return S.current.jobTitleRequired;

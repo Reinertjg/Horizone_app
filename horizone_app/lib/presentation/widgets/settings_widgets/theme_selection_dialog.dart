@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:horizone_app/presentation/state/theme_provider.dart';
-import '../../../generated/l10n.dart';
 
+import '../../../generated/l10n.dart';
+import '../../state/theme_provider.dart';
+
+/// A dialog that allows users to select between
+/// Light, dark, or system theme modes.
+///
+/// Uses [ThemeProvider] to update the application's theme.
 class ThemeSelectionDialog extends StatefulWidget {
+  /// Creates a custom [ThemeSelectionDialog] with the given parameter.
   const ThemeSelectionDialog({super.key,  required this.themeProvider});
 
+  /// The [ThemeProvider] used to update the application's theme.
   final ThemeProvider themeProvider;
 
   @override

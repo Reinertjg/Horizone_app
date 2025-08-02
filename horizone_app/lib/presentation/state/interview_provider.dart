@@ -1,45 +1,53 @@
 import 'package:flutter/cupertino.dart';
-
 import '../../domain/entities/trip.dart';
 
+/// Provider class responsible for managing the form state and logic
+/// related to a trip interview process.
 class InterviewProvider extends ChangeNotifier {
-  /// List of trips
+  /// Controller for the trip title input field.
   final titleController = TextEditingController();
+
+  /// Controller for the trip start date input field.
   final startDateController = TextEditingController();
+
+  /// Controller for the trip end date input field.
   final endDateController = TextEditingController();
+
+  /// Controller for the number of participants input field.
   final numberOfParticipantsController = TextEditingController();
 
   int? _participants;
   String? _meansOfTransportation;
   String? _experienceType;
 
+  /// Gets the number of participants.
   int? get participants => _participants;
 
+  /// Gets the selected means of transportation.
   String? get meansOfTransportation => _meansOfTransportation;
 
+  /// Gets the selected experience type.
   String? get experienceType => _experienceType;
 
-  /// Setters
-  ///
-  /// @param value The new value for the participants
-  /// @param value The new value for the means of transportation
-  /// @param value The new value for the experience type
-  void setParticipants(int? value) {
+  /// Sets the number of participants and notifies listeners.
+  set participants(int? value) {
     _participants = value;
     notifyListeners();
   }
 
-  void setMeansOfTransportation(String? value) {
+  /// Sets the means of transportation and notifies listeners.
+  set meansOfTransportation(String? value) {
     _meansOfTransportation = value;
     notifyListeners();
   }
 
-  void setExperienceType(String? value) {
+  /// Sets the experience type and notifies listeners.
+  set experienceType(String? value) {
     _experienceType = value;
     notifyListeners();
   }
 
-  /// Dispose the controllers
+  /// Disposes all controllers when the provider is destroyed.
   @override
   void dispose() {
     titleController.dispose();
@@ -49,7 +57,7 @@ class InterviewProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Convert the form data to an entity
+  /// Converts the form data to a [Trip] entity.
   Trip toEntity() {
     return Trip(
       id: 0,
@@ -62,14 +70,7 @@ class InterviewProvider extends ChangeNotifier {
     );
   }
 
-  /// Validators
-  ///
-  /// @param value The value to validate
-  /// @param value The value to validate start date
-  /// @param value The value to validate end date
-  /// @param value The value to validate means of transportation
-  /// @param value The value to validate number of participants
-  /// @param value The value to validate experience type
+  /// Validates the title field.
   String? validateTitle(String? value) {
     if (value == null || value.isEmpty) {
       return 'Title is required';
@@ -77,6 +78,7 @@ class InterviewProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the start date field.
   String? validateStartDate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Start date is required';
@@ -84,6 +86,7 @@ class InterviewProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the end date field.
   String? validateEndDate(String? value) {
     if (value == null || value.isEmpty) {
       return 'End date is required';
@@ -91,6 +94,7 @@ class InterviewProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the means of transportation field.
   String? validateMeansOfTransportation(String? value) {
     if (value == null || value.isEmpty) {
       return 'Means of transportation is required';
@@ -98,6 +102,7 @@ class InterviewProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the number of participants field.
   String? validateNumberOfParticipants(String? value) {
     if (value == null || value.isEmpty) {
       return 'Number of participants is required';
@@ -105,6 +110,7 @@ class InterviewProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the experience type field.
   String? validateExperienceType(String? value) {
     if (value == null || value.isEmpty) {
       return 'Experience type is required';

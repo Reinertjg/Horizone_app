@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme_color/AppColors.dart';
+import '../../theme_color/app_colors.dart';
 
+/// A reusable text form field for the interview screen.
+///
+/// Displays a label and a styled input field with custom icon and hint.
+///
+/// It supports input validation and keyboard type configuration.
 class InterviewTextField extends StatefulWidget {
+  /// Creates a custom [InterviewTextField] with the given parameters.
   const InterviewTextField({
     required this.nameButton,
     required this.hintText,
@@ -14,11 +20,22 @@ class InterviewTextField extends StatefulWidget {
     super.key,
   });
 
+  /// The label shown above the text field.
   final String nameButton;
+
+  /// The hint text displayed when the field is empty.
   final String hintText;
+
+  /// The icon displayed inside the field as prefix.
   final IconData icon;
+
+  /// The controller that manages the input text.
   final TextEditingController controller;
+
+  /// An optional validator for form validation.
   final String? Function(String?)? validator;
+
+  /// The type of keyboard to use for the field (e.g., number, text).
   final TextInputType keyboardType;
 
   @override
@@ -56,7 +73,7 @@ class _InterviewTextFieldState extends State<InterviewTextField> {
                 fontSize: 16,
               ),
             ),
-            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 28),
+            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 20),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: colors.tertiary),

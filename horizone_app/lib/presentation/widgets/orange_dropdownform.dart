@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../theme_color/AppColors.dart';
+import '../theme_color/app_colors.dart';
 
+/// A customizable dropdown form field styled with the orange theme.
+///
+/// Displays a list of string items with a label and icon.
 class OrangeDropdownform extends StatefulWidget {
+  /// Creates an [OrangeDropdownform] with the given parameters.
   const OrangeDropdownform({
     super.key,
     required this.label,
@@ -12,10 +16,19 @@ class OrangeDropdownform extends StatefulWidget {
     this.onChanged,
   });
 
+  /// The label shown above the dropdown.
   final String label;
+
+  /// The list of string items to display in the dropdown.
   final List<String> items;
+
+  /// The icon displayed before the dropdown.
   final IconData icon;
+
+  /// Optional form validator function.
   final String? Function(String?)? validator;
+
+  /// Callback triggered when an item is selected.
   final void Function(String?)? onChanged;
 
   @override
@@ -23,24 +36,25 @@ class OrangeDropdownform extends StatefulWidget {
 }
 
 class _OrangeDropdownformState extends State<OrangeDropdownform> {
+  String? selectedValue;
+
+  void onChanged(String? newValue) {
+    setState(() {
+      selectedValue = newValue;
+    });
+
+    if (widget.onChanged != null) {
+      widget.onChanged!(newValue);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    String? selectedValue;
-
-    void onChanged(String? newValue) {
-      setState(() {
-        selectedValue = newValue;
-      });
-
-      if (widget.onChanged != null) {
-        widget.onChanged!(newValue);
-      }
-    }
 
     return DropdownButtonFormField<String>(
       value: selectedValue,
-      items: widget.items.map((String value) {
+      items: widget.items.map((/*String*/ value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value, style: TextStyle(color: colors.secondary)),

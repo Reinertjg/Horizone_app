@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Provider class responsible for
+/// managing and persisting the app's theme settings.
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 
@@ -16,7 +18,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   /// Toggle the theme mode.
-  void toggleTheme(bool isOn) {
+  void toggleTheme({required bool isOn}) {
     _themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
     _saveTheme(_themeMode);
     notifyListeners();

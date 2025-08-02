@@ -6,8 +6,12 @@ import '../presentation/pages/interview_screen.dart';
 import '../presentation/pages/profilesetup_screen.dart';
 import '../presentation/pages/splash_screen.dart';
 import '../presentation/pages/trip_participants_screen.dart';
+import '../presentation/pages/trip_stops_screen.dart';
 
-class AppRoutes {
+/// Centralized route management for the app.
+abstract class AppRoutes {
+  // Private constructor to prevent instantiation.
+  AppRoutes._();
   /// Centralized route management for the app.
   /// Good practice: makes navigation easier to maintain and scale.
   static final Map<String, WidgetBuilder> routes = {
@@ -27,6 +31,9 @@ class AppRoutes {
 
     /// Screen for managing or input trip participants
     '/tripParticipants': (context) => const TripParticipantsScreen(),
+
+    /// Screen for managing or input trip stops
+    '/tripStops': (context) => const TripStopsScreen(),
   };
 }
 

@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:horizone_app/generated/l10n.dart';
 
-import '../../database/daos/profile_dao.dart';
+import '../../data/repositories/profile_repository_impl.dart';
+import '../../domain/entities/profile.dart';
+import '../../generated/l10n.dart';
 
+/// Splash screen shown when the app starts.
+/// It checks whether a user profile exists and navigates accordingly
+/// to either the dashboard or the get started screen.
 class SplashScreen extends StatefulWidget {
+  /// Creates a [SplashScreen] widget.
   const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
+/// State class for [SplashScreen], handles initial logic and navigation.
 class _SplashScreenState extends State<SplashScreen> {
-  final profileDao = ProfileDao();
-  late List<Map<String, Object?>> profiles;
+  /// Repository used to retrieve stored profile data.
+  final repository = ProfileRepositoryImpl();
+
+  /// List of profiles loaded from the database.
+  late List<Profile> profiles;
 
   @override
   void initState() {
@@ -20,23 +29,26 @@ class _SplashScreenState extends State<SplashScreen> {
     _carregarPerfil();
   }
 
+  /// Loads the profile data and navigates based on existence of profile.
   Future<void> _carregarPerfil() async {
-    final perfilBuscado = await profileDao.getProfile();
+    final perfilBuscado = await repository.getAllProfiles();
     setState(() {
       profiles = perfilBuscado;
     });
 
+    if (!mounted) return;
+
     if (profiles.isNotEmpty) {
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      await Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
-      Navigator.pushReplacementNamed(context, '/getStarted');
+      await Navigator.pushReplacementNamed(context, '/getStarted');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff003566),
+      backgroundColor: const Color(0xff003566),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: Text(
                   S.of(context).newHorizons,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

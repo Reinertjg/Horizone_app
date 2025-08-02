@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:horizone_app/app/routes.dart';
 import 'package:provider/provider.dart';
 
 import '../database/daos/trip_dao.dart';
-import '../database/daos/profile_dao.dart';
 import '../generated/l10n.dart';
-import '../presentation/theme_color/app_theme.dart';
 import '../presentation/state/interview_provider.dart';
 import '../presentation/state/locale_provider.dart';
 import '../presentation/state/profileform_provider.dart';
 import '../presentation/state/theme_provider.dart';
+import '../presentation/theme_color/app_theme.dart';
+import 'routes.dart';
 
 void main() {
   runApp(
@@ -27,8 +26,8 @@ void main() {
         /// Manages the state of the profile form (e.g., ProfileFormScreen)
         ChangeNotifierProvider(create: (_) => ProfileFormProvider()),
 
-        /// Handles database operations for profiles
-        ChangeNotifierProvider(create: (_) => ProfileDao()),
+        // /// Handles database operations for profiles
+        // ChangeNotifierProvider(create: (_) => ProfileDao()),
 
         /// Manages interview-related state and logic
         ChangeNotifierProvider(create: (_) => InterviewProvider()),
@@ -43,8 +42,12 @@ void main() {
   );
 }
 
-
+/// The root widget of the application.
+///
+/// Sets up localization, theme, routing, and providers
+/// such as locale and theme mode.
 class MyApp extends StatelessWidget {
+  /// Constructs the [MyApp] widget.
   const MyApp({super.key});
 
   @override

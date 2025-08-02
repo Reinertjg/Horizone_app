@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:provider/provider.dart';
+
 import '../../../generated/l10n.dart';
-import '../theme_color/AppColors.dart';
 import '../state/profileform_provider.dart';
 import '../state/theme_provider.dart';
+import '../theme_color/app_colors.dart';
+import '../widgets/continue_button.dart';
 import '../widgets/date_picker_text_form_field.dart';
 import '../widgets/orange_dropdownform.dart';
-import '../widgets/profile_widgets/profile_info_text.dart';
-import '../widgets/orange_text_form.dart';
 import '../widgets/orange_text_box_form.dart';
-import '../widgets/continue_button.dart';
+import '../widgets/orange_text_form.dart';
+import '../widgets/profile_widgets/profile_info_text.dart';
 
+/// Screen used to collect user profile information during onboarding.
 class ProfileSetUpScreen extends StatelessWidget {
+  /// Creates a [ProfileSetUpScreen] widget.
   const ProfileSetUpScreen({super.key});
 
   @override
@@ -67,7 +70,7 @@ class ProfileSetUpScreen extends StatelessWidget {
                     items: ['Masculino', 'Feminino', 'Outro'],
                     icon: Icons.person_outline,
                     validator: formProvider.validateGender,
-                    onChanged: formProvider.setGender,
+                    onChanged: (value) => formProvider.gender = value,
                   ),
                   const SizedBox(height: 18),
                   OrangeTextForm(
@@ -86,7 +89,7 @@ class ProfileSetUpScreen extends StatelessWidget {
         padding: const EdgeInsets.all(22),
         child: ContinueButton(
           title: S.of(context).continueButton,
-          pathRoute: "/dashboard",
+          pathRoute: '/dashboard',
           formKey: formKey,
         ),
       ),
@@ -118,7 +121,10 @@ class ProfileSetUpScreen extends StatelessWidget {
         IconButton(
           onPressed: () {
             Provider.of<ThemeProvider>(context, listen: false).toggleTheme(
-              !Provider.of<ThemeProvider>(context, listen: false).isDarkMode,
+              isOn: !Provider.of<ThemeProvider>(
+                context,
+                listen: false,
+              ).isDarkMode,
             );
           },
           icon: const Icon(Icons.light_mode, size: 25),

@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import '../../../generated/l10n.dart';
 import '../../state/locale_provider.dart';
 
+/// A dialog that allows the user to select the app's language.
+///
+/// This widget shows a list of available languages
+/// (English, Portuguese, Spanish),
+/// and updates the locale using the provided [LocaleProvider].
 class LanguageSelectionDialog extends StatelessWidget {
+  /// Creates a custom [InterviewTextField] with the given parameter.
   const LanguageSelectionDialog({super.key, required this.localeProvider});
 
+  /// The [LocaleProvider] used to update the app's locale.
   final LocaleProvider localeProvider;
 
   @override
