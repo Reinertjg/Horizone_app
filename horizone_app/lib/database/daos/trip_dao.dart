@@ -1,18 +1,21 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:horizone_app/database/horizone_database.dart';
+import '../horizone_database.dart';
 import '../tables/trips_table.dart';
 
+/// A class representing a trip.
 class TripDao extends ChangeNotifier {
-  final dbFuture = HorizoneDatabase().database;
+  final _dbFuture = HorizoneDatabase().database;
 
+  /// Inserts a new trip into the database.
   Future<List<Map<String, Object?>>> getAllTrips() async {
-    final db = await dbFuture;
+    final db = await _dbFuture;
     return await db.query(TripTable.tableName);
   }
 
+  /// Inserts a new trip into the database.
   Future<int> insertTrip(Map<String, dynamic> trip) async {
-    final db = await dbFuture;
+    final db = await _dbFuture;
     return await db.insert(TripTable.tableName, {
       'title': trip['title'],
       'startDate': trip['startDate'],
@@ -23,8 +26,10 @@ class TripDao extends ChangeNotifier {
     });
   }
 
+  /// Deletes a trip from the database.
   Future<int> deleteTrip(int id) async {
-    final db = await dbFuture;
-    return await db.delete(TripTable.tableName, where: 'id = ?', whereArgs: [id]);
+    final db = await _dbFuture;
+    return await db
+        .delete(TripTable.tableName, where: 'id = ?', whereArgs: [id]);
   }
 }

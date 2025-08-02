@@ -1,12 +1,21 @@
+/// A class representing a trip.
 class Trip {
+  /// The unique identifier of the trip.
   final int id;
+  /// The title or name of the trip.
   final String title;
+  /// The start date of the trip.
   final String startDate;
+  /// The end date of the trip.
   final String endDate;
+  /// The transportation method used for the trip.
   final String meansOfTransportation;
+  /// The number of participants in the trip.
   final int numberOfParticipants;
+  /// The type of experience the trip offers.
   final String experienceType;
 
+  /// Constructs a new [Trip] object.
   Trip({
     required this.id,
     required this.title,
@@ -17,6 +26,7 @@ class Trip {
     required this.experienceType,
   });
 
+  /// Converts the [Trip] object to a map.
   Map<String, dynamic> toMap() => {
     'title': title,
     'startDate': startDate,
