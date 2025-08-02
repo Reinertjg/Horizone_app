@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../generated/l10n.dart';
 import '../../state/locale_provider.dart';
 import '../../state/theme_provider.dart';
-import 'delete_accoun_ttile.dart';
+import '../../theme_color/app_colors.dart';
+import 'delete_accoun_tile.dart';
 import 'language_settings_tile.dart';
 import 'theme_settings_tile.dart';
 
@@ -15,15 +16,19 @@ class SettingsBottomSheetContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        final localeProvider = Provider.of<LocaleProvider>(
-            context, listen: false);
-
-
         return Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
           padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+            color: colors.primary,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -31,13 +36,13 @@ class SettingsBottomSheetContent extends StatelessWidget {
                 S.of(context).settings,
                 style: TextStyle(
                   fontSize: 18,
-                  color: Theme.of(context).primaryColor,
+                  color: colors.secondary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 20),
-              ThemeSettingsTile(themeProvider: themeProvider),
-              LanguageSettingsTile(localeProvider: localeProvider),
+              ThemeSettingsTile(),
+              LanguageSettingsTile(),
               DeleteAccountTile(),
             ],
           ),

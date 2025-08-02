@@ -20,10 +20,7 @@ class InterviewFab extends StatelessWidget {
     final interviewProvider = Provider.of<InterviewProvider>(context);
     return Container(
       height: 45,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [colors.secondary, Colors.lightBlueAccent],
@@ -36,8 +33,12 @@ class InterviewFab extends StatelessWidget {
           // print(travels);
 
           if (formKey.currentState!.validate()) {
-            if (!context.mounted) return;
 
+            interviewProvider.participants = int.parse(
+              interviewProvider.numberOfParticipantsController.text,
+            );
+
+            if (!context.mounted) return;
             await Navigator.pushNamed(context, '/tripParticipants');
 
             // final interview = interviewProvider.toEntity();
@@ -47,9 +48,6 @@ class InterviewFab extends StatelessWidget {
             // final useCase = InterviewUseCase(repository);
             //
             // await useCase.insert(interview);
-            interviewProvider.participants =
-              int.parse(interviewProvider.numberOfParticipantsController.text);
-
           }
         },
         style: ElevatedButton.styleFrom(

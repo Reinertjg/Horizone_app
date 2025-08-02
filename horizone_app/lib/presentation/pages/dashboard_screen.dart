@@ -52,7 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         toolbarHeight: 100,
         title: Text(
-          '${S.of(context).welcome},'
+          '${S.of(context).welcome}, '
               '${profiles.isNotEmpty ? profiles[0].name : 'User'}',
           style: GoogleFonts.nunito(color: colors.secondary),
         ),
@@ -93,7 +93,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(context, 0),
     );
   }
 }

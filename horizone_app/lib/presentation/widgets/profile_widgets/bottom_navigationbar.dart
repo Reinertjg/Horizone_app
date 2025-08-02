@@ -37,24 +37,6 @@ BottomNavigationBar bottomNavigationBar(
       ),
     ],
     currentIndex: currentIndex,
-    // Set the current index to the first item
-    onTap: (index) {
-      switch (index) {
-        case 0:
-          if (currentIndex != 0) {
-            Navigator.pushNamed(context, '/dashboard');
-          }
-          break;
-        case 1:
-          if (currentIndex != 1) {
-            Navigator.pushNamed(context, '/interview');
-          }
-          break;
-        case 2:
-          break;
-        case 3:
-          break;
-      }
-    },
+
   );
 }

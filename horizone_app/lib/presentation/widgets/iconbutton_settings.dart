@@ -11,7 +11,7 @@ class IconbuttonSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    return Material(
+    return Card(
       color: colors.secondary,
       shape: CircleBorder(),
       child: SizedBox(
@@ -19,11 +19,11 @@ class IconbuttonSettings extends StatelessWidget {
         width: 35,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(Icons.settings, color: colors.quaternary),
+          icon: Icon(Icons.settings, color: colors.quinary),
           onPressed: () {
             showModalBottomSheet(
               context: context,
-              builder: (/*BuildContext*/ innerContext) {
+              builder: (innerContext) {
                 return SettingsBottomSheetContent();
               },
             );

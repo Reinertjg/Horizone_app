@@ -34,8 +34,10 @@ class OrangeTextForm extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
+
       style: TextStyle(color: colors.secondary, fontSize: 16),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
         labelText: nameButton,
         labelStyle: TextStyle(color: colors.secondary, fontSize: 16),
         prefixIcon: Icon(icon, color: colors.tertiary, size: 28),

@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
 
     if (profiles.isNotEmpty) {
-      await Navigator.pushReplacementNamed(context, '/dashboard');
+      await Navigator.pushReplacementNamed(context, '/homeScreen');
     } else {
       await Navigator.pushReplacementNamed(context, '/getStarted');
     }

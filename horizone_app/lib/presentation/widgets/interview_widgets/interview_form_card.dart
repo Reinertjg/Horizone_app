@@ -1,9 +1,12 @@
-
 import 'package:flutter/material.dart' hide DatePickerMode;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/l10n.dart';
 import '../../state/interview_provider.dart';
 import '../../theme_color/app_colors.dart';
+import '../orange_text_form.dart';
+import '../settings_widgets/settingsbottom_sheetcontent.dart';
 import 'build_dropdownform.dart';
 import 'cupertino_textfield.dart';
 import 'interview_textfield.dart';
@@ -25,9 +28,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
     final interviewProvider = Provider.of<InterviewProvider>(context);
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -35,13 +36,9 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
           color: colors.quinary,
         ),
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            right: 8.0,
-            top: 8.0,
-          ),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               InterviewTextField(
                 nameButton: 'Titulo da viagem',
@@ -60,10 +57,8 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                       fontSize: 12,
                       icon: Icons.calendar_today_outlined,
                       mode: DatePickerMode.futureOnly,
-                      controller:
-                      interviewProvider.startDateController,
-                      validator:
-                      interviewProvider.validateStartDate,
+                      controller: interviewProvider.startDateController,
+                      validator: interviewProvider.validateStartDate,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -73,8 +68,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                       fontSize: 12,
                       icon: Icons.event,
                       mode: DatePickerMode.futureOnly,
-                      controller:
-                      interviewProvider.endDateController,
+                      controller: interviewProvider.endDateController,
                       validator: interviewProvider.validateEndDate,
                     ),
                   ),
@@ -85,9 +79,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 decoration: BoxDecoration(
                   color: const Color(0xFFF7FAFC),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFFE2E8F0),
-                  ),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
                 ),
               ),
               const SizedBox(height: 12),
@@ -95,21 +87,112 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 label: 'Meio de Transporte',
                 items: ['Carro', 'Avião', 'Ônibus', 'Trem'],
                 icon: Icons.directions_car,
-                validator:
-                interviewProvider.validateMeansOfTransportation,
+                validator: interviewProvider.validateMeansOfTransportation,
                 onChanged: (value) =>
-                interviewProvider.meansOfTransportation = value,
+                    interviewProvider.meansOfTransportation = value,
               ),
               const SizedBox(height: 12),
+
               InterviewTextField(
                 nameButton: 'Quantidade de Participantes',
                 hintText: 'Ex: 3',
                 icon: Icons.people_alt_outlined,
-                controller: interviewProvider
-                    .numberOfParticipantsController,
-                validator:
-                interviewProvider.validateNumberOfParticipants,
+                controller: interviewProvider.numberOfParticipantsController,
+                validator: interviewProvider.validateNumberOfParticipants,
                 keyboardType: TextInputType.number,
+              ),
+              TextButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    backgroundColor: colors.primary,
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (innerContext) {
+                      return Container(
+                        constraints: BoxConstraints(maxHeight: 650),
+                        padding: EdgeInsets.only(
+                          top: 22.0,
+                          left: 12.0,
+                          right: 12.0,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    size: 30,
+                                    color: colors.secondary,
+                                  ),
+                                ),
+                                Text(
+                                  'Participantes',
+                                  style: GoogleFonts.raleway(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    color: colors.secondary,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Icon(
+                                    Icons.add_circle,
+                                    size: 30,
+                                    color: colors.secondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            OrangeTextForm(
+                              nameButton: 'Name',
+                              icon: Icons.person,
+                              controller: TextEditingController(),
+                            ),
+                            SizedBox(height: 12),
+                            OrangeTextForm(
+                              nameButton: 'E-mail',
+                              icon: Icons.email,
+                              controller: TextEditingController(),
+                            ),
+                            SizedBox(height: 12),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF7FAFC),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: const Color(0xFFE2E8F0)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                  // ListView.builder(
+                  //   reverse: true,
+                  //   scrollDirection: Axis.vertical,
+                  //   shrinkWrap: true,
+                  //   physics: NeverScrollableScrollPhysics(),
+                  //   itemCount: index,
+                  //   itemBuilder: (_, index) {
+                  //     return ParticipantCard(index: index);
+                  //   },
+                  //   padding: const EdgeInsets.only(
+                  //     bottom: 70.0,
+                  //     left: 8.0,
+                  //     right: 8.0,
+                  //   ),
+                  // ),
+                },
+                child: Text(
+                  'Adicionar Participante',
+                  style: TextStyle(color: colors.secondary),
+                ),
               ),
               const SizedBox(height: 12),
               BuildDropdownform(

@@ -28,7 +28,6 @@ class ProfileFormProvider extends ChangeNotifier {
   /// Sets the gender property with the provided [value].
   set gender(String? value) {
     _gender = value;
-    notifyListeners();
   }
 
 

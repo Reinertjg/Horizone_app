@@ -5,6 +5,7 @@ import '../../generated/l10n.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
+import '../widgets/participant_card.dart';
 import '../widgets/profile_widgets/bottom_navigationbar.dart';
 import '../widgets/section_title.dart';
 
@@ -55,7 +56,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(8.0),
           child: Form(
             key: formKey,
             child: Column(
@@ -69,7 +70,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 InterviewFormCard(),
               ],
             ),
@@ -77,7 +78,6 @@ class _InterviewScreenState extends State<InterviewScreen> {
         ),
       ),
       floatingActionButton: InterviewFab(formKey: formKey),
-      bottomNavigationBar: bottomNavigationBar(context, 1),
     );
   }
 }

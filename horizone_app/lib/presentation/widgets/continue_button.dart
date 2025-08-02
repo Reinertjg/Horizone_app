@@ -43,8 +43,6 @@ class ContinueButton extends StatelessWidget {
 
           await useCase.insert(profile);
 
-          //final getProfile = await repository.getAllProfiles();
-          //print(getProfile);
           if (context.mounted) {
             await Navigator.pushNamed(context, pathRoute);
           }

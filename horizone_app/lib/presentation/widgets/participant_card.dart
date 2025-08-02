@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../generated/l10n.dart';
 import '../theme_color/app_colors.dart';
 import 'interview_widgets/interview_textfield.dart';
+import 'orange_text_form.dart';
 
 /// A widget that displays a card with input fields for a travel participant.
 ///
@@ -21,6 +22,7 @@ class ParticipantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     return Card(
+
       color: colors.quinary,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -36,20 +38,16 @@ class ParticipantCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            InterviewTextField(
+            OrangeTextForm(
               nameButton: S.of(context).name,
-              hintText: 'Nome completo',
               icon: Icons.person,
               controller: TextEditingController(),
-              keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 8),
-            InterviewTextField(
+            OrangeTextForm(
               nameButton: 'E-mail',
-              hintText: 'exemple@email.com',
               icon: Icons.email,
               controller: TextEditingController(),
-              keyboardType: TextInputType.text,
             ),
           ],
         ),

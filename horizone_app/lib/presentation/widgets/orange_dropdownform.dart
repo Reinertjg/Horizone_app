@@ -54,7 +54,7 @@ class _OrangeDropdownformState extends State<OrangeDropdownform> {
 
     return DropdownButtonFormField<String>(
       value: selectedValue,
-      items: widget.items.map((/*String*/ value) {
+      items: widget.items.map((value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value, style: TextStyle(color: colors.secondary)),

@@ -48,6 +48,7 @@ class _TripParticipantsScreenState extends State<TripParticipantsScreen> {
           children: [
             Expanded(
               child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: interviewProvider.participants,
                 itemBuilder: (_, index) {
                   return ParticipantCard(index: index);

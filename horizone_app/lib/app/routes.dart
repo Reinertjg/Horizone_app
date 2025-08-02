@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../presentation/pages/dashboard_screen.dart';
 import '../presentation/pages/getstarted_screen.dart';
+import '../presentation/pages/home_screen.dart';
 import '../presentation/pages/interview_screen.dart';
 import '../presentation/pages/profilesetup_screen.dart';
 import '../presentation/pages/splash_screen.dart';
@@ -22,6 +23,9 @@ abstract class AppRoutes {
 
     /// First-time profile setup screen
     '/profileSetup': (context) => const ProfileSetUpScreen(),
+
+
+    '/homeScreen': (context) => const HomeScreen(),
 
     /// Main screen after login/setup
     '/dashboard': (context) => const DashboardScreen(),

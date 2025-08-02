@@ -32,19 +32,16 @@ class InterviewProvider extends ChangeNotifier {
   /// Sets the number of participants and notifies listeners.
   set participants(int? value) {
     _participants = value;
-    notifyListeners();
   }
 
   /// Sets the means of transportation and notifies listeners.
   set meansOfTransportation(String? value) {
     _meansOfTransportation = value;
-    notifyListeners();
   }
 
   /// Sets the experience type and notifies listeners.
   set experienceType(String? value) {
     _experienceType = value;
-    notifyListeners();
   }
 
   /// Disposes all controllers when the provider is destroyed.
