@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horizone_app/presentation/theme_color/AppColors.dart';
-import 'package:horizone_app/presentation/widgets/iconbutton_notifications.dart';
-import '../../database/daos/profile_dao.dart';
-import '../../generated/l10n.dart';
-import '../widgets/profile_widgets/bottom_navigationbar.dart';
-import '../widgets/iconbutton_settings.dart';
 
+import '../../data/repositories/profile_repository_impl.dart';
+import '../../domain/entities/profile.dart';
+import '../../generated/l10n.dart';
+
+import '../theme_color/app_colors.dart';
+import '../widgets/iconbutton_notifications.dart';
+import '../widgets/iconbutton_settings.dart';
+import '../widgets/profile_widgets/bottom_navigationbar.dart';
+
+/// The main screen displayed after user login,
+/// showing a personalized welcome and main navigation options.
 class DashboardScreen extends StatefulWidget {
+  /// Creates a [DashboardScreen] widget.
   const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
+/// State class for [DashboardScreen], responsible for UI rendering and loading.
 class _DashboardScreenState extends State<DashboardScreen> {
-  final profileDao = ProfileDao();
-  List<Map<String, dynamic>> profiles = [];
+  /// The repository used to fetch profile data.
+  final repository = ProfileRepositoryImpl();
+
+  /// The list of profiles loaded from the data source.
+  List<Profile> profiles = [];
 
   @override
   void initState() {
@@ -24,8 +34,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _carregarPerfil();
   }
 
+  /// Loads all profiles from the repository and updates the UI.
   Future<void> _carregarPerfil() async {
-    final perfilBuscado = await profileDao.getProfile();
+    final perfilBuscado = await repository.getAllProfiles();
     setState(() {
       profiles = perfilBuscado;
     });
@@ -41,7 +52,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         toolbarHeight: 100,
         title: Text(
-          '${S.of(context).welcome}, ${profiles.isNotEmpty ? profiles[0]['name'] : 'User'}',
+          '${S.of(context).welcome},'
+              '${profiles.isNotEmpty ? profiles[0].name : 'User'}',
           style: GoogleFonts.nunito(color: colors.secondary),
         ),
         leading: Padding(

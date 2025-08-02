@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../theme_color/AppColors.dart';
+import '../theme_color/app_colors.dart';
 
+/// A widget that displays an icon button for notifications.
 class IconbuttonNotifications extends StatelessWidget {
+  /// Creates a custom [IconbuttonNotifications].
   const IconbuttonNotifications({super.key});
 
   @override

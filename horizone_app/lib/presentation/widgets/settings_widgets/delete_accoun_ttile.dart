@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../database/daos/profile_dao.dart';
 import '../../../generated/l10n.dart';
 import 'confirm_delete_dialog.dart';
 
+/// A widget that displays a red "Delete Account" text button.
+///
+/// Confirmation dialog before deleting the user's profile.
 class DeleteAccountTile extends StatelessWidget {
-  const DeleteAccountTile({super.key, required this.profileDao});
-
-  final ProfileDao profileDao;
+  /// Creates a custom [DeleteAccountTile].
+  const DeleteAccountTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +16,8 @@ class DeleteAccountTile extends StatelessWidget {
       onPressed: () {
         showDialog(
             context: context,
-            builder: (BuildContext context) =>
-            ConfirmDeleteDialog(profileDao: profileDao)
+            builder: (context) =>
+            ConfirmDeleteDialog()
         );
       },
       child: Text(

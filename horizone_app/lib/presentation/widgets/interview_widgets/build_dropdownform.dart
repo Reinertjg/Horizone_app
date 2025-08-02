@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme_color/AppColors.dart';
+import '../../theme_color/app_colors.dart';
 
+/// A customizable dropdown form field widget.
+///
+/// Useful for collecting single-selection input in forms with validation
+/// and theming support.
 class BuildDropdownform extends StatefulWidget {
+  /// Creates a [BuildDropdownform] with a label, list of items, and icon.
+  ///
+  /// Optionally accepts a validator and an `onChanged` callback.
   const BuildDropdownform({
     super.key,
     required this.label,
@@ -13,17 +20,29 @@ class BuildDropdownform extends StatefulWidget {
     this.onChanged,
   });
 
+  /// The label displayed above the dropdown field.
   final String label;
+
+  /// The list of selectable items.
   final List<String> items;
+
+  /// The icon displayed as a prefix inside the input.
   final IconData icon;
+
+  /// Optional validation logic.
   final String? Function(String?)? validator;
+
+  /// Optional callback triggered when the selection changes.
   final void Function(String?)? onChanged;
 
   @override
   State<BuildDropdownform> createState() => _BuildDropdownformState();
 }
 
+/// State class for [BuildDropdownform]
+/// responsible for managing selection state.
 class _BuildDropdownformState extends State<BuildDropdownform> {
+  /// The currently selected value.
   String? selectedValue;
 
   @override
@@ -54,7 +73,7 @@ class _BuildDropdownformState extends State<BuildDropdownform> {
         const SizedBox(height: 5),
         DropdownButtonFormField<String>(
           value: selectedValue,
-          items: widget.items.map((String value) {
+          items: widget.items.map((/*String*/ value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
@@ -71,7 +90,7 @@ class _BuildDropdownformState extends State<BuildDropdownform> {
           ),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
-            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 25),
+            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 20),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: colors.tertiary),

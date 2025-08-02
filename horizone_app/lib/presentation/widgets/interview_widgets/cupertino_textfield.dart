@@ -2,11 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme_color/AppColors.dart';
+import '../../theme_color/app_colors.dart';
 
-enum DatePickerMode { birthdate, futureOnly }
+/// Enum that defines the behavior mode of the date picker.
+enum DatePickerMode {
+  /// Used for selecting a birthdate (Subtract 18 years from the current date).
+  birthdate,
 
+  /// Used for selecting future dates only.
+  futureOnly,
+}
+
+/// A custom [TextFormField] widget
+/// Cupertino-style date picker popup
 class CupertinoDatePickerFieldd extends StatefulWidget {
+  /// Creates a [CupertinoDatePickerField] with the given parameters.
   const CupertinoDatePickerFieldd({
     super.key,
     required this.controller,
@@ -17,11 +27,22 @@ class CupertinoDatePickerFieldd extends StatefulWidget {
     this.validator,
   });
 
+  /// Controller for the date field.
   final TextEditingController controller;
+
+  /// Label text displayed inside the field.
   final String label;
+
+  /// Icon displayed at the beginning of the field.
   final IconData icon;
+
+  /// Font size for the label.
   final double fontSize;
+
+  /// Determines the behavior of the date picker.
   final DatePickerMode mode;
+
+  /// Optional validator for the form field.
   final String? Function(String?)? validator;
 
   @override
@@ -65,7 +86,7 @@ class _CupertinoDatePickerFielddState extends State<CupertinoDatePickerFieldd> {
           initialDateTime: initialDate,
           minimumDate: minDate,
           maximumDate: maxDate,
-          onDateTimeChanged: (DateTime value) {
+          onDateTimeChanged: (/*DateTime*/ value) {
             setState(() {
               widget.controller.text =
                   '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
@@ -106,7 +127,7 @@ class _CupertinoDatePickerFielddState extends State<CupertinoDatePickerFieldd> {
                 fontSize: 16,
               ),
             ),
-            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 25),
+            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 20),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

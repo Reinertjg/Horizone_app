@@ -1,11 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../theme_color/AppColors.dart';
+import '../theme_color/app_colors.dart';
 
-enum DatePickerMode { birthdate, futureOnly }
+/// Enum that defines the behavior mode of the date picker.
+enum DatePickerMode {
+  /// Used for selecting a birthdate (Subtract 18 years from the current date).
+  birthdate,
 
+  /// Used for selecting future dates only.
+  futureOnly,
+}
+
+/// A custom [TextFormField] widget
+/// Cupertino-style date picker popup
 class CupertinoDatePickerField extends StatefulWidget {
+  /// Creates a [CupertinoDatePickerField] with the given parameters.
   const CupertinoDatePickerField({
     super.key,
     required this.controller,
@@ -16,11 +26,22 @@ class CupertinoDatePickerField extends StatefulWidget {
     this.validator,
   });
 
+  /// Controller for the date field.
   final TextEditingController controller;
+
+  /// Label text displayed inside the field.
   final String label;
+
+  /// Icon displayed at the beginning of the field.
   final IconData icon;
+
+  /// Font size for the label.
   final double fontSize;
+
+  /// Determines the behavior of the date picker.
   final DatePickerMode mode;
+
+  /// Optional validator for the form field.
   final String? Function(String?)? validator;
 
   @override
@@ -63,7 +84,7 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
           initialDateTime: initialDate,
           minimumDate: minDate,
           maximumDate: maxDate,
-          onDateTimeChanged: (DateTime value) {
+          onDateTimeChanged: (/*DateTime*/ value) {
             setState(() {
               widget.controller.text =
                   '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../theme_color/AppColors.dart';
 import '../../../generated/l10n.dart';
+import '../../theme_color/app_colors.dart';
 
+/// Creates a bottom navigation bar for the application.
+///
+/// The [currentIndex] parameter indicates the currently selected item.
 BottomNavigationBar bottomNavigationBar(
   BuildContext context,
   int currentIndex,

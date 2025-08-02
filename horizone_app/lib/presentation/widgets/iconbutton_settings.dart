@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:horizone_app/presentation/widgets/settings_widgets/settingsbottom_sheetcontent.dart';
-import '../theme_color/AppColors.dart';
 
+import '../theme_color/app_colors.dart';
+import 'settings_widgets/settingsbottom_sheetcontent.dart';
+
+/// A widget that displays an icon button for settings.
 class IconbuttonSettings extends StatelessWidget {
+  /// Creates a custom [IconbuttonSettings].
   const IconbuttonSettings({super.key});
 
   @override
@@ -20,7 +23,7 @@ class IconbuttonSettings extends StatelessWidget {
           onPressed: () {
             showModalBottomSheet(
               context: context,
-              builder: (BuildContext innerContext) {
+              builder: (/*BuildContext*/ innerContext) {
                 return SettingsBottomSheetContent();
               },
             );

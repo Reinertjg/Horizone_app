@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../theme_color/AppColors.dart';
+
 import '../../data/repositories/profile_repository_impl.dart';
-import '../../database/daos/profile_dao.dart';
 import '../../domain/usecases/profile_usecase.dart';
 import '../state/profileform_provider.dart';
+import '../theme_color/app_colors.dart';
 
+/// A reusable button widget that validates a form,
+/// persists the profile data, and navigates to the given route.
 class ContinueButton extends StatelessWidget {
+  /// Creates a [ContinueButton].
+  ///
+  /// [title] is the text shown on the button,
+  /// [pathRoute] is the named route to navigate to on success,
+  /// [formKey] is used for form validation.
   const ContinueButton({
     required this.title,
     required this.pathRoute,
@@ -14,8 +21,11 @@ class ContinueButton extends StatelessWidget {
     super.key,
   });
 
+  /// Text to display on the button.
   final String title;
+  /// Route to navigate to after successful validation and saving.
   final String pathRoute;
+  /// Key to validate the associated form.
   final GlobalKey<FormState> formKey;
 
   @override
@@ -28,16 +38,15 @@ class ContinueButton extends StatelessWidget {
         if (formKey.currentState!.validate()) {
           final profile = formProvider.toEntity();
 
-          final dao = ProfileDao();
-          final repository = ProfileRepositoryImpl(dao);
+          final repository = ProfileRepositoryImpl();
           final useCase = ProfileUseCase(repository);
 
           await useCase.insert(profile);
 
-          final getProfile = await ProfileDao().getProfile();
-          print(getProfile);
+          //final getProfile = await repository.getAllProfiles();
+          //print(getProfile);
           if (context.mounted) {
-            Navigator.pushNamed(context, pathRoute);
+            await Navigator.pushNamed(context, pathRoute);
           }
         }
       },
