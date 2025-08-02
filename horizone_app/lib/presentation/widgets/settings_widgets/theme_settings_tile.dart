@@ -1,12 +1,15 @@
-
 import 'package:flutter/material.dart';
-import 'package:horizone_app/presentation/widgets/settings_widgets/theme_selection_dialog.dart';
+
 import '../../../generated/l10n.dart';
 import '../../state/theme_provider.dart';
+import 'theme_selection_dialog.dart';
 
+/// A widget that displays a theme selection dialog.
 class ThemeSettingsTile extends StatelessWidget {
+  /// Creates a custom [ThemeSettingsTile].
   const ThemeSettingsTile({super.key, required this.themeProvider});
 
+  /// The [ThemeProvider] to use for theme changes.
   final ThemeProvider themeProvider;
 
 
