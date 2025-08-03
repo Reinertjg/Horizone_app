@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:horizone_app/app/main.dart';
+import 'package:horizone_app/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (tester) async {
