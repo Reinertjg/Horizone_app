@@ -89,7 +89,7 @@ class ProfileSetUpScreen extends StatelessWidget {
         padding: const EdgeInsets.all(22),
         child: ContinueButton(
           title: S.of(context).continueButton,
-          pathRoute: '/dashboard',
+          pathRoute: '/homeScreen',
           formKey: formKey,
         ),
       ),
