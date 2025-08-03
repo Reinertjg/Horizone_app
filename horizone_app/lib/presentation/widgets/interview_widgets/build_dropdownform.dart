@@ -67,13 +67,13 @@ class _BuildDropdownformState extends State<BuildDropdownform> {
           style: GoogleFonts.raleway(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: colors.secondary,
+            color: colors.quaternary,
           ),
         ),
         const SizedBox(height: 5),
         DropdownButtonFormField<String>(
           value: selectedValue,
-          items: widget.items.map((/*String*/ value) {
+          items: widget.items.map((value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
