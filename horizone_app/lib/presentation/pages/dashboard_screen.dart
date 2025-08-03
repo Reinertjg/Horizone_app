@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         leading: Padding(
           padding: const EdgeInsets.only(top: 28, left: 10.0, bottom: 25.0),
-          child: Material(
+          child: Card(
             color: colors.secondary,
             shape: const CircleBorder(),
             child: ClipOval(
