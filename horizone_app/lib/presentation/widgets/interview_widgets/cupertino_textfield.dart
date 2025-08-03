@@ -108,7 +108,7 @@ class _CupertinoDatePickerFielddState extends State<CupertinoDatePickerFieldd> {
           style: GoogleFonts.raleway(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: colors.secondary,
+            color: colors.quaternary,
           ),
         ),
         const SizedBox(height: 5),
