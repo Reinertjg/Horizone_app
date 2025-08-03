@@ -5,9 +5,9 @@ import 'app_colors.dart';
 /// Semantic color [lightPrimaryColor] for light theme.
 const Color lightPrimaryColor = Color(0xFFF6F1EB);
 /// Semantic color [lightSecondaryColor] for light theme.
-const Color lightSecondaryColor = Color(0xFF0087FF);
+const Color lightSecondaryColor = Color(0xFF5866EA);
 /// Semantic color [lightTertiaryColor] for light theme.
-const Color lightTertiaryColor = Color(0xFFFF914D);
+const Color lightTertiaryColor = Color(0xFFEF8354);
 /// Semantic color [lightQuaternaryColor] for light theme.
 const Color lightQuaternaryColor = Color(0xFF292929);
 /// Semantic color [lightQuinaryColor] for light theme.
@@ -16,9 +16,9 @@ const Color lightQuinaryColor = Color(0xFFFFFFFF);
 /// Semantic color [darkPrimaryColor] for dark theme.
 const Color darkPrimaryColor = Color(0xFF292929);
 /// Semantic color [darkSecondaryColor] for dark theme.
-const Color darkSecondaryColor = Color(0xFF6DB7FD);
+const Color darkSecondaryColor = Color(0xFF727EE6);
 /// Semantic color [darkTertiaryColor] for dark theme.
-const Color darkTertiaryColor = Color(0xFFFF914D);
+const Color darkTertiaryColor = Color(0xFFFF995A);
 /// Semantic color [darkQuaternaryColor] for dark theme.
 const Color darkQuaternaryColor = Color(0xFFF6F1EB);
 /// Semantic color [darkQuinaryColor] for dark theme.
