@@ -37,5 +37,7 @@
   "deleteAccount": "Excluir Conta",
   "deleteMessage": "Todos os dados seram apagados permanentemente.",
   "cancel": "Cancelar",
-  "delete": "Excluir"
+  "delete": "Excluir",
+  "emailRequired": "O email é obrigatório.",
+  "emailInvalid": "Endereço de email inválido."
 }

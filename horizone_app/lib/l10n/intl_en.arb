@@ -37,5 +37,7 @@
   "deleteAccount": "Delete Account",
   "deleteMessage": "All data will be permanently deleted.",
   "cancel": "Cancel",
-  "delete": "Delete"
+  "delete": "Delete",
+  "emailRequired": "Email is required.",
+  "emailInvalid": "Invalid email address."
 }

@@ -50,6 +50,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteMessage": MessageLookupByLibrary.simpleMessage(
       "All data will be permanently deleted.",
     ),
+    "emailInvalid": MessageLookupByLibrary.simpleMessage(
+      "Invalid email address.",
+    ),
+    "emailRequired": MessageLookupByLibrary.simpleMessage("Email is required."),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "Gender is required.",

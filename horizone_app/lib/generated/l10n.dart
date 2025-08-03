@@ -353,6 +353,26 @@ class S {
   String get delete {
     return Intl.message('Delete', name: 'delete', desc: '', args: []);
   }
+
+  /// `Email is required.`
+  String get emailRequired {
+    return Intl.message(
+      'Email is required.',
+      name: 'emailRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email address.`
+  String get emailInvalid {
+    return Intl.message(
+      'Invalid email address.',
+      name: 'emailInvalid',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
