@@ -31,7 +31,7 @@ class SectionTitle extends StatelessWidget {
           style: GoogleFonts.nunito(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: colors.secondary,
+            color: colors.quaternary,
           ),
         ),
       ],
