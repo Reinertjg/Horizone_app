@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -9,10 +11,15 @@ import '../../theme_color/app_colors.dart';
 /// Navigate to the next screen.
 class InterviewFab extends StatelessWidget {
   /// Creates a custom [InterviewFab] with the given parameter.
-  const InterviewFab({super.key, required this.formKey});
+  const InterviewFab({
+    super.key,
+    required this.nameButton, this.onPressed,
+  });
 
-  /// The [GlobalKey] for the form.
-  final GlobalKey<FormState> formKey;
+  /// The [NameButton] for the form.
+  final String nameButton;
+
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -23,42 +30,24 @@ class InterviewFab extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colors.secondary, Colors.lightBlueAccent],
+          colors: [
+            colors.secondary,
+            colors.secondary.withRed(102).withGreen(178).withBlue(255),
+          ],
         ),
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: ElevatedButton(
-        onPressed: () async {
-          // final travels = await TripDao().getAllTrips();
-          // print(travels);
-
-          if (formKey.currentState!.validate()) {
-
-            interviewProvider.participants = int.parse(
-              interviewProvider.numberOfParticipantsController.text,
-            );
-
-            if (!context.mounted) return;
-            await Navigator.pushNamed(context, '/tripParticipants');
-
-            // final interview = interviewProvider.toEntity();
-            //
-            // final dao = TripDao();
-            // final repository = TripRepositoryImpl(dao);
-            // final useCase = InterviewUseCase(repository);
-            //
-            // await useCase.insert(interview);
-          }
-        },
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
         child: Text(
-          'Avançar',
+          nameButton,
           style: GoogleFonts.raleway(
             fontSize: 16,
             fontWeight: FontWeight.bold,

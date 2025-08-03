@@ -54,7 +54,7 @@ class _InterviewTextFieldState extends State<InterviewTextField> {
           style: GoogleFonts.raleway(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: colors.secondary,
+            color: colors.quaternary,
           ),
         ),
         const SizedBox(height: 5),

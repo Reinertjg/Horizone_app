@@ -1,15 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../generated/l10n.dart';
 import '../../state/interview_provider.dart';
+import '../../state/participant_provider.dart';
 import '../../theme_color/app_colors.dart';
-import '../orange_text_form.dart';
-import '../settings_widgets/settingsbottom_sheetcontent.dart';
 import 'build_dropdownform.dart';
 import 'cupertino_textfield.dart';
 import 'interview_textfield.dart';
+import 'show_modal_bottom.dart';
 
 /// A form card widget that collects general information about a trip,
 /// including title, start and end dates, transportation, and experience type.
@@ -26,6 +26,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<InterviewProvider>(context);
+    final participantProvider = Provider.of<ParticipantProvider>(context);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -77,9 +78,9 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
               const SizedBox(height: 12),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7FAFC),
+                  color: colors.quaternary,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: colors.quaternary),
                 ),
               ),
               const SizedBox(height: 12),
@@ -91,107 +92,94 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 onChanged: (value) =>
                     interviewProvider.meansOfTransportation = value,
               ),
-              const SizedBox(height: 12),
-
-              InterviewTextField(
-                nameButton: 'Quantidade de Participantes',
-                hintText: 'Ex: 3',
-                icon: Icons.people_alt_outlined,
-                controller: interviewProvider.numberOfParticipantsController,
-                validator: interviewProvider.validateNumberOfParticipants,
-                keyboardType: TextInputType.number,
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  showAddMemberModal(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Adicionar Participante',
+                      style: TextStyle(color: colors.quaternary),
+                    ),
+                    Icon(
+                      Icons.person_add_alt_1_outlined,
+                      color: colors.secondary,
+                      size: 30,
+                    ),
+                  ],
+                ),
               ),
-              TextButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    backgroundColor: colors.primary,
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (innerContext) {
-                      return Container(
-                        constraints: BoxConstraints(maxHeight: 650),
-                        padding: EdgeInsets.only(
-                          top: 22.0,
-                          left: 12.0,
-                          right: 12.0,
-                        ),
-                        child: Column(
+              SizedBox(
+                height: 80,
+                child: participantProvider.participants.isEmpty
+                    ? Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Icon(
-                                    Icons.arrow_back_ios,
-                                    size: 30,
-                                    color: colors.secondary,
-                                  ),
-                                ),
-                                Text(
-                                  'Participantes',
-                                  style: GoogleFonts.raleway(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w500,
-                                    color: colors.secondary,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Icon(
-                                    Icons.add_circle,
-                                    size: 30,
-                                    color: colors.secondary,
-                                  ),
-                                ),
-                              ],
+                            Icon(
+                              CupertinoIcons.person,
+                              color: colors.secondary,
+                              size: 22,
                             ),
-                            SizedBox(height: 8),
-                            OrangeTextForm(
-                              nameButton: 'Name',
-                              icon: Icons.person,
-                              controller: TextEditingController(),
-                            ),
-                            SizedBox(height: 12),
-                            OrangeTextForm(
-                              nameButton: 'E-mail',
-                              icon: Icons.email,
-                              controller: TextEditingController(),
-                            ),
-                            SizedBox(height: 12),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF7FAFC),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: const Color(0xFFE2E8F0)),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Nenhum participante adicionado',
+                              style: GoogleFonts.raleway(
+                                color: colors.quaternary,
+                                fontSize: 14,
                               ),
                             ),
                           ],
                         ),
-                      );
-                    },
-                  );
-                  // ListView.builder(
-                  //   reverse: true,
-                  //   scrollDirection: Axis.vertical,
-                  //   shrinkWrap: true,
-                  //   physics: NeverScrollableScrollPhysics(),
-                  //   itemCount: index,
-                  //   itemBuilder: (_, index) {
-                  //     return ParticipantCard(index: index);
-                  //   },
-                  //   padding: const EdgeInsets.only(
-                  //     bottom: 70.0,
-                  //     left: 8.0,
-                  //     right: 8.0,
-                  //   ),
-                  // ),
-                },
-                child: Text(
-                  'Adicionar Participante',
-                  style: TextStyle(color: colors.secondary),
+                      )
+                    : ListView.builder(
+                        itemCount: participantProvider.participants.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final participant =
+                              participantProvider.participants[index];
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 55,
+                                height: 55,
+                                decoration: BoxDecoration(
+                                  color: colors.quinary,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: colors.secondary.withValues(
+                                      alpha: 0.3,
+                                    ),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: ClipOval(
+                                  child: Image.network(
+                                    'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                participant.name,
+                                style: TextStyle(color: colors.quaternary),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: colors.quaternary,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: colors.quaternary),
                 ),
               ),
               const SizedBox(height: 12),

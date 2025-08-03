@@ -77,7 +77,23 @@ class _InterviewScreenState extends State<InterviewScreen> {
           ),
         ),
       ),
-      floatingActionButton: InterviewFab(formKey: formKey),
+      floatingActionButton: InterviewFab(
+        nameButton: 'Avançar',
+        onPressed: () async {
+          if (formKey.currentState!.validate()) {
+            if (!context.mounted) return;
+            await Navigator.pushNamed(context, '/tripParticipants');
+
+            // final interview = interviewProvider.toEntity();
+            //
+            // final dao = TripDao();
+            // final repository = TripRepositoryImpl(dao);
+            // final useCase = InterviewUseCase(repository);
+            //
+            // await useCase.insert(interview);
+          }
+        },
+      ),
     );
   }
 }
