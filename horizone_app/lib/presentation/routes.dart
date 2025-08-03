@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../presentation/pages/dashboard_screen.dart';
-import '../presentation/pages/getstarted_screen.dart';
-import '../presentation/pages/home_screen.dart';
-import '../presentation/pages/interview_screen.dart';
-import '../presentation/pages/profilesetup_screen.dart';
-import '../presentation/pages/splash_screen.dart';
-import '../presentation/pages/trip_participants_screen.dart';
-import '../presentation/pages/trip_stops_screen.dart';
+import 'pages/dashboard_screen.dart';
+import 'pages/getstarted_screen.dart';
+import 'pages/home_screen.dart';
+import 'pages/interview_screen.dart';
+import 'pages/profilesetup_screen.dart';
+import 'pages/splash_screen.dart';
+import 'pages/trip_participants_screen.dart';
+import 'pages/trip_stops_screen.dart';
+
 
 /// Centralized route management for the app.
 abstract class AppRoutes {

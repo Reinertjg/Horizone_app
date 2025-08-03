@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-import '../database/daos/trip_dao.dart';
-import '../generated/l10n.dart';
-import '../presentation/state/interview_provider.dart';
-import '../presentation/state/locale_provider.dart';
-import '../presentation/state/profileform_provider.dart';
-import '../presentation/state/theme_provider.dart';
-import '../presentation/theme_color/app_theme.dart';
-import 'routes.dart';
+import 'database/daos/trip_dao.dart';
+import 'generated/l10n.dart';
+import 'presentation/state/interview_provider.dart';
+import 'presentation/state/locale_provider.dart';
+import 'presentation/state/participant_provider.dart';
+import 'presentation/state/profileform_provider.dart';
+import 'presentation/state/theme_provider.dart';
+import 'presentation/theme_color/app_theme.dart';
+import 'presentation/routes.dart';
 
 void main() {
   runApp(
@@ -34,6 +35,9 @@ void main() {
 
         /// Handles database operations for trips
         ChangeNotifierProvider(create: (_) => TripDao()),
+
+        /// Manages participant-related state and logic
+        ChangeNotifierProvider(create: (_) => ParticipantProvider()),
       ],
 
       /// Root widget of the app
