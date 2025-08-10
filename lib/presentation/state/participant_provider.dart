@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/participant.dart';
@@ -6,6 +8,8 @@ import '../../generated/l10n.dart';
 ///
 class ParticipantProvider extends ChangeNotifier {
   final List<Participant> _participants = [];
+  File? _selectedImage;
+
   /// Controller for the name input field.
   final nameController = TextEditingController();
 
@@ -13,6 +17,12 @@ class ParticipantProvider extends ChangeNotifier {
   final emailController = TextEditingController();
 
   List<Participant> get participants => List.unmodifiable(_participants);
+  File? get selectedImage => _selectedImage;
+
+  void setSelectedImage(File? image) {
+    _selectedImage = image;
+    notifyListeners(); // Notifica os ouvintes sobre a mudança
+  }
 
   /// Adds a new [Participant] to the list of participants.
   void addParticipant(Participant participant) {
@@ -25,7 +35,7 @@ class ParticipantProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void delteParticipant(int index, Participant participantr){
+  void delteParticipant(int index){
     _participants.removeAt(index);
     notifyListeners();
   }
@@ -40,6 +50,7 @@ class ParticipantProvider extends ChangeNotifier {
   void clearFields() {
     nameController.clear();
     emailController.clear();
+    _selectedImage = null;
   }
 
   /// Validates all form fields using the given [formKey].

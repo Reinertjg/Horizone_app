@@ -1,0 +1,136 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../state/participant_provider.dart';
+import '../../theme_color/app_colors.dart';
+import '../participant_widgets/modals/save_participant_modal.dart';
+import 'add_participant_modal.dart';
+import 'options_participant_modal.dart';
+
+/// A widget that displays a list of participants.
+class ParticipantListPreview extends StatelessWidget {
+  /// Creates a custom [ParticipantListPreview].
+  const ParticipantListPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    final participantProvider = Provider.of<ParticipantProvider>(context);
+    final participants = participantProvider.participants;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SizedBox(
+        height: 80,
+        child: Row(
+          children: [
+            addParticipantClipOval(context),
+            ListView.builder(
+              itemCount: participantProvider.participants.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final participant = participantProvider.participants[index];
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) =>
+                              OptionsParticipantModal(index: index),
+                        );
+                      },
+                      child: Container(
+                        width: 55,
+                        height: 55,
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: colors.quinary,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: colors.secondary.withOpacity(0.3),
+                            width: 2,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: participant.photo == null
+                              ? Image.asset(
+                                  'assets/images/user_default_photo.png',
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  participant.photo!,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      child: Text(
+                        participant.name,
+                        style: TextStyle(color: colors.quaternary),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget addParticipantClipOval(BuildContext context) {
+  final colors = Theme.of(context).extension<AppColors>()!;
+  return Center(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => const SaveParticipantModal(),
+                );
+              },
+              child: Container(
+                width: 55,
+                height: 55,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  color: colors.quinary,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: colors.secondary.withValues(alpha: 0.3),
+                    width: 2,
+                  ),
+                ),
+                child: ClipOval(
+                  child: Icon(
+                    CupertinoIcons.person_add_solid,
+                    color: colors.secondary,
+                  ),
+                ),
+              ),
+            ),
+            Text('Adicionar', style: TextStyle(color: colors.quaternary)),
+          ],
+        ),
+      ],
+    ),
+  );
+}
