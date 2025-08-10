@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/interview_provider.dart';
-import '../../state/participant_provider.dart';
 import '../../theme_color/app_colors.dart';
+import 'add_participant_button.dart';
 import 'build_dropdownform.dart';
 import 'cupertino_textfield.dart';
 import 'interview_textfield.dart';
-import 'show_modal_bottom.dart';
+import 'participant_list_preview.dart';
 
 /// A form card widget that collects general information about a trip,
 /// including title, start and end dates, transportation, and experience type.
@@ -26,7 +24,6 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<InterviewProvider>(context);
-    final participantProvider = Provider.of<ParticipantProvider>(context);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -41,6 +38,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              /// Text field for entering the title of the trip.
               InterviewTextField(
                 nameButton: 'Titulo da viagem',
                 hintText: 'Ex: Viagem da Família Silva 2024',
@@ -53,6 +51,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
               Row(
                 children: [
                   Expanded(
+                    /// First date picker field for selecting the start date.
                     child: CupertinoDatePickerFieldd(
                       label: 'Data de Inicío',
                       fontSize: 12,
@@ -64,6 +63,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
+                    /// Second date picker field for selecting the end date.
                     child: CupertinoDatePickerFieldd(
                       label: 'Data de Término',
                       fontSize: 12,
@@ -76,14 +76,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 ],
               ),
               const SizedBox(height: 12),
-              Container(
-                decoration: BoxDecoration(
-                  color: colors.quaternary,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: colors.quaternary),
-                ),
-              ),
-              const SizedBox(height: 12),
+              /// Dropdown form for selecting the means of transportation.
               BuildDropdownform(
                 label: 'Meio de Transporte',
                 items: ['Carro', 'Avião', 'Ônibus', 'Trem'],
@@ -92,97 +85,29 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 onChanged: (value) =>
                     interviewProvider.meansOfTransportation = value,
               ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  showAddMemberModal(context);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Adicionar Participante',
-                      style: TextStyle(color: colors.quaternary),
-                    ),
-                    Icon(
-                      Icons.person_add_alt_1_outlined,
-                      color: colors.secondary,
-                      size: 30,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 80,
-                child: participantProvider.participants.isEmpty
-                    ? Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              CupertinoIcons.person,
-                              color: colors.secondary,
-                              size: 22,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Nenhum participante adicionado',
-                              style: GoogleFonts.raleway(
-                                color: colors.quaternary,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: participantProvider.participants.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final participant =
-                              participantProvider.participants[index];
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 55,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  color: colors.quinary,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: colors.secondary.withValues(
-                                      alpha: 0.3,
-                                    ),
-                                    width: 2,
-                                  ),
-                                ),
-                                child: ClipOval(
-                                  child: Image.network(
-                                    'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                participant.name,
-                                style: TextStyle(color: colors.quaternary),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-              ),
+              const SizedBox(height: 12),
+
+              /// Add participant button and participant list preview.
+              AddParticipantButton(),
+
+              const SizedBox(height: 12),
+
+              /// Participant list preview.
+              ParticipantListPreview(),
+
+              const SizedBox(height: 6),
               Container(
                 decoration: BoxDecoration(
-                  color: colors.quaternary,
+                  color: colors.quaternary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: colors.quaternary),
+                  border: Border.all(
+                    color: colors.quaternary.withValues(alpha: 0.1),
+                  ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 6),
+
+              /// Dropdown form for selecting the type of experience.
               BuildDropdownform(
                 label: 'Tipo e Experiencias',
                 items: [

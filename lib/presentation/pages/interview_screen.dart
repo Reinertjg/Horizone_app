@@ -1,12 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../state/interview_provider.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/interview_widgets/cupertino_textfield.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
-import '../widgets/participant_card.dart';
-import '../widgets/profile_widgets/bottom_navigationbar.dart';
+import '../widgets/interview_widgets/interview_textfield.dart';
+import '../widgets/interview_widgets/interview_textfield_box.dart';
 import '../widgets/section_title.dart';
 
 /// Screen where the user fills out general travel information
@@ -36,6 +40,8 @@ class _InterviewScreenState extends State<InterviewScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
+    final interviewProvider = Provider.of<InterviewProvider>(context);
+
     return Scaffold(
       backgroundColor: colors.primary,
       appBar: AppBar(
@@ -66,17 +72,185 @@ class _InterviewScreenState extends State<InterviewScreen> {
                   children: [
                     SectionTitle(
                       title: 'Informações Gerais',
-                      icon: Icons.info_outline,
+                      icon: CupertinoIcons.info,
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 InterviewFormCard(),
+                const SizedBox(height: 36),
+                Row(
+                  children: [
+                    SectionTitle(
+                      title: 'Rotas',
+                      icon: CupertinoIcons.map_pin_ellipse,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+
+                /// TODO First card for trip route
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: colors.quinary,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        right: 8.0,
+                        top: 8.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InterviewTextField(
+                            nameButton: 'Local de Origem',
+                            hintText: 'Ex: São Paulo, Paris',
+                            icon: CupertinoIcons.placemark,
+                            controller: interviewProvider.titleController,
+                            validator: interviewProvider.validateTitle,
+                            keyboardType: TextInputType.text,
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                /// First date picker field for selecting the start date.
+                                child: CupertinoDatePickerFieldd(
+                                  label: 'Data de Inicío',
+                                  fontSize: 12,
+                                  icon: Icons.calendar_today_outlined,
+                                  mode: DatePickerMode.futureOnly,
+                                  controller:
+                                      interviewProvider.startDateController,
+                                  validator:
+                                      interviewProvider.validateStartDate,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                /// Second date picker field for selecting the end date.
+                                child: CupertinoDatePickerFieldd(
+                                  label: 'Data de Término',
+                                  fontSize: 12,
+                                  icon: Icons.event,
+                                  mode: DatePickerMode.futureOnly,
+                                  controller:
+                                      interviewProvider.endDateController,
+                                  validator: interviewProvider.validateEndDate,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          InterviewTextFieldBox(
+                            nameButton: 'Descrição das Atividades',
+                            hintText:
+                                'Descreva as atividades que seram realizadas no local...',
+                            icon: CupertinoIcons.ticket,
+                            controller: TextEditingController(),
+                            keyboardType: TextInputType.text,
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 36,),
+
+                /// TODO Second card for trip route
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: colors.quinary,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        right: 8.0,
+                        top: 8.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InterviewTextField(
+                            nameButton: 'Local do Destino',
+                            hintText: 'Ex: São Paulo, Paris',
+                            icon: CupertinoIcons.placemark,
+                            controller: interviewProvider.titleController,
+                            validator: interviewProvider.validateTitle,
+                            keyboardType: TextInputType.text,
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                /// First date picker field for selecting the start date.
+                                child: CupertinoDatePickerFieldd(
+                                  label: 'Data de Inicío',
+                                  fontSize: 12,
+                                  icon: Icons.calendar_today_outlined,
+                                  mode: DatePickerMode.futureOnly,
+                                  controller:
+                                  interviewProvider.startDateController,
+                                  validator:
+                                  interviewProvider.validateStartDate,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                /// Second date picker field for selecting the end date.
+                                child: CupertinoDatePickerFieldd(
+                                  label: 'Data de Término',
+                                  fontSize: 12,
+                                  icon: Icons.event,
+                                  mode: DatePickerMode.futureOnly,
+                                  controller:
+                                  interviewProvider.endDateController,
+                                  validator: interviewProvider.validateEndDate,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          InterviewTextFieldBox(
+                            nameButton: 'Descrição das Atividades',
+                            hintText:
+                            'Descreva as atividades que seram realizadas no local...',
+                            icon: CupertinoIcons.ticket,
+                            controller: TextEditingController(),
+                            keyboardType: TextInputType.text,
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 60),
               ],
             ),
           ),
         ),
       ),
+
       floatingActionButton: InterviewFab(
         nameButton: 'Avançar',
         onPressed: () async {
