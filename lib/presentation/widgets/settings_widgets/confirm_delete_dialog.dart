@@ -3,6 +3,7 @@ import '../../../data/repositories/profile_repository_impl.dart';
 import '../../../domain/usecases/profile_usecase.dart';
 import '../../../generated/l10n.dart';
 import '../../pages/getstarted_screen.dart';
+import '../../theme_color/app_colors.dart';
 
 /// A confirmation dialog
 /// That asks the user if they really want to delete their profile.
@@ -15,8 +16,9 @@ class ConfirmDeleteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return AlertDialog(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colors.primary,
       title: Text(S.of(context).deleteAccountAsk),
       content: Text(S.of(context).deleteMessage),
       actions: <Widget>[
@@ -24,7 +26,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context, 'Cancel'),
           child: Text(
             S.of(context).cancel,
-            style: TextStyle(color: Theme.of(context).primaryColor),
+            style: TextStyle(color: colors.secondary),
           ),
         ),
         TextButton(
@@ -41,7 +43,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
           },
           child: Text(
             S.of(context).delete,
-            style: TextStyle(color: Theme.of(context).primaryColor),
+            style: TextStyle(color: colors.secondary),
           ),
         ),
       ],
