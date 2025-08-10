@@ -56,7 +56,7 @@ class LanguageSelectionDialog extends StatelessWidget {
             ),
             onTap: () {
               localeProvider.setLocale(Locale('es'));
-              Navigator.pushNamed(context, '/interview');
+              Navigator.pop(context);
             },
           ),
         ],
