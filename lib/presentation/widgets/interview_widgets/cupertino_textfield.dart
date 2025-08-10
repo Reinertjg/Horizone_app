@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../../state/theme_provider.dart';
 import '../../theme_color/app_colors.dart';
 
 /// Enum that defines the behavior mode of the date picker.
@@ -76,22 +78,35 @@ class _CupertinoDatePickerFielddState extends State<CupertinoDatePickerFieldd> {
 
   void _showDatePicker() {
     final colors = Theme.of(context).extension<AppColors>()!;
+    if (widget.controller.text.isEmpty) {
+      // Set initial date in the controller when the widget initializes
+      widget.controller.text =
+          '${initialDate.day.toString().padLeft(2, '0')}/${initialDate.month.toString().padLeft(2, '0')}/${initialDate.year}';
+    }
     showCupertinoModalPopup(
       context: context,
       builder: (_) => Container(
-        height: MediaQuery.of(context).size.height * 0.30,
+        height: MediaQuery.of(context).size.height * 0.35,
         color: colors.primary,
-        child: CupertinoDatePicker(
-          mode: CupertinoDatePickerMode.date,
-          initialDateTime: initialDate,
-          minimumDate: minDate,
-          maximumDate: maxDate,
-          onDateTimeChanged: (/*DateTime*/ value) {
-            setState(() {
-              widget.controller.text =
-                  '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
-            });
-          },
+        child: CupertinoTheme(
+          data: CupertinoThemeData(
+            brightness: Provider.of<ThemeProvider>(context).themeMode ==
+                    ThemeMode.light
+                ? Brightness.light
+                : Brightness.dark,
+          ),
+          child: CupertinoDatePicker(
+            mode: CupertinoDatePickerMode.date,
+            initialDateTime: initialDate,
+            minimumDate: minDate,
+            maximumDate: maxDate,
+            onDateTimeChanged: (value) {
+              setState(() {
+                widget.controller.text =
+                    '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
+              });
+            },
+          ),
         ),
       ),
     );
