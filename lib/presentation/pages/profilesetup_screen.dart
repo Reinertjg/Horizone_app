@@ -1,15 +1,17 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:provider/provider.dart';
 
-import '../../../generated/l10n.dart';
+import '../../generated/l10n.dart';
 import '../state/profileform_provider.dart';
 import '../state/theme_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/continue_button.dart';
-import '../widgets/date_picker_text_form_field.dart';
-import '../widgets/orange_dropdownform.dart';
-import '../widgets/orange_text_box_form.dart';
-import '../widgets/orange_text_form.dart';
+import '../widgets/interview_widgets/build_dropdownform.dart';
+import '../widgets/interview_widgets/cupertino_textfield.dart';
+import '../widgets/interview_widgets/interview_textfield.dart';
+import '../widgets/interview_widgets/interview_textfield_box.dart';
 import '../widgets/profile_widgets/profile_info_text.dart';
 
 /// Screen used to collect user profile information during onboarding.
@@ -41,43 +43,57 @@ class ProfileSetUpScreen extends StatelessWidget {
                     andWellTake: S.of(context).andWellTake,
                   ),
                   const SizedBox(height: 24),
-                  OrangeTextForm(
+                  // OrangeTextForm(
+                  //   nameButton: S.of(context).name,
+                  //   icon: Icons.person,
+                  //   controller: formProvider.nameController,
+                  //   validator: formProvider.validateName,
+                  // ),
+                  InterviewTextField(
                     nameButton: S.of(context).name,
-                    icon: Icons.person,
+                    hintText: 'Nome Completo',
+                    icon: CupertinoIcons.person_alt,
                     controller: formProvider.nameController,
                     validator: formProvider.validateName,
+                    keyboardType: TextInputType.text,
                   ),
-                  const SizedBox(height: 18),
-                  OrangeTextBoxForm(
+                  const SizedBox(height: 8),
+                  InterviewTextFieldBox(
                     nameButton: S.of(context).bio,
                     hintText: S.of(context).bioDescription,
-                    icon: Icons.info_outline,
+                    icon: Icons.email_outlined,
                     controller: formProvider.bioController,
                     validator: formProvider.validateBio,
+                    keyboardType: TextInputType.text
                   ),
-                  const SizedBox(height: 18),
-                  CupertinoDatePickerField(
-                    label: S.of(context).dateOfBirth,
-                    fontSize: 16,
-                    mode: DatePickerMode.birthdate,
+                  const SizedBox(height: 8),
+                  CupertinoDatePickerFieldd(
+                    label: 'Data de Inicío',
+                    fontSize: 12,
                     icon: Icons.calendar_today_outlined,
-                    controller: formProvider.dateOfBirthController,
-                    validator: formProvider.validateDateOfBirth,
+                    mode: DatePickerMode.futureOnly,
+                    controller:
+                    formProvider.dateOfBirthController,
+                    validator:
+                    formProvider.validateDateOfBirth,
                   ),
-                  const SizedBox(height: 18),
-                  OrangeDropdownform(
+                  const SizedBox(height: 8),
+                  BuildDropdownform(
                     label: S.of(context).gender,
                     items: ['Masculino', 'Feminino', 'Outro'],
-                    icon: Icons.person_outline,
+                    icon: CupertinoIcons.person_solid,
                     validator: formProvider.validateGender,
-                    onChanged: (value) => formProvider.gender = value,
+                    onChanged: (value) =>
+                    formProvider.gender = value,
                   ),
-                  const SizedBox(height: 18),
-                  OrangeTextForm(
+                  const SizedBox(height: 8),
+                  InterviewTextField(
                     nameButton: S.of(context).jobTitle,
-                    icon: Icons.work_outline,
+                    hintText: 'Cargo',
+                    icon: CupertinoIcons.hammer,
                     controller: formProvider.jobTitleController,
                     validator: formProvider.validateJobTitle,
+                    keyboardType: TextInputType.text,
                   ),
                 ],
               ),

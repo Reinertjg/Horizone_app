@@ -105,12 +105,13 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
       onTap: _showDatePicker,
       style: TextStyle(color: colors.secondary),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
         label: Text(widget.label),
         labelStyle: TextStyle(
           color: colors.secondary,
           fontSize: widget.fontSize,
         ),
-        prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 25),
+        prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

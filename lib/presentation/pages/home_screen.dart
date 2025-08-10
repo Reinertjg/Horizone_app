@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../../data/repositories/profile_repository_impl.dart';
-import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
 
 import '../theme_color/app_colors.dart';
-import '../widgets/iconbutton_notifications.dart';
-import '../widgets/iconbutton_settings.dart';
-import '../widgets/profile_widgets/bottom_navigationbar.dart';
 import 'dashboard_screen.dart';
 import 'interview_screen.dart';
 
