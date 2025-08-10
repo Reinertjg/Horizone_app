@@ -6,8 +6,6 @@ import 'pages/home_screen.dart';
 import 'pages/interview_screen.dart';
 import 'pages/profilesetup_screen.dart';
 import 'pages/splash_screen.dart';
-import 'pages/trip_participants_screen.dart';
-import 'pages/trip_stops_screen.dart';
 
 
 /// Centralized route management for the app.
@@ -34,11 +32,6 @@ abstract class AppRoutes {
     /// Screen for managing or input interviews/trip
     '/interview': (context) => const InterviewScreen(),
 
-    /// Screen for managing or input trip participants
-    '/tripParticipants': (context) => const TripParticipantsScreen(),
-
-    /// Screen for managing or input trip stops
-    '/tripStops': (context) => const TripStopsScreen(),
   };
 }
 
