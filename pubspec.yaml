@@ -40,6 +40,14 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   google_fonts: ^6.2.1
   image_picker: ^1.1.2
+  google_maps_flutter: ^2.12.3
+  flutter_typeahead: ^5.2.0
+  http: ^1.5.0
+  uuid: ^4.5.1
+  envied: ^1.2.0
+  geolocator: ^14.0.2
+  flutter_polyline_points: ^3.0.1
+  flutter_dotenv: ^5.2.1
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -63,6 +71,7 @@ flutter:
 
   assets:
      - assets/images/
+     - .env
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
