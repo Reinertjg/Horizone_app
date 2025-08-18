@@ -1,13 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:provider/provider.dart';
 
 import '../../state/interview_provider.dart';
 import '../../theme_color/app_colors.dart';
-import 'add_participant_button.dart';
 import 'build_dropdownform.dart';
 import 'cupertino_textfield.dart';
 import 'interview_textfield.dart';
-import 'participant_list_preview.dart';
+import '../participant_widgets/participant_list_preview.dart';
 
 /// A form card widget that collects general information about a trip,
 /// including title, start and end dates, transportation, and experience type.
@@ -26,11 +26,11 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
     final interviewProvider = Provider.of<InterviewProvider>(context);
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
           color: colors.quinary,
         ),
         child: Padding(
@@ -52,7 +52,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 children: [
                   Expanded(
                     /// First date picker field for selecting the start date.
-                    child: CupertinoDatePickerFieldd(
+                    child: CupertinoDatePickerField(
                       label: 'Data de Inicío',
                       fontSize: 12,
                       icon: Icons.calendar_today_outlined,
@@ -64,7 +64,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                   const SizedBox(width: 10),
                   Expanded(
                     /// Second date picker field for selecting the end date.
-                    child: CupertinoDatePickerFieldd(
+                    child: CupertinoDatePickerField(
                       label: 'Data de Término',
                       fontSize: 12,
                       icon: Icons.event,
@@ -88,7 +88,24 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
               const SizedBox(height: 12),
 
               /// Add participant button and participant list preview.
-              AddParticipantButton(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Participantes',
+                    style: TextStyle(color: colors.quaternary),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      CupertinoIcons.person_2,
+                      color: colors.secondary,
+                      size: 25,
+                    ),
+                  ),
+
+                ],
+              ),
 
               const SizedBox(height: 12),
 

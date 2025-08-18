@@ -1,17 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../api/place_details_api.dart';
 import '../../generated/l10n.dart';
 import '../state/interview_provider.dart';
+import '../state/travelstops_provider.dart';
 import '../theme_color/app_colors.dart';
-import '../widgets/interview_widgets/cupertino_textfield.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
-import '../widgets/interview_widgets/interview_textfield.dart';
-import '../widgets/interview_widgets/interview_textfield_box.dart';
+import '../widgets/interview_widgets/travel_route_card.dart';
 import '../widgets/section_title.dart';
+import '../widgets/travelstops_widgets/travelstop_form_card.dart';
+import 'google_map_screen.dart';
 
 /// Screen where the user fills out general travel information
 /// as part of the trip planning flow.
@@ -28,20 +33,20 @@ class InterviewScreen extends StatefulWidget {
 class _InterviewScreenState extends State<InterviewScreen> {
   /// Global form key used to validate and manage form state.
   final formKey = GlobalKey<FormState>();
+  final apiKey = dotenv.env['MAPS_API_KEY'];
 
   /// Current quantity of participants or related value (if applicable).
   int qtd = 0;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<InterviewProvider>(context);
+    // no topo do build:
+    final stopsProvider = context.watch<TravelStopsProvider>();
 
+    // quantidade de paradas intermediárias = total - origem - destino
+    final middleCount = (stopsProvider.length - 2).clamp(0, 1 << 20);
     return Scaffold(
       backgroundColor: colors.primary,
       appBar: AppBar(
@@ -76,170 +81,266 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 InterviewFormCard(),
                 const SizedBox(height: 36),
                 Row(
                   children: [
                     SectionTitle(
-                      title: 'Rotas',
+                      title: 'Rota',
                       icon: CupertinoIcons.map_pin_ellipse,
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
 
+                TravelRouteCard(
+                  labelStart: 'Local Origem',
+                  labelEnd: 'Local Destino',
+                ),
+                const SizedBox(height: 16),
 
-                /// TODO First card for trip route
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: colors.quinary,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 8.0,
+                SectionTitle(title: 'Mapa do Roteiro', icon: Icons.map),
+                const SizedBox(height: 12),
+
+                GestureDetector(
+                  onTap: () async {
+                    final args = context.read<TravelStopsProvider>().buildRouteArgs();
+
+                    if (args == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Selecione origem e destino válidos.')),
+                      );
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const TravelRoutePage(),
+                        settings: RouteSettings(arguments: args),
                       ),
+                    );
+                  },
+
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          colors.secondary.withValues(alpha: 0.2),
+                          colors.secondary
+                              .withRed(102)
+                              .withGreen(178)
+                              .withBlue(255)
+                              .withValues(alpha: 0.2),
+                        ],
+                      ),
+                      border: Border.all(color: colors.secondary),
+                    ),
+                    child: Center(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InterviewTextField(
-                            nameButton: 'Local de Origem',
-                            hintText: 'Ex: São Paulo, Paris',
-                            icon: CupertinoIcons.placemark,
-                            controller: interviewProvider.titleController,
-                            validator: interviewProvider.validateTitle,
-                            keyboardType: TextInputType.text,
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                /// First date picker field for selecting the start date.
-                                child: CupertinoDatePickerFieldd(
-                                  label: 'Data de Inicío',
-                                  fontSize: 12,
-                                  icon: Icons.calendar_today_outlined,
-                                  mode: DatePickerMode.futureOnly,
-                                  controller:
-                                      interviewProvider.startDateController,
-                                  validator:
-                                      interviewProvider.validateStartDate,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                /// Second date picker field for selecting the end date.
-                                child: CupertinoDatePickerFieldd(
-                                  label: 'Data de Término',
-                                  fontSize: 12,
-                                  icon: Icons.event,
-                                  mode: DatePickerMode.futureOnly,
-                                  controller:
-                                      interviewProvider.endDateController,
-                                  validator: interviewProvider.validateEndDate,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          InterviewTextFieldBox(
-                            nameButton: 'Descrição das Atividades',
-                            hintText:
-                                'Descreva as atividades que seram realizadas no local...',
-                            icon: CupertinoIcons.ticket,
-                            controller: TextEditingController(),
-                            keyboardType: TextInputType.text,
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: colors.quinary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Icon(
+                              Icons.map_outlined,
+                              size: 40,
+                              color: colors.secondary,
+                            ),
                           ),
                           const SizedBox(height: 16),
+                          Text(
+                            'Mapa do Roteiro',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: colors.quaternary,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Visualização da rota e pontos de parada',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 16),
 
-                const SizedBox(height: 36,),
-
-                /// TODO Second card for trip route
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
+                Container(
+                  decoration: BoxDecoration(
+                    color: colors.quaternary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: colors.quinary,
+                    border: Border.all(
+                      color: colors.quaternary.withValues(alpha: 0.1),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 8.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InterviewTextField(
-                            nameButton: 'Local do Destino',
-                            hintText: 'Ex: São Paulo, Paris',
-                            icon: CupertinoIcons.placemark,
-                            controller: interviewProvider.titleController,
-                            validator: interviewProvider.validateTitle,
-                            keyboardType: TextInputType.text,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                Row(
+                  children: [
+                    SectionTitle(
+                      title: 'Paradas Intermediárias',
+                      icon: CupertinoIcons.location_circle,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  child: Column(
+                    children: [
+                      if (middleCount == 0)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 24,
+                            horizontal: 16,
                           ),
-                          const SizedBox(height: 8),
-                          Row(
+                          child: Column(
                             children: [
-                              Expanded(
-                                /// First date picker field for selecting the start date.
-                                child: CupertinoDatePickerFieldd(
-                                  label: 'Data de Inicío',
-                                  fontSize: 12,
-                                  icon: Icons.calendar_today_outlined,
-                                  mode: DatePickerMode.futureOnly,
-                                  controller:
-                                  interviewProvider.startDateController,
-                                  validator:
-                                  interviewProvider.validateStartDate,
+                              Icon(
+                                CupertinoIcons.location_circle,
+                                size: 48,
+                                color: colors.secondary.withValues(alpha: 0.3),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Nenhuma parada intermediária',
+                                style: TextStyle(
+                                  color: colors.secondary.withValues(
+                                    alpha: 0.7,
+                                  ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                /// Second date picker field for selecting the end date.
-                                child: CupertinoDatePickerFieldd(
-                                  label: 'Data de Término',
-                                  fontSize: 12,
-                                  icon: Icons.event,
-                                  mode: DatePickerMode.futureOnly,
-                                  controller:
-                                  interviewProvider.endDateController,
-                                  validator: interviewProvider.validateEndDate,
+                              const SizedBox(height: 4),
+                              Text(
+                                'Adicione paradas para personalizar sua rota',
+                                style: TextStyle(
+                                  color: colors.secondary.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                  fontSize: 14,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          InterviewTextFieldBox(
-                            nameButton: 'Descrição das Atividades',
-                            hintText:
-                            'Descreva as atividades que seram realizadas no local...',
-                            icon: CupertinoIcons.ticket,
-                            controller: TextEditingController(),
-                            keyboardType: TextInputType.text,
-                          ),
-                          const SizedBox(height: 16),
-                        ],
+                        ),
+
+                      if (middleCount > 0)
+                        ListView.separated(
+                          itemCount: middleCount,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            // mapear índice visual (0..middleCount-1) -> índice real na lista (1..length-2)
+                            final realIndex = index + 1;
+
+                            return AnimatedContainer(
+                              duration: Duration(
+                                milliseconds: 300 + (index * 50),
+                              ),
+                              curve: Curves.easeOutCubic,
+                              child: TweenAnimationBuilder<double>(
+                                tween: Tween(begin: 0.0, end: 1.0),
+                                duration: Duration(
+                                  milliseconds: 400 + (index * 100),
+                                ),
+                                curve: Curves.easeOutBack,
+                                builder: (context, value, child) {
+                                  return Transform.scale(
+                                    scale: value,
+                                    child: Opacity(
+                                      opacity: value,
+                                      child: StopFormCard(
+                                        label: 'Parada ${index + 1}',
+                                        index:
+                                            realIndex, // <- importante: índice real no provider
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // Botão "Adicionar Parada" -> usa o provider (insere antes do destino)
+                Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colors.secondary.withValues(alpha: 0.6),
+                        colors.secondary
+                            .withRed(102)
+                            .withGreen(178)
+                            .withBlue(255)
+                            .withValues(alpha: 0.6),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: colors.secondary),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<TravelStopsProvider>().addStop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          CupertinoIcons.add_circled,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Adicionar Parada',
+                          style: GoogleFonts.raleway(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -269,5 +370,16 @@ class _InterviewScreenState extends State<InterviewScreen> {
         },
       ),
     );
+  }
+}
+
+/// Utility class to handle string parsing operations
+class StringUtils {
+  /// Returns the substring before the first comma.
+  /// If no comma is found, returns the entire string.
+  static String beforeComma(String text) {
+    final index = text.indexOf(',');
+    if (index == -1) return text;
+    return text.substring(0, index);
   }
 }

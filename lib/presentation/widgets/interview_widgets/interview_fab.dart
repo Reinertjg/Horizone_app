@@ -1,10 +1,7 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-import '../../state/interview_provider.dart';
 import '../../theme_color/app_colors.dart';
 
 /// Builds the FAB widget used to validate the form
@@ -24,10 +21,9 @@ class InterviewFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final interviewProvider = Provider.of<InterviewProvider>(context);
     return Container(
       height: 45,
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.92,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
