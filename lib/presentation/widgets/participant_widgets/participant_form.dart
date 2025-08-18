@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../state/participant_provider.dart';
 import '../interview_widgets/interview_textfield.dart';
 
 class ParticipantForm extends StatefulWidget {

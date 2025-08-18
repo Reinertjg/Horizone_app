@@ -1,11 +1,7 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-import '../../../domain/entities/participant.dart';
-import '../../state/participant_provider.dart';
 import '../../theme_color/app_colors.dart';
 import '../interview_widgets/interview_fab.dart';
 

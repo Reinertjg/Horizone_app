@@ -1,12 +1,10 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../state/participant_provider.dart';
 import '../../theme_color/app_colors.dart';
-import '../participant_widgets/modals/save_participant_modal.dart';
-import 'add_participant_modal.dart';
+import 'modals/save_participant_modal.dart';
 import 'options_participant_modal.dart';
 
 /// A widget that displays a list of participants.
@@ -18,7 +16,6 @@ class ParticipantListPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final participantProvider = Provider.of<ParticipantProvider>(context);
-    final participants = participantProvider.participants;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

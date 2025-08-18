@@ -21,7 +21,7 @@ class ParticipantProvider extends ChangeNotifier {
 
   void setSelectedImage(File? image) {
     _selectedImage = image;
-    notifyListeners(); // Notifica os ouvintes sobre a mudança
+    notifyListeners();
   }
 
   /// Adds a new [Participant] to the list of participants.
