@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../domain/entities/participant.dart';
-import '../../state/participant_provider.dart';
-import '../../theme_color/app_colors.dart';
+import '../../../../../domain/entities/participant.dart';
+import '../../../state/participant_provider.dart';
+import '../../../theme_color/app_colors.dart';
 import 'participant_avatar_picker.dart';
 import 'participant_form.dart';
 import 'participant_handle_bar.dart';
