@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import '../theme_color/app_colors.dart';
 
 /// A widget that displays an icon button for notifications.
@@ -17,7 +18,7 @@ class IconbuttonNotifications extends StatelessWidget {
         width: 35,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(Icons.notifications_none, color: colors.quinary),
+          icon: Icon(HugeIcons.strokeRoundedNotification02, color: colors.quinary),
           onPressed: () {},
         ),
       ),
