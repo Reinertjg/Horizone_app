@@ -1,3 +1,5 @@
+import 'travelstop.dart';
+
 /// A class representing a trip.
 class Trip {
   /// The unique identifier of the trip.
@@ -14,6 +16,12 @@ class Trip {
   final int numberOfParticipants;
   /// The type of experience the trip offers.
   final String experienceType;
+  /// The Origin Place the Trip
+  final PlacePoint? originPlace;
+  final String originLabel;
+  /// The Destination Place the Trip
+  final PlacePoint? destinationPlace;
+  final String destinationLabel;
 
   /// Constructs a new [Trip] object.
   Trip({
@@ -24,6 +32,10 @@ class Trip {
     required this.meansOfTransportation,
     required this.numberOfParticipants,
     required this.experienceType,
+    this.originPlace,
+    required this.originLabel,
+    this.destinationPlace,
+    required this.destinationLabel
   });
 
   /// Converts the [Trip] object to a map.
@@ -34,6 +46,10 @@ class Trip {
     'meansOfTransportation': meansOfTransportation,
     'numberOfParticipants': numberOfParticipants,
     'experienceType': experienceType,
+    'originLabel': originLabel,
+    'destinationLabel': destinationLabel,
+    'originPlace': originPlace,
+    'destinationPlace': destinationPlace
   };
 
   /// Creates a [Trip] object from a map.
@@ -46,6 +62,8 @@ class Trip {
       meansOfTransportation: map['meansOfTransportation'],
       numberOfParticipants: map['numberOfParticipants'],
       experienceType: map['experienceType'],
+      originLabel: map['originLabel'],
+      destinationLabel: map['destinationLabel']
     );
   }
 }
