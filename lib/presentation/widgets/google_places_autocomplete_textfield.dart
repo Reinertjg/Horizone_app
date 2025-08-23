@@ -105,3 +105,46 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
     );
   }
 }
+
+Widget _circularLoadingBuilder(BuildContext context) {
+  final colors = Theme.of(context).extension<AppColors>()!;
+  return Container(
+    decoration: BoxDecoration(
+      color: colors.quinary,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    height: 50,
+    child: Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(colors.tertiary),
+        strokeWidth: 3.0,
+      ),
+    ),
+  );
+}
+
+Widget _textEmptyBuilder(
+  BuildContext context,
+    TextEditingController? _controller
+) {
+  final colors = Theme.of(context).extension<AppColors>()!;
+  return _controller?.text == ''
+      ? SizedBox()
+      : Container(
+          decoration: BoxDecoration(
+            color: colors.quinary,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          height: 50,
+          child: Center(
+            child: Text(
+              'Localização não encontrada!',
+              style: GoogleFonts.raleway(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: colors.quaternary,
+              ),
+            ),
+          ),
+        );
+}
