@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme_color/app_colors.dart';
-import '../interview_widgets/interview_fab.dart';
+import '../../../theme_color/app_colors.dart';
+import '../interview_fab.dart';
 
 class ParticipantModalButtons extends StatelessWidget {
   const ParticipantModalButtons({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../theme_color/app_colors.dart';
+import '../../../theme_color/app_colors.dart';
 
 class ParticipantHandleBar extends StatelessWidget {
   const ParticipantHandleBar({super.key});

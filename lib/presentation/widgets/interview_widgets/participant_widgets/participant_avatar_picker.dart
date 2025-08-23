@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../theme_color/app_colors.dart';
+import '../../../theme_color/app_colors.dart';
 import 'image_picker_sheet.dart';
 
 enum OptionPhotoMode { cameraMode, galleryMode }

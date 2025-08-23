@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../theme_color/app_colors.dart';
+import '../../../theme_color/app_colors.dart';
 
 class ParticipantModalHeader extends StatelessWidget {
   const ParticipantModalHeader({
