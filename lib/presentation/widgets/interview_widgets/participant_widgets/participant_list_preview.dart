@@ -69,11 +69,13 @@ class ParticipantListPreview extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: 50,
-                      child: Text(
-                        participant.name,
-                        style: TextStyle(color: colors.quaternary),
-                        overflow: TextOverflow.ellipsis,
+                      width: 55,
+                      child: Center(
+                        child: Text(
+                          participant.name,
+                          style: TextStyle(color: colors.quaternary),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
