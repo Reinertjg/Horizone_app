@@ -2,21 +2,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
-import '../../../domain/usecases/get_place_suggestions.dart';
-import '../../state/travelstops_provider.dart';
-import '../../theme_color/app_colors.dart';
-import '../google_places_autocomplete_textfield.dart';
-import '../interview_widgets/cupertino_textfield.dart';
+import '../../../../domain/usecases/get_place_suggestions.dart';
+import '../../../state/travelstops_provider.dart';
+import '../../../state/trip_dates_provider.dart';
+import '../../../theme_color/app_colors.dart';
+import '../../google_places_autocomplete_textfield.dart';
+import '../test_cupertino_date_picker.dart';
 import 'travelstops_textfield_box.dart';
 
 class StopFormCard extends StatelessWidget {
-  const StopFormCard({
-    super.key,
-    required this.index,
-    required this.label,
-  });
+  const StopFormCard({super.key, required this.index, required this.label});
 
   /// Stop index in the provider list.
   final int index;
@@ -27,15 +25,19 @@ class StopFormCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final stops = context.watch<TravelStopsProvider>();
+    final stopsProvider = context.watch<TravelStopsProvider>();
+    final dateProvider = Provider.of<TripDatesProvider>(context);
     final apiKey = dotenv.env['MAPS_API_KEY'];
 
+    final places = PlacesService(apiKey: apiKey!);
 
-    final places = PlacesService(
-      apiKey: apiKey!,
+    final stop = stopsProvider.stops[index];
+
+    final today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
     );
-
-    final stop = stops.stops[index];
 
     return Card(
       elevation: 2,
@@ -55,10 +57,14 @@ class StopFormCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(label, style: TextStyle(color: colors.quaternary)),
-                if (index > 0 && index < stops.length - 1)
+                if (index > 0 && index < stopsProvider.length - 1)
                   GestureDetector(
-                    onTap: () => stops.removeStop(index),
-                    child: Icon(CupertinoIcons.delete, color: colors.secondary, size: 20),
+                    onTap: () => stopsProvider.removeStop(index),
+                    child: Icon(
+                      CupertinoIcons.delete,
+                      color: colors.secondary,
+                      size: 20,
+                    ),
                   ),
               ],
             ),
@@ -87,11 +93,19 @@ class StopFormCard extends StatelessWidget {
                   child: CupertinoDatePickerField(
                     label: 'Start date',
                     fontSize: 12,
-                    icon: Icons.calendar_today_outlined,
-                    mode: DatePickerMode.futureOnly,
-                    controller: TextEditingController(text: stop.startDate),
-                    validator: (_) => null, // put your validator if needed
-                    ),
+                    icon: HugeIcons.strokeRoundedCalendar01,
+                    controller: TextEditingController(text: stop.startDate.toString()),
+                    validator: (_) => null,
+                    // put your validator if needed
+                    // minDate: dateProvider.minDateForStop(index),
+                    // maxDate: dateProvider.maxDateForStop(index),
+                    // initialDate: dateProvider.initialDateForStop(index, current: stop.startDate),
+                    maxDate:
+                    dateProvider.endDate?.subtract(Duration(days: 1)) ??
+                        DateTime(2100),
+                    minDate: today,
+                    initialDate: dateProvider.startDate ?? today,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -99,10 +113,21 @@ class StopFormCard extends StatelessWidget {
                     label: 'End date',
                     fontSize: 12,
                     icon: Icons.event,
-                    mode: DatePickerMode.futureOnly,
-                    controller: TextEditingController(text: stop.endDate),
+                    controller: TextEditingController(text: stop.endDate.toString()),
                     validator: (_) => null,
-                    ),
+                    // put your validator if needed
+                    // minDate: dateProvider.minDateForStop(index),
+                    // maxDate: dateProvider.maxDateForStop(index),
+                    // initialDate: dateProvider.initialDateForStop(index, current: stop.startDate),
+                    maxDate: DateTime(2100),
+                    minDate:
+                    dateProvider.startDate?.add(Duration(days: 1)) ??
+                        today.add(Duration(days: 1)),
+                    initialDate:
+                    dateProvider.endDate ??
+                        (dateProvider.startDate?.add(Duration(days: 2)) ??
+                            today.add(Duration(days: 1))),
+                  ),
                 ),
               ],
             ),

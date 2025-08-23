@@ -12,8 +12,8 @@ class TravelStop {
   final int? travelStopId;
   final PlacePoint place;
   final String label;
-  final String startDate;
-  final String endDate;
+  final DateTime? startDate;
+  final DateTime? endDate;
   final String description;
 
   TravelStop({
@@ -24,4 +24,23 @@ class TravelStop {
     required this.endDate,
     required this.description,
   });
+
+  /// Creates a copy of this object but with the given values replaced.
+  TravelStop copyWith({
+    int? travelStopId,
+    PlacePoint? place,
+    String? label,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? description,
+  }) {
+    return TravelStop(
+      travelStopId: travelStopId ?? this.travelStopId,
+      place: place ?? this.place,
+      label: label ?? this.label,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      description: description ?? this.description,
+    );
+  }
 }
