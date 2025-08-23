@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../generated/l10n.dart';
-import '../../state/participant_provider.dart';
-import '../../theme_color/app_colors.dart';
-import '../participant_widgets/modals/update_participant_modal.dart';
+import '../../../../generated/l10n.dart';
+import '../../../state/participant_provider.dart';
+import '../../../theme_color/app_colors.dart';
+import 'modals/update_participant_modal.dart';
 
 class OptionsParticipantModal extends StatelessWidget {
   const OptionsParticipantModal({super.key, required this.index});
