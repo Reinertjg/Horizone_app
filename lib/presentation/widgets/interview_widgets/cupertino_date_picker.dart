@@ -17,9 +17,9 @@ enum DatePickerMode {
 
 /// A custom [TextFormField] widget
 /// Cupertino-style date picker popup
-class CupertinoDatePickerFieldd extends StatefulWidget {
+class CupertinoDatePickerFieldO extends StatefulWidget {
   /// Creates a [CupertinoDatePickerField] with the given parameters.
-  const CupertinoDatePickerFieldd({
+  const CupertinoDatePickerFieldO({
     super.key,
     required this.controller,
     required this.label,
@@ -48,11 +48,11 @@ class CupertinoDatePickerFieldd extends StatefulWidget {
   final String? Function(String?)? validator;
 
   @override
-  State<CupertinoDatePickerFieldd> createState() =>
-      _CupertinoDatePickerFielddState();
+  State<CupertinoDatePickerFieldO> createState() =>
+      _CupertinoDatePickerFieldState();
 }
 
-class _CupertinoDatePickerFielddState extends State<CupertinoDatePickerFieldd> {
+class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerFieldO> {
   late DateTime initialDate;
   late DateTime minDate;
   late DateTime maxDate;
