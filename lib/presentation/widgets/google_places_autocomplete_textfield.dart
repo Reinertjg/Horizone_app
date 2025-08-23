@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../domain/usecases/get_place_suggestions.dart';
 import '../theme_color/app_colors.dart';
 
@@ -26,6 +27,12 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
   TextEditingController? _controller;
 
   @override
+  void initState() {
+    super.initState();
+    widget.service.resetSession();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     return TypeAheadField<Map<String, String>>(
@@ -35,6 +42,10 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
         return TextField(
           controller: controller,
           focusNode: focusNode,
+          style: TextStyle(
+            color: colors.quaternary,
+            fontSize: 16,
+          ),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,
@@ -68,16 +79,23 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
-          leading: const Icon(Icons.place_outlined),
+          tileColor: colors.quinary.withValues(alpha: 0.9),
+          leading: Icon(Icons.place_outlined, color: colors.quaternary,
+          ),
           title: Text(
             suggestion['description']!,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.raleway(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: colors.quaternary,
+            ),
           ),
         );
       },
       onSelected: (suggestion) {
-        _controller?.text = suggestion['description']!; // Atualiza o campo
+        _controller?.text = suggestion['description']!; // Update the text
 
         widget.onSelected(suggestion['placeId']!, suggestion['description']!);
         widget.service.resetSession();
