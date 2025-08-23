@@ -37,6 +37,8 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
     final colors = Theme.of(context).extension<AppColors>()!;
     return TypeAheadField<Map<String, String>>(
       suggestionsCallback: widget.service.fetchSuggestions,
+      loadingBuilder: _circularLoadingBuilder,
+      emptyBuilder: (context) => _textEmptyBuilder(context, _controller),
       builder: (context, controller, focusNode) {
         _controller = controller;
         return TextField(
