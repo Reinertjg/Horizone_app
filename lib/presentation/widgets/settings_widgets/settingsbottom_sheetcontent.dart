@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../../state/locale_provider.dart';
 import '../../state/theme_provider.dart';
 import '../../theme_color/app_colors.dart';
 import 'delete_accoun_tile.dart';

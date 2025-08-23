@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import '../../generated/l10n.dart';
 
@@ -43,21 +45,21 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: colors.secondary),
+            icon: Icon(HugeIcons.strokeRoundedHome09, color: colors.secondary),
             label: S.of(context).home,
             backgroundColor: colors.primary,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.mode_of_travel_outlined, color: colors.secondary),
+            icon: Icon(HugeIcons.strokeRoundedProfile, color: colors.secondary),
             backgroundColor: colors.primary,
             label: S.of(context).planning,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month, color: colors.secondary),
+            icon: Icon(HugeIcons.strokeRoundedCalendar04, color: colors.secondary),
             label: 'Notifications',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_pin_rounded, color: colors.secondary),
+            icon: Icon(HugeIcons.strokeRoundedUser, color: colors.secondary),
             label: S.of(context).profile,
           ),
         ],
