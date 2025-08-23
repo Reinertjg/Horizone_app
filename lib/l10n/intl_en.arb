@@ -39,5 +39,14 @@
   "cancel": "Cancel",
   "delete": "Delete",
   "emailRequired": "Email is required.",
-  "emailInvalid": "Invalid email address."
+  "emailInvalid": "Invalid email address.",
+  "generalInformation": "General Information",
+  "tripTitle": "Trip Title",
+  "hintTitleTrip": "Ex: Silva Family Trip 2025",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "meansOfTransport": "Means of Transport",
+  "participants": "Participants",
+  "add": "Add",
+  "typeAndExperience": "Type and Experience"
 }

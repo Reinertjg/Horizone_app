@@ -39,5 +39,13 @@
   "cancel": "Cancelar",
   "delete": "Borrar",
   "emailRequired": "El correo electrónico es obligatorio.",
-  "emailInvalid": "Dirección de correo electrónico inválida."
+  "emailInvalid": "Dirección de correo electrónico inválida.",
+  "generalInformation": "Información General",
+  "tripTitle": "Título del Viaje",
+  "startDate": "Fecha de Inicio",
+  "endDate": "Fecha de Finalización",
+  "meansOfTransport": "Medio de Transporte",
+  "participants": "Participantes",
+  "add": "Agregar",
+  "typeAndExperience": "Tipo y Experiencia"
 }

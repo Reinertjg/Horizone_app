@@ -373,6 +373,76 @@ class S {
       args: [],
     );
   }
+
+  /// `General Information`
+  String get generalInformation {
+    return Intl.message(
+      'General Information',
+      name: 'generalInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Trip Title`
+  String get tripTitle {
+    return Intl.message('Trip Title', name: 'tripTitle', desc: '', args: []);
+  }
+
+  /// `Ex: Silva Family Trip 2025`
+  String get hintTitleTrip {
+    return Intl.message(
+      'Ex: Silva Family Trip 2025',
+      name: 'hintTitleTrip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Date`
+  String get startDate {
+    return Intl.message('Start Date', name: 'startDate', desc: '', args: []);
+  }
+
+  /// `End Date`
+  String get endDate {
+    return Intl.message('End Date', name: 'endDate', desc: '', args: []);
+  }
+
+  /// `Means of Transport`
+  String get meansOfTransport {
+    return Intl.message(
+      'Means of Transport',
+      name: 'meansOfTransport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Participants`
+  String get participants {
+    return Intl.message(
+      'Participants',
+      name: 'participants',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add`
+  String get add {
+    return Intl.message('Add', name: 'add', desc: '', args: []);
+  }
+
+  /// `Type and Experience`
+  String get typeAndExperience {
+    return Intl.message(
+      'Type and Experience',
+      name: 'typeAndExperience',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
