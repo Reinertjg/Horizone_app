@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/l10n.dart';
 import '../../state/interview_provider.dart';
+import '../../state/trip_dates_provider.dart';
 import '../../theme_color/app_colors.dart';
 import 'build_dropdownform.dart';
-import 'cupertino_textfield.dart';
 import 'interview_textfield.dart';
-import '../participant_widgets/participant_list_preview.dart';
+import 'participant_widgets/participant_list_preview.dart';
+import 'test_cupertino_date_picker.dart';
 
 /// A form card widget that collects general information about a trip,
 /// including title, start and end dates, transportation, and experience type.
@@ -20,10 +23,17 @@ class InterviewFormCard extends StatefulWidget {
 }
 
 class _InterviewFormCardState extends State<InterviewFormCard> {
+  final today = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<InterviewProvider>(context);
+    final dateProvider = Provider.of<TripDatesProvider>(context);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -40,9 +50,9 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
             children: [
               /// Text field for entering the title of the trip.
               InterviewTextField(
-                nameButton: 'Titulo da viagem',
+                nameButton: S.of(context).tripTitle,
                 hintText: 'Ex: Viagem da Família Silva 2024',
-                icon: Icons.title,
+                icon: HugeIcons.strokeRoundedTextCircle,
                 controller: interviewProvider.titleController,
                 validator: interviewProvider.validateTitle,
                 keyboardType: TextInputType.text,
@@ -53,34 +63,48 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                   Expanded(
                     /// First date picker field for selecting the start date.
                     child: CupertinoDatePickerField(
-                      label: 'Data de Inicío',
+                      label: S.of(context).startDate,
                       fontSize: 12,
-                      icon: Icons.calendar_today_outlined,
-                      mode: DatePickerMode.futureOnly,
+                      icon: HugeIcons.strokeRoundedCalendarCheckIn01,
                       controller: interviewProvider.startDateController,
                       validator: interviewProvider.validateStartDate,
+                      maxDate:
+                          dateProvider.endDate?.subtract(Duration(days: 1)) ??
+                          DateTime(2100),
+                      minDate: today,
+                      initialDate: dateProvider.startDate ?? today,
+                      onDateChanged: dateProvider.setTripStart,
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     /// Second date picker field for selecting the end date.
                     child: CupertinoDatePickerField(
-                      label: 'Data de Término',
+                      label: S.of(context).endDate,
                       fontSize: 12,
-                      icon: Icons.event,
-                      mode: DatePickerMode.futureOnly,
+                      icon: HugeIcons.strokeRoundedCalendarCheckOut01,
                       controller: interviewProvider.endDateController,
                       validator: interviewProvider.validateEndDate,
+                      maxDate: DateTime(2100),
+                      minDate:
+                          dateProvider.startDate?.add(Duration(days: 1)) ??
+                          today.add(Duration(days: 1)),
+                      initialDate:
+                          dateProvider.endDate ??
+                          (dateProvider.startDate?.add(Duration(days: 2)) ??
+                              today.add(Duration(days: 1))),
+                      onDateChanged: dateProvider.setTripEnd,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
+
               /// Dropdown form for selecting the means of transportation.
               BuildDropdownform(
-                label: 'Meio de Transporte',
+                label: S.of(context).meansOfTransport,
                 items: ['Carro', 'Avião', 'Ônibus', 'Trem'],
-                icon: Icons.directions_car,
+                icon: HugeIcons.strokeRoundedAirplane01,
                 validator: interviewProvider.validateMeansOfTransportation,
                 onChanged: (value) =>
                     interviewProvider.meansOfTransportation = value,
@@ -92,18 +116,17 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Participantes',
+                    S.of(context).participants,
                     style: TextStyle(color: colors.quaternary),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: Icon(
-                      CupertinoIcons.person_2,
+                      HugeIcons.strokeRoundedUserMultiple02,
                       color: colors.secondary,
                       size: 25,
                     ),
                   ),
-
                 ],
               ),
 
@@ -126,14 +149,14 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
 
               /// Dropdown form for selecting the type of experience.
               BuildDropdownform(
-                label: 'Tipo e Experiencias',
+                label: S.of(context).typeAndExperience,
                 items: [
                   'Imersão Cultural',
                   'Explorar Culinárias',
                   'Visitar Locais Históricos',
                   'Visitar Estabelecimentos',
                 ],
-                icon: Icons.directions_car,
+                icon: HugeIcons.strokeRoundedLocationFavourite01,
                 validator: interviewProvider.validateExperienceType,
                 onChanged: (value) => interviewProvider.experienceType = value,
               ),
