@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../state/participant_provider.dart';
-import '../save_participant_content.dart';
 import '../update_participant_content.dart';
 
 class UpdateParticipantModal extends StatefulWidget {
