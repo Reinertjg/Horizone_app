@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "add": MessageLookupByLibrary.simpleMessage("Add"),
     "andWellTake": MessageLookupByLibrary.simpleMessage(
       "\nAnd we\'ll take you where \nyou want to be",
     ),
@@ -54,9 +55,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Invalid email address.",
     ),
     "emailRequired": MessageLookupByLibrary.simpleMessage("Email is required."),
+    "endDate": MessageLookupByLibrary.simpleMessage("End Date"),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "Gender is required.",
+    ),
+    "generalInformation": MessageLookupByLibrary.simpleMessage(
+      "General Information",
+    ),
+    "hintTitleTrip": MessageLookupByLibrary.simpleMessage(
+      "Ex: Silva Family Trip 2025",
     ),
     "home": MessageLookupByLibrary.simpleMessage("Home"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
@@ -68,12 +76,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "lightTheme": MessageLookupByLibrary.simpleMessage("Light Theme"),
+    "meansOfTransport": MessageLookupByLibrary.simpleMessage(
+      "Means of Transport",
+    ),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "nameRequired": MessageLookupByLibrary.simpleMessage("Name is required."),
     "nameTooShort": MessageLookupByLibrary.simpleMessage(
       "Name must be at least 3 characters long.",
     ),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
+    "participants": MessageLookupByLibrary.simpleMessage("Participants"),
     "planning": MessageLookupByLibrary.simpleMessage("Planning"),
     "planningTravel": MessageLookupByLibrary.simpleMessage("Planning a Travel"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
@@ -83,12 +95,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectLanguage": MessageLookupByLibrary.simpleMessage("Select Language"),
     "selectTheme": MessageLookupByLibrary.simpleMessage("Select Theme"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+    "startDate": MessageLookupByLibrary.simpleMessage("Start Date"),
     "startJourney": MessageLookupByLibrary.simpleMessage(
       "Your Journey Starts Here",
     ),
     "systemTheme": MessageLookupByLibrary.simpleMessage("System Theme"),
     "tellUs": MessageLookupByLibrary.simpleMessage("Tell us "),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+    "tripTitle": MessageLookupByLibrary.simpleMessage("Trip Title"),
+    "typeAndExperience": MessageLookupByLibrary.simpleMessage(
+      "Type and Experience",
+    ),
     "welcome": MessageLookupByLibrary.simpleMessage("Hi"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Who you are"),
   };

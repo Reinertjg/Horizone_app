@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "add": MessageLookupByLibrary.simpleMessage("Adicionar"),
     "andWellTake": MessageLookupByLibrary.simpleMessage(
       "\nE nós te levaremos para onde \nvocê quiser estar",
     ),
@@ -54,9 +55,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailRequired": MessageLookupByLibrary.simpleMessage(
       "O email é obrigatório.",
     ),
+    "endDate": MessageLookupByLibrary.simpleMessage("Data de Término"),
     "gender": MessageLookupByLibrary.simpleMessage("Gênero"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "O gênero é obrigatório.",
+    ),
+    "generalInformation": MessageLookupByLibrary.simpleMessage(
+      "Informações Gerais",
     ),
     "home": MessageLookupByLibrary.simpleMessage("Início"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
@@ -68,6 +73,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "language": MessageLookupByLibrary.simpleMessage("Idioma"),
     "lightTheme": MessageLookupByLibrary.simpleMessage("Tema Claro"),
+    "meansOfTransport": MessageLookupByLibrary.simpleMessage(
+      "Meio de Transporte",
+    ),
     "name": MessageLookupByLibrary.simpleMessage("Nome"),
     "nameRequired": MessageLookupByLibrary.simpleMessage(
       "O nome é obrigatorio.",
@@ -78,6 +86,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORE NOVOS HORIZONTES",
     ),
+    "participants": MessageLookupByLibrary.simpleMessage("Participantes"),
     "planning": MessageLookupByLibrary.simpleMessage("Planejamento"),
     "planningTravel": MessageLookupByLibrary.simpleMessage(
       "Planejamento de Viagem",
@@ -91,12 +100,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "selectTheme": MessageLookupByLibrary.simpleMessage("Selecione o Tema"),
     "settings": MessageLookupByLibrary.simpleMessage("Configurações"),
+    "startDate": MessageLookupByLibrary.simpleMessage("Data de Início"),
     "startJourney": MessageLookupByLibrary.simpleMessage(
       "Sua Jornada Começa Aqui",
     ),
     "systemTheme": MessageLookupByLibrary.simpleMessage("Tema do Sistema"),
     "tellUs": MessageLookupByLibrary.simpleMessage("Conte-nos "),
     "theme": MessageLookupByLibrary.simpleMessage("Tema"),
+    "tripTitle": MessageLookupByLibrary.simpleMessage("Título da Viagem"),
+    "typeAndExperience": MessageLookupByLibrary.simpleMessage(
+      "Tipo e Experiência",
+    ),
     "welcome": MessageLookupByLibrary.simpleMessage("Olá"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Quem é você"),
   };
