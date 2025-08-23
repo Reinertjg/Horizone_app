@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'database/daos/trip_dao.dart';
 import 'generated/l10n.dart';
+import 'presentation/routes.dart';
 import 'presentation/state/interview_provider.dart';
 import 'presentation/state/locale_provider.dart';
 import 'presentation/state/participant_provider.dart';
 import 'presentation/state/profileform_provider.dart';
 import 'presentation/state/theme_provider.dart';
+import 'presentation/state/travelstops_provider.dart';
+import 'presentation/state/trip_dates_provider.dart';
 import 'presentation/theme_color/app_theme.dart';
-import 'presentation/routes.dart';
 
-void main() {
-  runApp(
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+    runApp(
     MultiProvider(
       providers: [
         /// Provides the current app locale (e.g., 'pt' for Portuguese)
@@ -27,9 +32,6 @@ void main() {
         /// Manages the state of the profile form (e.g., ProfileFormScreen)
         ChangeNotifierProvider(create: (_) => ProfileFormProvider()),
 
-        // /// Handles database operations for profiles
-        // ChangeNotifierProvider(create: (_) => ProfileDao()),
-
         /// Manages interview-related state and logic
         ChangeNotifierProvider(create: (_) => InterviewProvider()),
 
@@ -38,6 +40,12 @@ void main() {
 
         /// Manages participant-related state and logic
         ChangeNotifierProvider(create: (_) => ParticipantProvider()),
+
+        /// Manages travel stop-related state and logic
+        ChangeNotifierProvider(create: (_) => TravelStopsProvider()),
+
+        /// Manages trip date-related state and logic
+        ChangeNotifierProvider(create: (_) => TripDatesProvider()),
       ],
 
       /// Root widget of the app
