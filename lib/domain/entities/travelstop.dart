@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class PlacePoint {
   final double latitude;
   final double longitude;
@@ -9,6 +11,7 @@ class PlacePoint {
 }
 
 class TravelStop {
+  final int order;
   final int? travelStopId;
   final PlacePoint place;
   final String label;
@@ -18,6 +21,7 @@ class TravelStop {
 
   TravelStop({
     this.travelStopId,
+    required this.order,
     required this.place,
     required this.label,
     required this.startDate,
@@ -27,6 +31,7 @@ class TravelStop {
 
   /// Creates a copy of this object but with the given values replaced.
   TravelStop copyWith({
+    int? order,
     int? travelStopId,
     PlacePoint? place,
     String? label,
@@ -35,6 +40,7 @@ class TravelStop {
     String? description,
   }) {
     return TravelStop(
+      order: order ?? this.order,
       travelStopId: travelStopId ?? this.travelStopId,
       place: place ?? this.place,
       label: label ?? this.label,
@@ -43,4 +49,14 @@ class TravelStop {
       description: description ?? this.description,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TravelStop &&
+          runtimeType == other.runtimeType &&
+          order == other.order;
+
+  @override
+  int get hashCode => order.hashCode;
 }

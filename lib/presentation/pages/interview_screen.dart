@@ -32,7 +32,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
     final colors = Theme.of(context).extension<AppColors>()!;
     final stopsProvider = context.watch<TravelStopsProvider>();
 
-    final middleCount = (stopsProvider.length - 2).clamp(0, 1 << 20);
+    final middleCount = stopsProvider.length;
 
     return Scaffold(
       backgroundColor: colors.primary,
@@ -75,7 +75,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
               const SizedBox(height: 16),
               MapPreviewCard(),
               const SizedBox(height: 16),
-              IntermediateStopsSection(middleCount: middleCount),
+              IntermediateStopsSection(),
               const SizedBox(height: 16),
               AddStopButton(),
               const SizedBox(height: 60),

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// Para Opção A, passe a URL do seu BFF ao instanciar.
 class PlacesApiClient {
   final String baseUrl;
   final http.Client _client;
@@ -18,7 +17,7 @@ class PlacesApiClient {
       'sessionToken': sessionToken,
     };
     if (regionCodes != null && regionCodes.isNotEmpty) {
-      body['includedRegionCodes'] = regionCodes; // só envia se pedirem
+      body['includedRegionCodes'] = regionCodes;
     }
 
     final uri = Uri.parse('$baseUrl/places/autocomplete');

@@ -10,15 +10,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class TravelStopsProvider extends ChangeNotifier {
   TravelStopsProvider();
 
-  // Agora: só waypoints
   final List<TravelStop> _stops = [];
 
   List<TravelStop> get stops => List.unmodifiable(_stops);
+
   int get length => _stops.length;
 
   void addStop() {
+    final previousOrder = _stops.lastOrNull?.order ?? 0;
+
     _stops.add(
       TravelStop(
+        order: previousOrder + 1,
         place: const PlacePoint(latitude: 0, longitude: 0),
         label: '',
         startDate: null,
@@ -29,34 +32,29 @@ class TravelStopsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeStop(int index) {
-    _ensureIndex(index);
-    _stops.removeAt(index);
+  void removeStop(TravelStop stop) {
+    print('REMOVE STOP ${stop.order}');
+
+    _stops.remove(stop);
     notifyListeners();
   }
 
-  void updateLabel(int index, String label) {
-    _ensureIndex(index);
-    final s = _stops[index];
-    _stops[index] = s.copyWith(label: label);
-    notifyListeners();
-  }
+  void updateStop(TravelStop stop, LatLng coords, String label) {
+    final index = _stops.indexOf(stop);
 
-  void updateLatLng(int index, LatLng latLng) {
-    _ensureIndex(index);
-    final s = _stops[index];
-    _stops[index] = s.copyWith(
-      place: PlacePoint(latitude: latLng.latitude, longitude: latLng.longitude),
+    _stops[index] = _stops[index].copyWith(
+      label: label,
+      place: PlacePoint(latitude: coords.latitude, longitude: coords.longitude),
     );
+
     notifyListeners();
   }
 
   Future<void> resolveAndSetPlace({
-    required int index,
+    required TravelStop stop,
     required String placeId,
     required String label,
   }) async {
-    _ensureIndex(index);
     final apiKey = dotenv.env['MAPS_API_KEY'];
     if (apiKey == null || apiKey.isEmpty) return;
 
@@ -64,11 +62,9 @@ class TravelStopsProvider extends ChangeNotifier {
     final latLng = await details.getLatLngFromPlaceId(placeId);
     if (latLng == null) return;
 
-    updateLabel(index, label);
-    updateLatLng(index, latLng);
+    updateStop(stop, latLng, label);
   }
 
-  // AGORA recebe origem/destino de fora (ex.: do InterviewProvider)
   TravelRouteArgs? buildRouteArgs({
     required PlacePoint? origin,
     required PlacePoint? destination,
@@ -89,18 +85,13 @@ class TravelStopsProvider extends ChangeNotifier {
       destination: LatLng(destination!.latitude, destination.longitude),
       waypoints: waypoints,
       title:
-      '${beforeComma(originLabel ?? '')} → ${beforeComma(destinationLabel ?? '')}'.trim(),
+          '${beforeComma(originLabel ?? '')} → ${beforeComma(destinationLabel ?? '')}'
+              .trim(),
     );
   }
 
   bool _isValid(PlacePoint? p) =>
       p != null && p.latitude != 0 && p.longitude != 0;
-
-  void _ensureIndex(int index) {
-    if (index < 0 || index >= _stops.length) {
-      throw RangeError('Invalid stop index $index');
-    }
-  }
 }
 
 String beforeComma(String text) {

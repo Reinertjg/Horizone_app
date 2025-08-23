@@ -5,6 +5,7 @@ import '../../domain/usecases/get_place_suggestions.dart';
 import '../theme_color/app_colors.dart';
 
 class GooglePlacesAutocomplete extends StatefulWidget {
+  final String? initialText;
   final PlacesService service;
   final String hintText;
   final IconData icon;
@@ -12,6 +13,7 @@ class GooglePlacesAutocomplete extends StatefulWidget {
 
   const GooglePlacesAutocomplete({
     super.key,
+    this.initialText,
     required this.service,
     required this.hintText,
     required this.onSelected,
@@ -24,30 +26,52 @@ class GooglePlacesAutocomplete extends StatefulWidget {
 }
 
 class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
-  TextEditingController? _controller;
+  final _controller = TextEditingController();
+
+  @override
+  void didUpdateWidget(covariant GooglePlacesAutocomplete oldWidget) {
+    if (oldWidget.hintText != widget.initialText &&
+        widget.initialText?.isNotEmpty == true) {
+      _controller.text = widget.initialText ?? '';
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   void initState() {
     super.initState();
+
+    if (_controller.text != widget.initialText &&
+        widget.initialText?.isNotEmpty == true) {
+      _controller.text = widget.initialText!;
+    }
+
     widget.service.resetSession();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('_controller => ${_controller.text}');
+
     final colors = Theme.of(context).extension<AppColors>()!;
     return TypeAheadField<Map<String, String>>(
       suggestionsCallback: widget.service.fetchSuggestions,
       loadingBuilder: _circularLoadingBuilder,
       emptyBuilder: (context) => _textEmptyBuilder(context, _controller),
+      controller: _controller,
       builder: (context, controller, focusNode) {
-        _controller = controller;
         return TextField(
-          controller: controller,
+          controller: _controller,
           focusNode: focusNode,
-          style: TextStyle(
-            color: colors.quaternary,
-            fontSize: 16,
-          ),
+          style: TextStyle(color: colors.quaternary, fontSize: 16),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,
@@ -82,8 +106,7 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
       itemBuilder: (context, suggestion) {
         return ListTile(
           tileColor: colors.quinary.withValues(alpha: 0.9),
-          leading: Icon(Icons.place_outlined, color: colors.quaternary,
-          ),
+          leading: Icon(Icons.place_outlined, color: colors.quaternary),
           title: Text(
             suggestion['description']!,
             maxLines: 2,
@@ -127,7 +150,7 @@ Widget _circularLoadingBuilder(BuildContext context) {
 
 Widget _textEmptyBuilder(
   BuildContext context,
-    TextEditingController? _controller
+  TextEditingController? _controller,
 ) {
   final colors = Theme.of(context).extension<AppColors>()!;
   return _controller?.text == ''

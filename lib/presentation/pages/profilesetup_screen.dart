@@ -33,6 +33,12 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
     final formProvider = Provider.of<ProfileFormProvider>(context);
     final colors = Theme.of(context).extension<AppColors>()!;
 
+    /// Variables that handle the CupertinoDatePickerField
+    final now = DateTime.now();
+    final maxDate = DateTime(now.year - 18, now.month, now.day);
+    final minDate = DateTime(1900);
+    final initialDate = maxDate;
+
     return Scaffold(
       appBar: _buildAppBar(context),
       backgroundColor: colors.primary,
@@ -74,9 +80,9 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
                   icon: Icons.calendar_today_outlined,
                   controller: formProvider.dateOfBirthController,
                   validator: formProvider.validateDateOfBirth,
-                  maxDate: DateTime.now(),
-                  minDate: DateTime(1900),
-                  initialDate: DateTime.now(),
+                  maxDate: maxDate,
+                  minDate: minDate,
+                  initialDate: initialDate,
                 ),
                 const SizedBox(height: 8),
                 BuildDropdownform(
