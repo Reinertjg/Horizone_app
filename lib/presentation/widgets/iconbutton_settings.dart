@@ -13,14 +13,15 @@ class IconbuttonSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     return Card(
-      color: colors.secondary,
+      color: colors.quinary,
       shape: CircleBorder(),
+      elevation: 2,
       child: SizedBox(
-        height: 35,
-        width: 35,
+        height: 38,
+        width: 38,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(HugeIcons.strokeRoundedSettings02, color: colors.quinary),
+          icon: Icon(HugeIcons.strokeRoundedSettings02, color: colors.quaternary),
           onPressed: () {
             showModalBottomSheet(
               context: context,
