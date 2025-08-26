@@ -42,6 +42,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  final List<String> travelDestinations = [
+    'Rio',
+    'Caribe',
+    'Dubai',
+    'Ilhas Malvinas',
+    'Bali',
+    'Paris',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
@@ -52,7 +61,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.only(
+                  top: 12.0,
+                  right: 12.0,
+                  left: 12.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -75,7 +88,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -86,27 +98,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: 200,
                 width: double.infinity,
                 child: ListView.builder(
-                  itemCount: 5,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: _buildTravelCard,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 20.0,
+                  right: 20.0,
+                  left: 20.0,
+                  bottom: 8.0,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Where would you like to visit?',
+                    style: GoogleFonts.raleway(
+                      color: colors.quaternary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 100,
+                width: double.infinity,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Card(
-                          elevation: 2,
-                          clipBehavior: Clip.antiAlias,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          color: colors.quinary,
-                          child: Image.asset(
-                            'assets/images/travel_image0${index + 1}.jpg',
-                            fit: BoxFit.cover,
+                    return Column(
+                      children: [
+                        SizedBox(
+                          width: 75,
+                          height: 75,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Card(
+                              elevation: 2,
+                              clipBehavior: Clip.antiAlias,
+                              shape: CircleBorder(),
+                              color: colors.quinary,
+                              child: Image.asset(
+                                'assets/images/travel_image0${index + 1}.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Text(travelDestinations[index])
+                      ],
                     );
                   },
                 ),
@@ -151,7 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Expanded(
                   child: Text(
                     '${S.of(context).welcome}, '
-                        '${profiles.isNotEmpty ? profiles[0].name : 'User'}',
+                    '${profiles.isNotEmpty ? profiles[0].name : 'User'}',
                     style: GoogleFonts.nunito(
                       color: colors.quaternary,
                       fontSize: 22,
@@ -240,6 +286,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTravelCard(BuildContext context, int index) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Card(
+          elevation: 2,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          color: colors.quinary,
+          child: Image.asset(
+            'assets/images/travel_image0${index + 1}.jpg',
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }
