@@ -103,14 +103,10 @@ class TravelStopsProvider extends ChangeNotifier {
 
   DateTime minDateForStop(int index) {
     if (index == 0) {
-      // Para o primeiro ponto de parada (index 0), a data mínima é
-      // a data de início da viagem (se definida) ou o dia de amanhã.
+
       return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 1);
     }
 
-    // Para os demais pontos de parada, a data mínima é a data final
-    // do ponto de parada anterior + 1 dia, ou o dia de amanhã se a data
-    // do ponto anterior não estiver definida.
     final previousStop = _stops[index - 1];
     final previousEndDate = previousStop.endDate.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(previousStop.endDate) : null;
     return previousEndDate?.add(const Duration(days: 1)) ?? DateTime(today.year, today.month, today.day + 1);
@@ -134,7 +130,6 @@ class TravelStopsProvider extends ChangeNotifier {
       return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 2);
     }
 
-    // Para os demais, a data inicial sugerida é a data mínima para este ponto.
     return minDateForStop(index);
   }
 }
