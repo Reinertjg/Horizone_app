@@ -74,6 +74,10 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
       // Set initial date in the controller when the widget initializes
       widget.controller.text =
           '${widget.initialDate.day.toString().padLeft(2, '0')}/${widget.initialDate.month.toString().padLeft(2, '0')}/${widget.initialDate.year}';
+
+      if (widget.onDateChanged != null) {
+        widget.onDateChanged!(widget.initialDate);
+      }
     }
     showCupertinoModalPopup(
       context: context,
