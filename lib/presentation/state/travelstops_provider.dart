@@ -121,20 +121,16 @@ class TravelStopsProvider extends ChangeNotifier {
       return dateProvider.endDate ?? DateTime(2100);
     }
 
-    // Para os demais pontos de parada, a data máxima é a data final da viagem
-    // (se definida) ou um futuro distante.
     return dateProvider.endDate ?? DateTime(2100);
   }
 
   DateTime initialDateForStop(int index, {DateTime? current}) {
-    // Se já existe uma data definida para este ponto, usa ela.
     if (current != null) {
       return current;
     }
 
     if (index == 0) {
-      // Para o primeiro ponto, a data inicial sugerida é a data de início da viagem
-      // (se definida) ou daqui a dois dias.
+
       return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 2);
     }
 
