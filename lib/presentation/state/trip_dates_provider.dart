@@ -3,8 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'travelstops_provider.dart';
 
 class TripDatesProvider extends ChangeNotifier {
-  final TravelStopsProvider stops = TravelStopsProvider();
-  DateTime? _startDate;
+  DateTime? _startDate = DateTime.now();
   DateTime? _endDate;
   List<DateTime> _dates = [];
 
@@ -29,27 +28,4 @@ class TripDatesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime minDateForStop(int index) {
-    if (index == 0) {
-      return startDate ?? DateTime.now();
-    } else {
-      return dates[index - 1];
-    }
-  }
-
-  DateTime maxDateForStop(int index) {
-    if (index == stops.length - 1) {
-      return endDate ?? DateTime.now();
-    } else {
-      return dates[index + 1] ;
-    }
-  }
-
-  DateTime initialDateForStop(int index, {DateTime? current}) {
-    if (index == 0) {
-      return current ?? startDate ?? DateTime.now();
-    } else {
-      return dates[index - 1];
-    }
-  }
 }

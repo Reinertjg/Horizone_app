@@ -15,8 +15,8 @@ class TravelStop {
   final int? travelStopId;
   final PlacePoint place;
   final String label;
-  final DateTime? startDate;
-  final DateTime? endDate;
+  final String startDate;
+  final String endDate;
   final String description;
 
   TravelStop({
@@ -35,8 +35,8 @@ class TravelStop {
     int? travelStopId,
     PlacePoint? place,
     String? label,
-    DateTime? startDate,
-    DateTime? endDate,
+    String? startDate,
+    String? endDate,
     String? description,
   }) {
     return TravelStop(

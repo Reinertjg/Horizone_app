@@ -1,20 +1,27 @@
 // lib/presentation/state/travel_stops_provider.dart
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entities/travelstop.dart';
 import '../pages/google_map_screen.dart';
 import '../../api/place_details_api.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'trip_dates_provider.dart';
+
 class TravelStopsProvider extends ChangeNotifier {
   TravelStopsProvider();
+  final dateProvider = TripDatesProvider();
 
   final List<TravelStop> _stops = [];
 
   List<TravelStop> get stops => List.unmodifiable(_stops);
 
   int get length => _stops.length;
+
+  final today = DateTime.now();
+
 
   void addStop() {
     final previousOrder = _stops.lastOrNull?.order ?? 0;
@@ -24,11 +31,12 @@ class TravelStopsProvider extends ChangeNotifier {
         order: previousOrder + 1,
         place: const PlacePoint(latitude: 0, longitude: 0),
         label: '',
-        startDate: null,
-        endDate: null,
+        startDate: '',
+        endDate: '',
         description: '',
       ),
     );
+
     notifyListeners();
   }
 
@@ -92,6 +100,47 @@ class TravelStopsProvider extends ChangeNotifier {
 
   bool _isValid(PlacePoint? p) =>
       p != null && p.latitude != 0 && p.longitude != 0;
+
+  DateTime minDateForStop(int index) {
+    if (index == 0) {
+      // Para o primeiro ponto de parada (index 0), a data mínima é
+      // a data de início da viagem (se definida) ou o dia de amanhã.
+      return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 1);
+    }
+
+    // Para os demais pontos de parada, a data mínima é a data final
+    // do ponto de parada anterior + 1 dia, ou o dia de amanhã se a data
+    // do ponto anterior não estiver definida.
+    final previousStop = _stops[index - 1];
+    final previousEndDate = previousStop.endDate.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(previousStop.endDate) : null;
+    return previousEndDate?.add(const Duration(days: 1)) ?? DateTime(today.year, today.month, today.day + 1);
+  }
+
+  DateTime maxDateForStop(int index) {
+    if (index == 0) {
+      return dateProvider.endDate ?? DateTime(2100);
+    }
+
+    // Para os demais pontos de parada, a data máxima é a data final da viagem
+    // (se definida) ou um futuro distante.
+    return dateProvider.endDate ?? DateTime(2100);
+  }
+
+  DateTime initialDateForStop(int index, {DateTime? current}) {
+    // Se já existe uma data definida para este ponto, usa ela.
+    if (current != null) {
+      return current;
+    }
+
+    if (index == 0) {
+      // Para o primeiro ponto, a data inicial sugerida é a data de início da viagem
+      // (se definida) ou daqui a dois dias.
+      return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 2);
+    }
+
+    // Para os demais, a data inicial sugerida é a data mínima para este ponto.
+    return minDateForStop(index);
+  }
 }
 
 String beforeComma(String text) {

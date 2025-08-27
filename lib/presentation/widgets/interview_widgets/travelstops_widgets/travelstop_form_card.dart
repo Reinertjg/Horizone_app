@@ -1,4 +1,3 @@
-// lib/presentation/widgets/travelstops_widgets/stop_form_card.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,30 +14,37 @@ import '../test_cupertino_date_picker.dart';
 import 'travelstops_textfield_box.dart';
 
 class StopFormCard extends StatelessWidget {
-  const StopFormCard({super.key, required this.label, required this.stop});
+  const StopFormCard({
+    super.key,
+    required this.label,
+    required this.stop,
+    required this.order,
+    required this.index,
+  });
 
   /// Header label (e.g., "Origin", "Stop 1", "Destination").
   final String label;
-
+  final int order;
+  final int index;
   final TravelStop stop;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-
+    final stopsProvider = Provider.of<TravelStopsProvider>(context);
     final dateProvider = Provider.of<TripDatesProvider>(context);
+
     final apiKey = dotenv.env['MAPS_API_KEY'];
     final places = PlacesService(apiKey: apiKey!);
-    final today = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    );
 
     return GestureDetector(
       key: ValueKey(stop),
       onTap: () {
-        print('ÇÇ');
+        print('Ordem: $order');
+        print('Stop: ${stop.order}');
+        print('Index: $index');
+        print('StarDate: ${dateProvider.startDate}');
+        print('EndDate: ${dateProvider.endDate}');
       },
       child: Card(
         elevation: 2,
@@ -102,15 +108,9 @@ class StopFormCard extends StatelessWidget {
                         text: stop.startDate.toString(),
                       ),
                       validator: (_) => null,
-                      // put your validator if needed
-                      // minDate: dateProvider.minDateForStop(index),
-                      // maxDate: dateProvider.maxDateForStop(index),
-                      // initialDate: dateProvider.initialDateForStop(index, current: stop.startDate),
-                      maxDate:
-                          dateProvider.endDate?.subtract(Duration(days: 1)) ??
-                          DateTime(2100),
-                      minDate: today,
-                      initialDate: dateProvider.startDate ?? today,
+                      maxDate: stopsProvider.maxDateForStop(index),
+                      minDate: stopsProvider.minDateForStop(index),
+                      initialDate: stopsProvider.initialDateForStop(index),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -123,18 +123,9 @@ class StopFormCard extends StatelessWidget {
                         text: stop.endDate.toString(),
                       ),
                       validator: (_) => null,
-                      // put your validator if needed
-                      // minDate: dateProvider.minDateForStop(index),
-                      // maxDate: dateProvider.maxDateForStop(index),
-                      // initialDate: dateProvider.initialDateForStop(index, current: stop.startDate),
-                      maxDate: DateTime(2100),
-                      minDate:
-                          dateProvider.startDate?.add(Duration(days: 1)) ??
-                          today.add(Duration(days: 1)),
-                      initialDate:
-                          dateProvider.endDate ??
-                          (dateProvider.startDate?.add(Duration(days: 2)) ??
-                              today.add(Duration(days: 1))),
+                      maxDate: stopsProvider.maxDateForStop(index),
+                      minDate: stopsProvider.minDateForStop(index),
+                      initialDate: stopsProvider.initialDateForStop(index),
                     ),
                   ),
                 ],

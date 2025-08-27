@@ -66,6 +66,8 @@ class IntermediateStopsSection extends StatelessWidget {
                         child: StopFormCard(
                           stop: travelStop,
                           label: 'Parada ${index + 1}',
+                          order: travelStop.order,
+                          index: index,
                         ),
                       ),
                     );
