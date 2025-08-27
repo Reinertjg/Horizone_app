@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:hugeicons/hugeicons.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
@@ -28,6 +29,13 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
     DateTime.now().month,
     DateTime.now().day,
   );
+
+  @override
+  void initState() {
+    Provider.of<InterviewProvider>(context, listen: false).startDateController.text =
+       DateFormat('dd/MM/yyyy').format(today);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +99,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                           today.add(Duration(days: 1)),
                       initialDate:
                           dateProvider.endDate ??
-                          (dateProvider.startDate?.add(Duration(days: 2)) ??
+                          (dateProvider.startDate?.add(Duration(days: 1)) ??
                               today.add(Duration(days: 1))),
                       onDateChanged: dateProvider.setTripEnd,
                     ),
