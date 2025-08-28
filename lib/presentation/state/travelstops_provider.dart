@@ -1,63 +1,92 @@
 // lib/presentation/state/travel_stops_provider.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../api/place_details_api.dart';
 import '../../domain/entities/travelstop.dart';
 import '../pages/google_map_screen.dart';
-import '../../api/place_details_api.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'trip_dates_provider.dart';
-
+/// Provider responsible for managing travel stops and trip date rules,
+/// as well as building route arguments for the map.
 class TravelStopsProvider extends ChangeNotifier {
+  /// Creates a [TravelStopsProvider] instance.
   TravelStopsProvider();
-  final dateProvider = TripDatesProvider();
 
   final List<TravelStop> _stops = [];
 
+  DateTime? _tripStart = DateTime.now();
+  DateTime? _tripEnd;
+
+  /// Current list of travel stops.
   List<TravelStop> get stops => List.unmodifiable(_stops);
 
+  /// Number of travel stops.
   int get length => _stops.length;
 
-  final today = DateTime.now();
+  /// Planned start date of the trip.
+  DateTime? get tripStart => _tripStart;
 
+  /// Planned end date of the trip.
+  DateTime? get tripEnd => _tripEnd;
 
-  void addStop() {
-    final previousOrder = _stops.lastOrNull?.order ?? 0;
-
-    _stops.add(
-      TravelStop(
-        order: previousOrder + 1,
-        place: const PlacePoint(latitude: 0, longitude: 0),
-        label: '',
-        startDate: '',
-        endDate: '',
-        description: '',
-      ),
-    );
-
+  /// Sets the trip start date.
+  void setTripStart(DateTime date) {
+    _tripStart = _normalize(date);
+    if (_tripEnd != null && _tripEnd!.isBefore(_tripStart!)) {
+      _tripEnd = _tripStart;
+    }
     notifyListeners();
   }
 
-  void removeStop(TravelStop stop) {
-    print('REMOVE STOP ${stop.order}');
+  /// Sets the trip end date.
+  void setTripEnd(DateTime date) {
+    _tripEnd = _normalize(date);
+    if (_tripStart != null && _tripEnd!.isBefore(_tripStart!)) {
+      _tripStart = _tripEnd;
+    }
+    notifyListeners();
+  }
 
+  /// Adds a new stop at the end of the list with sequential order.
+  void addStop() {
+    final lastOrder = _stops.isEmpty ? 0 : _stops.last.order;
+    _stops.add(
+      TravelStop(
+        order: lastOrder + 1,
+        place: const PlacePoint(latitude: 0, longitude: 0),
+        label: '',
+        startDate: null,
+        endDate: null,
+        description: '',
+      ),
+    );
+    notifyListeners();
+  }
+
+  /// Removes a stop from the list.
+  void removeStop(TravelStop stop) {
     _stops.remove(stop);
     notifyListeners();
   }
 
+  /// Updates the coordinates and label of an existing stop.
   void updateStop(TravelStop stop, LatLng coords, String label) {
     final index = _stops.indexOf(stop);
-
+    if (index == -1) return;
     _stops[index] = _stops[index].copyWith(
       label: label,
-      place: PlacePoint(latitude: coords.latitude, longitude: coords.longitude),
+      place: PlacePoint(
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      ),
     );
-
     notifyListeners();
   }
 
+  /// Resolves a placeId into coordinates and updates the stop.
   Future<void> resolveAndSetPlace({
     required TravelStop stop,
     required String placeId,
@@ -73,6 +102,7 @@ class TravelStopsProvider extends ChangeNotifier {
     updateStop(stop, latLng, label);
   }
 
+  /// Builds map route arguments from valid stops.
   TravelRouteArgs? buildRouteArgs({
     required PlacePoint? origin,
     required PlacePoint? destination,
@@ -93,48 +123,144 @@ class TravelStopsProvider extends ChangeNotifier {
       destination: LatLng(destination!.latitude, destination.longitude),
       waypoints: waypoints,
       title:
-          '${beforeComma(originLabel ?? '')} → ${beforeComma(destinationLabel ?? '')}'
-              .trim(),
+      '${_beforeComma(originLabel ?? '')} → '
+          '${_beforeComma(destinationLabel ?? '')}'.trim(),
     );
   }
 
-  bool _isValid(PlacePoint? p) =>
-      p != null && p.latitude != 0 && p.longitude != 0;
+  /// Sets the start date of a stop, clamping it between valid boundaries.
+  void setStopStartDate(int order, DateTime value) {
+    final index = _indexByOrder(order);
+    if (index == -1) return;
 
-  DateTime minDateForStop(int index) {
-    if (index == 0) {
+    final minD = minStartFor(order);
+    final maxD = maxStartFor(order);
+    final safe = _clamp(_normalize(value), minD, maxD);
 
-      return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 1);
+    _stops[index] = _stops[index].copyWith(startDate: safe);
+
+    final end = _stops[index].endDate;
+    if (end != null && end.isBefore(safe)) {
+      _stops[index] = _stops[index].copyWith(endDate: safe);
     }
-
-    final previousStop = _stops[index - 1];
-    final previousEndDate = previousStop.endDate.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(previousStop.endDate) : null;
-    return previousEndDate?.add(const Duration(days: 1)) ?? DateTime(today.year, today.month, today.day + 1);
+    notifyListeners();
   }
 
-  DateTime maxDateForStop(int index) {
-    if (index == 0) {
-      return dateProvider.endDate ?? DateTime(2100);
-    }
+  /// Sets the end date of a stop, clamping it between valid boundaries.
+  void setStopEndDate(int order, DateTime value) {
+    final index = _indexByOrder(order);
+    if (index == -1) return;
 
-    return dateProvider.endDate ?? DateTime(2100);
+    final minD = minEndFor(order);
+    final maxD = maxEndFor(order);
+    final safe = _clamp(_normalize(value), minD, maxD);
+
+    _stops[index] = _stops[index].copyWith(endDate: safe);
+
+    final start = _stops[index].startDate;
+    if (start != null && start.isAfter(safe)) {
+      _stops[index] = _stops[index].copyWith(startDate: safe);
+    }
+    notifyListeners();
   }
 
-  DateTime initialDateForStop(int index, {DateTime? current}) {
-    if (current != null) {
-      return current;
+  /// Minimum valid start date for a stop with the given order.
+  DateTime minStartFor(int order) {
+    final index = _indexByOrder(order);
+    if (index == -1) return _now();
+
+    if (index == 0) return _tripStart ?? _now();
+
+    final prevEnd = _stops[index - 1].endDate;
+    return _normalize(prevEnd ?? (_tripStart ?? _now()));
+  }
+
+  /// Maximum valid start date for a stop with the given order.
+  DateTime maxStartFor(int order) {
+    final index = _indexByOrder(order);
+    if (index == -1) return DateTime(2100);
+
+    if (index == _stops.length - 1) {
+      return _normalize(_tripEnd ?? DateTime(2100));
     }
 
-    if (index == 0) {
+    final nextStart = _stops[index + 1].startDate;
+    return _normalize(nextStart ?? (_tripEnd ?? DateTime(2100)));
+  }
 
-      return dateProvider.startDate ?? DateTime(today.year, today.month, today.day + 2);
+  /// Suggested initial start date for a stop with the given order.
+  DateTime initialStartFor(int order) {
+    final index = _indexByOrder(order);
+    if (index == -1) return _now();
+
+    final base = _normalize(_stops[index].startDate ?? minStartFor(order));
+    return _clamp(base, minStartFor(order), maxStartFor(order));
+  }
+
+  /// Minimum valid end date for a stop with the given order.
+  DateTime minEndFor(int order) {
+    final index = _indexByOrder(order);
+    if (index == -1) return _now();
+
+    final start = _stops[index].startDate ?? minStartFor(order);
+    return _normalize(start);
+  }
+
+  /// Maximum valid end date for a stop with the given order.
+  DateTime maxEndFor(int order) {
+    final index = _indexByOrder(order);
+    if (index == -1) return DateTime(2100);
+
+    if (index == _stops.length - 1) {
+      return _normalize(_tripEnd ?? DateTime(2100));
     }
 
-    return minDateForStop(index);
+    final nextStart = _stops[index + 1].startDate;
+    return _normalize(nextStart ?? (_tripEnd ?? DateTime(2100)));
+  }
+
+  /// Suggested initial end date for a stop with the given order.
+  DateTime initialEndFor(int order) {
+    final index = _indexByOrder(order);
+    if (index == -1) return _now();
+
+    final base = _normalize(_stops[index].endDate ?? minEndFor(order));
+    return _clamp(base, minEndFor(order), maxEndFor(order));
+  }
+
+  bool _isValid(PlacePoint? place) {
+    return place != null && place.latitude != 0 && place.longitude != 0;
+  }
+
+  int _indexByOrder(int order) {
+    return _stops.indexWhere((s) => s.order == order);
+  }
+
+  DateTime _normalize(DateTime d) {
+    return DateTime(d.year, d.month, d.day, d.hour, d.minute, 0, 0, 0);
+  }
+
+  DateTime _clamp(DateTime v, DateTime min, DateTime max) {
+    if (v.isBefore(min)) return min;
+    if (v.isAfter(max)) return max;
+    return v;
+  }
+
+  DateTime _now() {
+    return _normalize(DateTime.now());
+  }
+
+  String formatDate(DateTime? date) {
+    if (date == null) return '';
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 }
 
-String beforeComma(String text) {
+/// Returns the text before the first comma, if present.
+String _beforeComma(String text) {
   final i = text.indexOf(',');
   return (i == -1) ? text : text.substring(0, i);
 }
+
+/// Returns a formatted date string in the format "dd/MM/yyyy".
+

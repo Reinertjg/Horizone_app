@@ -31,17 +31,30 @@ class StopFormCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final stopsProvider = Provider.of<TravelStopsProvider>(context);
     final dateProvider = Provider.of<TripDatesProvider>(context);
+    final stopsProvider = Provider.of<TravelStopsProvider>(context);
 
     final apiKey = dotenv.env['MAPS_API_KEY'];
     final places = PlacesService(apiKey: apiKey!);
+
+    final minStart = stopsProvider.minStartFor(stop.order);
+    final maxStart = stopsProvider.maxStartFor(stop.order);
+    final initialStart = stopsProvider.initialStartFor(stop.order);
+
+    final minEnd = stopsProvider.minEndFor(stop.order);
+    final maxEnd = stopsProvider.maxEndFor(stop.order);
+    final initialEnd = stopsProvider.initialEndFor(stop.order);
 
     return GestureDetector(
       key: ValueKey(stop),
       onTap: () {
         print('Ordem: $order');
         print('Stop: ${stop.order}');
+        print('startDate: ${stop.startDate}');
+        print('endDate: ${stop.endDate}');
+        print('ListStop: ${stopsProvider.stops[index].order}');
+        print('ListStopSS: ${stopsProvider.stops[index].startDate}');
+        print('ListStopEE: ${stopsProvider.stops[index].endDate}');
         print('Index: $index');
         print('StarDate: ${dateProvider.startDate}');
         print('EndDate: ${dateProvider.endDate}');
@@ -105,12 +118,15 @@ class StopFormCard extends StatelessWidget {
                       fontSize: 12,
                       icon: HugeIcons.strokeRoundedCalendar01,
                       controller: TextEditingController(
-                        text: stop.startDate.toString(),
+                        text: stopsProvider.formatDate(stop.startDate),
                       ),
                       validator: (_) => null,
-                      maxDate: stopsProvider.maxDateForStop(index),
-                      minDate: stopsProvider.minDateForStop(index),
-                      initialDate: stopsProvider.initialDateForStop(index),
+                      maxDate: maxStart,
+                      minDate: minStart,
+                      initialDate: initialStart,
+                      onDateChanged: (value) =>
+                          stopsProvider.setStopStartDate(stop.order, value)
+                      ,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -120,13 +136,14 @@ class StopFormCard extends StatelessWidget {
                       fontSize: 12,
                       icon: Icons.event,
                       controller: TextEditingController(
-                        text: stop.endDate.toString(),
+                        text: stopsProvider.formatDate(stop.endDate),
                       ),
                       validator: (_) => null,
-                      maxDate: stopsProvider.maxDateForStop(index),
-                      minDate: stopsProvider.minDateForStop(index),
-                      initialDate: stopsProvider.initialDateForStop(index),
-                    ),
+                        maxDate: maxEnd,
+                        minDate: minEnd,
+                        initialDate: initialEnd,
+                      onDateChanged: (value) =>
+                          stopsProvider.setStopEndDate(stop.order, value)                    ),
                   ),
                 ],
               ),

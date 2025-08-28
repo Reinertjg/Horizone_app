@@ -32,7 +32,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
     final colors = Theme.of(context).extension<AppColors>()!;
     final stopsProvider = context.watch<TravelStopsProvider>();
 
-    final middleCount = stopsProvider.length;
+    final middleCount = stopsProvider.stops.length;
 
     return Scaffold(
       backgroundColor: colors.primary,

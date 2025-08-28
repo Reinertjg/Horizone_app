@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
 import '../../state/interview_provider.dart';
+import '../../state/travelstops_provider.dart';
 import '../../state/trip_dates_provider.dart';
 import '../../theme_color/app_colors.dart';
 import 'build_dropdownform.dart';
@@ -42,6 +43,8 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<InterviewProvider>(context);
     final dateProvider = Provider.of<TripDatesProvider>(context);
+    final stopsProvider = Provider.of<TravelStopsProvider>(context);
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -77,11 +80,11 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                       controller: interviewProvider.startDateController,
                       validator: interviewProvider.validateStartDate,
                       maxDate:
-                          dateProvider.endDate?.subtract(Duration(days: 1)) ??
+                          stopsProvider.tripEnd?.subtract(Duration(days: 1)) ??
                           DateTime(2100),
                       minDate: today,
-                      initialDate: dateProvider.startDate ?? today,
-                      onDateChanged: dateProvider.setTripStart,
+                      initialDate: stopsProvider.tripStart ?? today,
+                      onDateChanged: stopsProvider.setTripStart,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -95,13 +98,13 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                       validator: interviewProvider.validateEndDate,
                       maxDate: DateTime(2100),
                       minDate:
-                          dateProvider.startDate?.add(Duration(days: 1)) ??
+                          stopsProvider.tripStart?.add(Duration(days: 1)) ??
                           today.add(Duration(days: 1)),
                       initialDate:
-                          dateProvider.endDate ??
-                          (dateProvider.startDate?.add(Duration(days: 1)) ??
+                          stopsProvider.tripEnd ??
+                          (stopsProvider.tripStart?.add(Duration(days: 1)) ??
                               today.add(Duration(days: 1))),
-                      onDateChanged: dateProvider.setTripEnd,
+                      onDateChanged: stopsProvider.setTripEnd,
                     ),
                   ),
                 ],
