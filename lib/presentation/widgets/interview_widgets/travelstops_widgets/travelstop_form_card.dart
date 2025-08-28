@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../../../domain/entities/travelstop.dart';
 import '../../../../domain/usecases/get_place_suggestions.dart';
 import '../../../state/travelstops_provider.dart';
-import '../../../state/trip_dates_provider.dart';
 import '../../../theme_color/app_colors.dart';
 import '../../google_places_autocomplete_textfield.dart';
 import '../test_cupertino_date_picker.dart';
@@ -31,7 +30,6 @@ class StopFormCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final dateProvider = Provider.of<TripDatesProvider>(context);
     final stopsProvider = Provider.of<TravelStopsProvider>(context);
 
     final apiKey = dotenv.env['MAPS_API_KEY'];
@@ -56,8 +54,6 @@ class StopFormCard extends StatelessWidget {
         print('ListStopSS: ${stopsProvider.stops[index].startDate}');
         print('ListStopEE: ${stopsProvider.stops[index].endDate}');
         print('Index: $index');
-        print('StarDate: ${dateProvider.startDate}');
-        print('EndDate: ${dateProvider.endDate}');
       },
       child: Card(
         elevation: 2,

@@ -12,7 +12,6 @@ import 'presentation/state/participant_provider.dart';
 import 'presentation/state/profileform_provider.dart';
 import 'presentation/state/theme_provider.dart';
 import 'presentation/state/travelstops_provider.dart';
-import 'presentation/state/trip_dates_provider.dart';
 import 'presentation/theme_color/app_theme.dart';
 
 Future<void> main() async {
@@ -44,8 +43,6 @@ Future<void> main() async {
         /// Manages travel stop-related state and logic
         ChangeNotifierProvider(create: (_) => TravelStopsProvider()),
 
-        /// Manages trip date-related state and logic
-        ChangeNotifierProvider(create: (_) => TripDatesProvider()),
       ],
 
       /// Root widget of the app
