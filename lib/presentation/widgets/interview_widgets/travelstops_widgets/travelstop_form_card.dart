@@ -72,7 +72,10 @@ class StopFormCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(label, style: TextStyle(color: colors.quaternary)),
+                  Text(
+                    label,
+                    style: TextStyle(color: colors.quaternary, fontSize: 16),
+                  ),
                   GestureDetector(
                     onTap: () {
                       final stopsProvider = context.read<TravelStopsProvider>();
@@ -81,7 +84,7 @@ class StopFormCard extends StatelessWidget {
                     child: Icon(
                       HugeIcons.strokeRoundedDelete02,
                       color: colors.secondary,
-                      size: 20,
+                      size: 25,
                     ),
                   ),
                 ],
@@ -93,7 +96,7 @@ class StopFormCard extends StatelessWidget {
                 initialText: stop.label,
                 service: places,
                 hintText: 'Search address...',
-                icon: CupertinoIcons.placemark,
+                icon: HugeIcons.strokeRoundedMapsSearch,
                 onSelected: (placeId, description) async {
                   await context.read<TravelStopsProvider>().resolveAndSetPlace(
                     stop: stop,
@@ -112,7 +115,7 @@ class StopFormCard extends StatelessWidget {
                     child: CupertinoDatePickerField(
                       label: 'Start date',
                       fontSize: 12,
-                      icon: HugeIcons.strokeRoundedCalendar01,
+                      icon: HugeIcons.strokeRoundedDateTime,
                       controller: TextEditingController(
                         text: stopsProvider.formatDate(stop.startDate),
                       ),
@@ -121,8 +124,7 @@ class StopFormCard extends StatelessWidget {
                       minDate: minStart,
                       initialDate: initialStart,
                       onDateChanged: (value) =>
-                          stopsProvider.setStopStartDate(stop.order, value)
-                      ,
+                          stopsProvider.setStopStartDate(stop.order, value),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -130,16 +132,17 @@ class StopFormCard extends StatelessWidget {
                     child: CupertinoDatePickerField(
                       label: 'End date',
                       fontSize: 12,
-                      icon: Icons.event,
+                      icon: HugeIcons.strokeRoundedDateTime,
                       controller: TextEditingController(
                         text: stopsProvider.formatDate(stop.endDate),
                       ),
                       validator: (_) => null,
-                        maxDate: maxEnd,
-                        minDate: minEnd,
-                        initialDate: initialEnd,
+                      maxDate: maxEnd,
+                      minDate: minEnd,
+                      initialDate: initialEnd,
                       onDateChanged: (value) =>
-                          stopsProvider.setStopEndDate(stop.order, value)                    ),
+                          stopsProvider.setStopEndDate(stop.order, value),
+                    ),
                   ),
                 ],
               ),
@@ -150,7 +153,7 @@ class StopFormCard extends StatelessWidget {
               TravelStopsTextFieldBox(
                 nameButton: 'Activity description',
                 hintText: 'Describe the activities at this location...',
-                icon: CupertinoIcons.ticket,
+                icon: HugeIcons.strokeRoundedTicketStar,
                 controller: TextEditingController(text: stop.description),
                 keyboardType: TextInputType.text,
               ),

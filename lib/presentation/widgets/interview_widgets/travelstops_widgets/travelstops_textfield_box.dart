@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 import '../../../theme_color/app_colors.dart';
 
 class TravelStopsTextFieldBox extends StatefulWidget {
@@ -22,7 +23,7 @@ class TravelStopsTextFieldBox extends StatefulWidget {
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
 
-  /// Texto adicional que será exibido quando o ícone de olho for clicado.
+  /// Additional text that will be displayed when the eye icon is clicked.
   final String? description;
 
   @override
@@ -57,9 +58,9 @@ class _TravelStopsTextFieldBoxState extends State<TravelStopsTextFieldBox> {
               constraints: const BoxConstraints(),
               icon: Icon(
                 _showDescription
-                    ? CupertinoIcons.eye_fill
-                    : CupertinoIcons.eye_slash_fill,
-                size: 20,
+                    ? HugeIcons.strokeRoundedView
+                    : HugeIcons.strokeRoundedViewOffSlash,
+                size: 25,
                 color: colors.tertiary,
               ),
               onPressed: () {

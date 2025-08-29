@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/usecases/get_place_suggestions.dart';
 import '../../state/interview_provider.dart';
-import '../../state/travelstops_provider.dart';
 import '../../theme_color/app_colors.dart';
 import '../google_places_autocomplete_textfield.dart';
 
@@ -31,10 +32,9 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final _ = context.watch<TravelStopsProvider>();
     final interviewProvider = context.watch<InterviewProvider>();
     final service = PlacesService(
-      apiKey: 'AIzaSyAgT9pV0ONamMF8ByF008OT7lf4-1oAFd0',
+      apiKey: dotenv.env['MAPS_API_KEY']!,
     );
     return Card(
       elevation: 2,
@@ -57,18 +57,13 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
                     widget.labelStart,
                     style: TextStyle(color: colors.quaternary),
                   ),
-                  Icon(
-                    CupertinoIcons.delete_left,
-                    color: colors.secondary,
-                    size: 20,
-                  ),
                 ],
               ),
               const SizedBox(height: 12),
               GooglePlacesAutocomplete(
                 service: service,
                 hintText: 'Pesquisar endereço...',
-                icon: CupertinoIcons.placemark,
+                icon: HugeIcons.strokeRoundedAirplaneTakeOff01,
                 onSelected: (placeId, description) async {
                   await interviewProvider.resolveAndSetOrigin(placeId: placeId, label: description);
                 },
@@ -81,7 +76,7 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
               GooglePlacesAutocomplete(
                 service: service,
                 hintText: 'Pesquisar endereço...',
-                icon: CupertinoIcons.placemark,
+                  icon: HugeIcons.strokeRoundedAirplaneLanding01,
                 onSelected: (placeId, description) async {
                   await interviewProvider.resolveAndSetDestination(placeId: placeId, label: description);
                 },
