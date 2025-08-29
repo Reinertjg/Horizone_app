@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../pages/google_map_screen.dart';
@@ -72,7 +73,7 @@ class MapPreviewCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Icon(
-                      Icons.map_outlined,
+                      HugeIcons.strokeRoundedGoogleMaps,
                       size: 40,
                       color: colors.secondary,
                     ),
