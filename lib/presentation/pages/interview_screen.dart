@@ -66,7 +66,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
               SizedBox(height: 12),
               InterviewFormCard(),
               const SizedBox(height: 36),
-              SectionTitle(title: 'Rota', icon: HugeIcons.strokeRoundedRoute01),
+              SectionTitle(title: 'Rota', icon: HugeIcons.strokeRoundedRoute02),
               const SizedBox(height: 16),
               TravelRouteCard(
                 labelStart: 'Local Origem',
@@ -78,19 +78,34 @@ class _InterviewScreenState extends State<InterviewScreen> {
               IntermediateStopsSection(),
               const SizedBox(height: 16),
               AddStopButton(),
-              const SizedBox(height: 60),
+              const SizedBox(height: 20),
+              _buildMiddleSection(context),
+              const SizedBox(height: 20),
+              InterviewFab(
+                nameButton: 'Avançar',
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    if (!context.mounted) return;
+                    await Navigator.pushNamed(context, '/tripParticipants');
+                  }
+                },
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: InterviewFab(
-        nameButton: 'Avançar',
-        onPressed: () async {
-          if (formKey.currentState!.validate()) {
-            if (!context.mounted) return;
-            await Navigator.pushNamed(context, '/tripParticipants');
-          }
-        },
+    );
+  }
+
+  Widget _buildMiddleSection(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return Container(
+      decoration: BoxDecoration(
+        color: colors.quaternary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colors.quaternary.withValues(alpha: 0.1),
+        ),
       ),
     );
   }
