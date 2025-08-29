@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -151,7 +152,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
                         ),
-                        Text(travelDestinations[index])
+
+                        Text(travelDestinations[index]),
                       ],
                     );
                   },
@@ -291,24 +293,132 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildTravelCard(BuildContext context, int index) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    return SizedBox(
-      width: 200,
-      height: 200,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Card(
-          elevation: 2,
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          color: colors.quinary,
-          child: Image.asset(
-            'assets/images/travel_image0${index + 1}.jpg',
-            fit: BoxFit.cover,
+    return Stack(
+      children: [
+        SizedBox(
+          width: 200,
+          height: 200,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Card(
+              elevation: 2,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              color: colors.quinary,
+              child: Image.asset(
+                'assets/images/travel_image0${index + 1}.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
-      ),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          left: 10,
+          child: Container(
+            width: 50,
+            height: 55,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
+              color: colors.quaternary.withValues(alpha: 0.5),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0, left: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    travelDestinations[index],
+                    style: GoogleFonts.raleway(
+                      color: colors.quinary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        HugeIcons.strokeRoundedLocation06,
+                        color: colors.quinary,
+                        size: 10,
+                      ),
+                      SizedBox(width: 2),
+                      Text(
+                        travelDestinations[index],
+                        style: GoogleFonts.raleway(
+                          color: colors.quinary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // ListView.builder(
+                  //   itemCount: 5,
+                  //   shrinkWrap: true,
+                  //   scrollDirection: Axis.horizontal,
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   itemBuilder: (context, index) {
+                  //     return Icon(
+                  //       HugeIcons.strokeRoundedStar,
+                  //       color: colors.quinary,
+                  //       size: 12,
+                  //     );
+                  //   },
+                  // ),
+
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star_rounded,
+                        color: colors.tertiary,
+                        size: 16,
+                      ),
+                      SizedBox(width: 2,),
+                      Icon(
+                        Icons.star_rounded,
+                        color: colors.tertiary,
+                        size: 16,
+                      ),
+                      SizedBox(width: 2,),
+                      Icon(
+                        Icons.star_rounded,
+                        color: colors.tertiary,
+                        size: 16,
+                      ),
+                      SizedBox(width: 2,),
+                      Icon(
+                        Icons.star_rounded,
+                        color: colors.tertiary,
+                        size: 16,
+                      ),
+                      SizedBox(width: 2,),
+                      Icon(
+                        Icons.star_outline_rounded,
+                        color: colors.tertiary,
+                        size: 16,
+                      ),
+                      SizedBox(width: 2,),
+                      Text(
+                        '4.6',
+                        style: GoogleFonts.nunito(
+                          color: colors.quinary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
