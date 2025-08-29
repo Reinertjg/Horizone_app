@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import '../../../state/travelstops_provider.dart';
 import '../../section_title.dart';
@@ -23,7 +24,7 @@ class IntermediateStopsSection extends StatelessWidget {
           children: [
             SectionTitle(
               title: 'Paradas Intermediárias',
-              icon: CupertinoIcons.location_circle,
+              icon: HugeIcons.strokeRoundedMapPinpoint01,
             ),
           ],
         ),
@@ -35,7 +36,7 @@ class IntermediateStopsSection extends StatelessWidget {
             children: [
               if (stopsCount == 0)
                 const EmptyStateMessage(
-                  icon: CupertinoIcons.location_circle,
+                  icon: HugeIcons.strokeRoundedMapPinpoint02,
                   title: 'Nenhuma parada intermediária',
                   subtitle: 'Adicione paradas para personalizar sua rota',
                 ),
