@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import '../../../state/travelstops_provider.dart';
 import '../../../theme_color/app_colors.dart';
@@ -38,7 +39,7 @@ class AddStopButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.add_circle_outline, color: Colors.white, size: 20),
+            const Icon(HugeIcons.strokeRoundedPlayListAdd, color: Colors.white, size: 20),
             const SizedBox(width: 12),
             Text(
               'Adicionar Parada',
