@@ -2,7 +2,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 import 'tables/profile_table.dart';
-import 'tables/trips_table.dart';
+import 'tables/travel_table.dart';
 
 /// A class representing a trip.
 class HorizoneDatabase {
@@ -38,6 +38,6 @@ class HorizoneDatabase {
 
   Future _onCreate(Database db, int version) async {
     await db.execute(ProfileTable.createTable);
-    await db.execute(TripTable.createTable);
+    await db.execute(TravelTable.createTable);
   }
 }

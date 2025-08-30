@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-
+/// A class representing a point on the map.
 class PlacePoint {
   final double latitude;
   final double longitude;

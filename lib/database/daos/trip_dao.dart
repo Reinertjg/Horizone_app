@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import '../horizone_database.dart';
-import '../tables/trips_table.dart';
+import '../tables/travel_table.dart';
 
 /// A class representing a trip.
 class TripDao extends ChangeNotifier {
@@ -10,13 +10,13 @@ class TripDao extends ChangeNotifier {
   /// Inserts a new trip into the database.
   Future<List<Map<String, Object?>>> getAllTrips() async {
     final db = await _dbFuture;
-    return await db.query(TripTable.tableName);
+    return await db.query(TravelTable.tableName);
   }
 
   /// Inserts a new trip into the database.
   Future<int> insertTrip(Map<String, dynamic> trip) async {
     final db = await _dbFuture;
-    return await db.insert(TripTable.tableName, {
+    return await db.insert(TravelTable.tableName, {
       'title': trip['title'],
       'startDate': trip['startDate'],
       'endDate': trip['endDate'],
@@ -30,6 +30,6 @@ class TripDao extends ChangeNotifier {
   Future<int> deleteTrip(int id) async {
     final db = await _dbFuture;
     return await db
-        .delete(TripTable.tableName, where: 'id = ?', whereArgs: [id]);
+        .delete(TravelTable.tableName, where: 'id = ?', whereArgs: [id]);
   }
 }

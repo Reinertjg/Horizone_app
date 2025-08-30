@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
-import '../../../pages/google_map_screen.dart';
-import '../../../state/interview_provider.dart';
-import '../../../state/travelstops_provider.dart';
-import '../../../theme_color/app_colors.dart';
+import '../../pages/google_map_screen.dart';
+import '../../state/interview_provider.dart';
+import '../../state/travelstops_provider.dart';
+import '../../theme_color/app_colors.dart';
 
 /// Card to preview the map of the travel route.
 class MapPreviewCard extends StatelessWidget {

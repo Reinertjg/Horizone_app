@@ -78,12 +78,30 @@ class TravelStopsProvider extends ChangeNotifier {
     if (index == -1) return;
     _stops[index] = _stops[index].copyWith(
       label: label,
-      place: PlacePoint(
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      ),
+      place: PlacePoint(latitude: coords.latitude, longitude: coords.longitude),
     );
     notifyListeners();
+  }
+
+  String? validateStopPlace(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Place is required';
+    }
+    return null;
+  }
+
+  String? validateStopStartDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Start date is required';
+    }
+    return null;
+  }
+
+  String? validateStopEndDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'End date is required';
+    }
+    return null;
   }
 
   /// Resolves a placeId into coordinates and updates the stop.
@@ -123,8 +141,9 @@ class TravelStopsProvider extends ChangeNotifier {
       destination: LatLng(destination!.latitude, destination.longitude),
       waypoints: waypoints,
       title:
-      '${_beforeComma(originLabel ?? '')} → '
-          '${_beforeComma(destinationLabel ?? '')}'.trim(),
+          '${_beforeComma(originLabel ?? '')} → '
+                  '${_beforeComma(destinationLabel ?? '')}'
+              .trim(),
     );
   }
 
@@ -236,14 +255,23 @@ class TravelStopsProvider extends ChangeNotifier {
     return _stops.indexWhere((s) => s.order == order);
   }
 
-  DateTime _normalize(DateTime d) {
-    return DateTime(d.year, d.month, d.day, d.hour, d.minute, 0, 0, 0);
+  DateTime _normalize(DateTime date) {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      date.hour,
+      date.minute,
+      0,
+      0,
+      0,
+    );
   }
 
-  DateTime _clamp(DateTime v, DateTime min, DateTime max) {
-    if (v.isBefore(min)) return min;
-    if (v.isAfter(max)) return max;
-    return v;
+  DateTime _clamp(DateTime date, DateTime min, DateTime max) {
+    if (date.isBefore(min)) return min;
+    if (date.isAfter(max)) return max;
+    return date;
   }
 
   DateTime _now() {
@@ -256,11 +284,10 @@ class TravelStopsProvider extends ChangeNotifier {
   }
 }
 
-/// Returns the text before the first comma, if present.
+/// Returns the text before the first separator (comma, hyphen, or slash), if
+/// present.
 String _beforeComma(String text) {
-  final i = text.indexOf(',');
+  final i = text.indexOf(RegExp(r'[,/-]'));
   return (i == -1) ? text : text.substring(0, i);
 }
-
-/// Returns a formatted date string in the format "dd/MM/yyyy".
 

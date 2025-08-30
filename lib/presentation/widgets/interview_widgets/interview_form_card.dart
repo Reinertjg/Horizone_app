@@ -11,7 +11,7 @@ import '../../theme_color/app_colors.dart';
 import 'build_dropdownform.dart';
 import 'interview_textfield.dart';
 import 'participant_widgets/participant_list_preview.dart';
-import 'test_cupertino_date_picker.dart';
+import 'cupertino_date_picker.dart';
 
 /// A form card widget that collects general information about a trip,
 /// including title, start and end dates, transportation, and experience type.

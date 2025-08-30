@@ -1,7 +1,7 @@
-import '../entities/trip.dart';
+import '../entities/travel.dart';
 import '../repositories/trip_repository.dart';
 
-/// Use case class responsible for managing [Trip] operations
+/// Use case class responsible for managing [Travel] operations
 /// such as insertion and retrieval.
 class InterviewUseCase {
   /// Repository interface for interacting with trip data.
@@ -10,9 +10,9 @@ class InterviewUseCase {
   /// Creates an [InterviewUseCase] with the provided [repository].
   InterviewUseCase(this.repository);
 
-  /// Inserts a new [Trip] into the repository.
-  Future<void> insert(Trip trip) => repository.insertTrip(trip);
+  /// Inserts a new [Travel] into the repository.
+  Future<void> insert(Travel trip) => repository.insertTrip(trip);
 
-  /// Retrieves all [Trip] records from the repository.
-  Future<List<Trip>> getAll() => repository.getAllTrips();
+  /// Retrieves all [Travel] records from the repository.
+  Future<List<Travel>> getAll() => repository.getAllTrips();
 }

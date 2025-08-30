@@ -67,6 +67,7 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
                 onSelected: (placeId, description) async {
                   await interviewProvider.resolveAndSetOrigin(placeId: placeId, label: description);
                 },
+                validator: interviewProvider.validateOriginPlace,
               ),
               const SizedBox(height: 8),
 
@@ -80,6 +81,7 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
                 onSelected: (placeId, description) async {
                   await interviewProvider.resolveAndSetDestination(placeId: placeId, label: description);
                 },
+                validator: interviewProvider.validateDestinationPlace,
               ),
 
               const SizedBox(height: 12),

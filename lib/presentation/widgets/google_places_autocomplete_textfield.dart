@@ -9,6 +9,10 @@ class GooglePlacesAutocomplete extends StatefulWidget {
   final PlacesService service;
   final String hintText;
   final IconData icon;
+
+  /// An optional validator for form validation.
+  final String? Function(String?)? validator;
+
   final void Function(String placeId, String description) onSelected;
 
   const GooglePlacesAutocomplete({
@@ -18,6 +22,7 @@ class GooglePlacesAutocomplete extends StatefulWidget {
     required this.hintText,
     required this.onSelected,
     required this.icon,
+    this.validator,
   });
 
   @override
@@ -27,6 +32,9 @@ class GooglePlacesAutocomplete extends StatefulWidget {
 
 class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
   final _controller = TextEditingController();
+
+  String? _selectedPlaceId;
+  String? _selectedDescription;
 
   @override
   void didUpdateWidget(covariant GooglePlacesAutocomplete oldWidget) {
@@ -53,14 +61,11 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
   @override
   void dispose() {
     super.dispose();
-
     _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('_controller => ${_controller.text}');
-
     final colors = Theme.of(context).extension<AppColors>()!;
     return TypeAheadField<Map<String, String>>(
       suggestionsCallback: widget.service.fetchSuggestions,
@@ -68,19 +73,17 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
       emptyBuilder: (context) => _textEmptyBuilder(context, _controller),
       controller: _controller,
       builder: (context, controller, focusNode) {
-        return TextField(
+        return TextFormField(
           controller: _controller,
           focusNode: focusNode,
+          validator: widget.validator,
           style: TextStyle(color: colors.quaternary, fontSize: 16),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
-            border: InputBorder.none,
-            hint: Text(
-              widget.hintText,
-              style: TextStyle(
-                color: colors.secondary.withValues(alpha: 0.3),
-                fontSize: 16,
-              ),
+            hintText: widget.hintText,
+            hintStyle: TextStyle(
+              color: colors.secondary.withValues(alpha: 0.3),
+              fontSize: 16,
             ),
             prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 20),
             focusedBorder: OutlineInputBorder(
@@ -93,7 +96,7 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: colors.tertiary),
+              borderSide: BorderSide(color: Colors.red),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -120,9 +123,11 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
         );
       },
       onSelected: (suggestion) {
-        _controller?.text = suggestion['description']!; // Update the text
+        _controller.text = suggestion['description']!;
+        _selectedPlaceId = suggestion['placeId'];
+        _selectedDescription = suggestion['description'];
 
-        widget.onSelected(suggestion['placeId']!, suggestion['description']!);
+        widget.onSelected(_selectedPlaceId!, _selectedDescription!);
         widget.service.resetSession();
 
         FocusScope.of(context).unfocus();
@@ -150,10 +155,10 @@ Widget _circularLoadingBuilder(BuildContext context) {
 
 Widget _textEmptyBuilder(
   BuildContext context,
-  TextEditingController? _controller,
+  TextEditingController? controller,
 ) {
   final colors = Theme.of(context).extension<AppColors>()!;
-  return _controller?.text == ''
+  return controller?.text == ''
       ? SizedBox()
       : Container(
           decoration: BoxDecoration(

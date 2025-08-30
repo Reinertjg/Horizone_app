@@ -1,14 +1,14 @@
 /// Contains constants and SQL statement related to the `trips` table schema.
-abstract class TripTable {
+abstract class TravelTable {
 
   /// Private constructor to prevent instantiation.
-  static const tableName = 'trips';
+  static const tableName = 'travels';
 
   /// Primary key (auto-incremented integer)
-  static const String tripId = 'id';
+  static const String travelId = 'id';
 
   /// Title or name of the trip (text, required)
-  static const String tripTitle = 'title';
+  static const String travelTitle = 'title';
 
   /// Start date of the trip in string format (text, required)
   static const String startDate = 'startDate';
@@ -25,16 +25,25 @@ abstract class TripTable {
   /// Type of experience (e.g. cultural, adventure) (text, required)
   static const String experienceType = 'experienceType';
 
-  /// SQL statement to create the `trips` table with the defined schema.
+  /// Origin Place of the Travel
+  static const String originPlace = 'originPlace';
+
+  /// Destination Place of the Travel
+  static const String destinationPlace = 'destinationPlace';
+
+
+  /// SQL statement to create the `Travels` table with the defined schema.
   static const createTable = '''
     CREATE TABLE $tableName (
-      $tripId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $tripTitle TEXT NOT NULL,
+      $travelId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $travelTitle TEXT NOT NULL,
       $startDate TEXT NOT NULL,
       $endDate TEXT NOT NULL,
       $meansOfTransportation TEXT NOT NULL,
       $numberOfParticipants INTEGER NOT NULL,
       $experienceType TEXT NOT NULL
+      $originPlace TEXT NOT NULL,
+      $destinationPlace TEXT NOT NULL
     )
   ''';
 }

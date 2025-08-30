@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../state/travelstops_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
+import '../widgets/interview_widgets/travel_route_card.dart';
 import '../widgets/interview_widgets/travelstops_widgets/add_stop_button.dart';
 import '../widgets/interview_widgets/travelstops_widgets/intermediate_stops_section.dart';
-import '../widgets/interview_widgets/travelstops_widgets/map_preview_card.dart';
-import '../widgets/interview_widgets/travel_route_card.dart';
+import '../widgets/interview_widgets/map_preview_card.dart';
 import '../widgets/section_title.dart';
+import 'home_screen.dart';
 
 /// Section containing general information about the trip.
 /// Includes title, start and end dates, transportation, and experience type.
@@ -30,9 +29,6 @@ class _InterviewScreenState extends State<InterviewScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final stopsProvider = context.watch<TravelStopsProvider>();
-
-    final middleCount = stopsProvider.stops.length;
 
     return Scaffold(
       backgroundColor: colors.primary,
@@ -86,7 +82,10 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     if (!context.mounted) return;
-                    await Navigator.pushNamed(context, '/tripParticipants');
+                    await Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                          (route) => false,
+                    );
                   }
                 },
               ),
@@ -103,9 +102,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
       decoration: BoxDecoration(
         color: colors.quaternary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: colors.quaternary.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: colors.quaternary.withValues(alpha: 0.1)),
       ),
     );
   }

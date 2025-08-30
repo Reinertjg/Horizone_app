@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../api/place_details_api.dart';
 import '../../domain/entities/travelstop.dart';
-import '../../domain/entities/trip.dart';
+import '../../domain/entities/travel.dart';
 
 /// Provider class responsible for managing the form state and logic
 /// related to a trip interview process.
@@ -83,9 +83,9 @@ class InterviewProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Converts the form data to a [Trip] entity.
-  Trip toEntity() {
-    return Trip(
+  /// Converts the form data to a [Travel] entity.
+  Travel toEntity() {
+    return Travel(
       id: 0,
       title: titleController.text.trim(),
       startDate: startDateController.text.trim(),
@@ -174,6 +174,22 @@ class InterviewProvider extends ChangeNotifier {
   String? validateExperienceType(String? value) {
     if (value == null || value.isEmpty) {
       return 'Experience type is required';
+    }
+    return null;
+  }
+
+  /// Validates the origin place field.
+  String? validateOriginPlace(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Origin place is required';
+    }
+    return null;
+  }
+
+  /// Validates the destination place field.
+  String? validateDestinationPlace(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Destination place is required';
     }
     return null;
   }

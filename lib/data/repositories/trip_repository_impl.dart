@@ -1,5 +1,5 @@
 import '../../database/daos/trip_dao.dart';
-import '../../domain/entities/trip.dart';
+import '../../domain/entities/travel.dart';
 import '../../domain/repositories/trip_repository.dart';
 
 /// Implementation of the [TripRepository] interface.
@@ -10,7 +10,7 @@ class TripRepositoryImpl implements TripRepository {
   TripRepositoryImpl(this._dao);
 
   @override
-  Future<void> insertTrip(Trip trip) async {
+  Future<void> insertTrip(Travel trip) async {
     await _dao.insertTrip(trip.toMap());
   }
 
@@ -20,8 +20,8 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  Future<List<Trip>> getAllTrips() async {
+  Future<List<Travel>> getAllTrips() async {
     final maps = await _dao.getAllTrips();
-    return maps.map(Trip.fromMap).toList();
+    return maps.map(Travel.fromMap).toList();
   }
 }

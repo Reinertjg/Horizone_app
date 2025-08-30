@@ -1,7 +1,7 @@
 import 'travelstop.dart';
 
 /// A class representing a trip.
-class Trip {
+class Travel {
   /// The unique identifier of the trip.
   final int id;
   /// The title or name of the trip.
@@ -23,8 +23,8 @@ class Trip {
   final PlacePoint? destinationPlace;
   final String destinationLabel;
 
-  /// Constructs a new [Trip] object.
-  Trip({
+  /// Constructs a new [Travel] object.
+  Travel({
     required this.id,
     required this.title,
     required this.startDate,
@@ -38,7 +38,7 @@ class Trip {
     required this.destinationLabel
   });
 
-  /// Converts the [Trip] object to a map.
+  /// Converts the [Travel] object to a map.
   Map<String, dynamic> toMap() => {
     'title': title,
     'startDate': startDate,
@@ -52,9 +52,9 @@ class Trip {
     'destinationPlace': destinationPlace
   };
 
-  /// Creates a [Trip] object from a map.
-  static Trip fromMap(Map<String, dynamic> map) {
-    return Trip(
+  /// Creates a [Travel] object from a map.
+  static Travel fromMap(Map<String, dynamic> map) {
+    return Travel(
       id: map['id'],
       title: map['title'],
       startDate: map['startDate'],

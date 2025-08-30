@@ -9,7 +9,7 @@ import '../../../../domain/usecases/get_place_suggestions.dart';
 import '../../../state/travelstops_provider.dart';
 import '../../../theme_color/app_colors.dart';
 import '../../google_places_autocomplete_textfield.dart';
-import '../test_cupertino_date_picker.dart';
+import '../cupertino_date_picker.dart';
 import 'travelstops_textfield_box.dart';
 
 class StopFormCard extends StatelessWidget {
@@ -43,122 +43,110 @@ class StopFormCard extends StatelessWidget {
     final maxEnd = stopsProvider.maxEndFor(stop.order);
     final initialEnd = stopsProvider.initialEndFor(stop.order);
 
-    return GestureDetector(
-      key: ValueKey(stop),
-      onTap: () {
-        print('Ordem: $order');
-        print('Stop: ${stop.order}');
-        print('startDate: ${stop.startDate}');
-        print('endDate: ${stop.endDate}');
-        print('ListStop: ${stopsProvider.stops[index].order}');
-        print('ListStopSS: ${stopsProvider.stops[index].startDate}');
-        print('ListStopEE: ${stopsProvider.stops[index].endDate}');
-        print('Index: $index');
-      },
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: colors.quinary,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(color: colors.quaternary, fontSize: 16),
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: colors.quinary,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(color: colors.quaternary, fontSize: 16),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    final stopsProvider = context.read<TravelStopsProvider>();
+                    stopsProvider.removeStop(stop);
+                  },
+                  child: Icon(
+                    HugeIcons.strokeRoundedDelete02,
+                    color: colors.secondary,
+                    size: 25,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      final stopsProvider = context.read<TravelStopsProvider>();
-                      stopsProvider.removeStop(stop);
-                    },
-                    child: Icon(
-                      HugeIcons.strokeRoundedDelete02,
-                      color: colors.secondary,
-                      size: 25,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+
+            // Autocomplete -> updates label + coordinates in provider
+            GooglePlacesAutocomplete(
+              initialText: stop.label,
+              service: places,
+              hintText: 'Search address...',
+              icon: HugeIcons.strokeRoundedMapsSearch,
+              onSelected: (placeId, description) async {
+                await context.read<TravelStopsProvider>().resolveAndSetPlace(
+                  stop: stop,
+                  placeId: placeId,
+                  label: description,
+                );
+              },
+              validator: stopsProvider.validateStopPlace,
+            ),
+
+            const SizedBox(height: 8),
+
+            // Dates
+            Row(
+              children: [
+                Expanded(
+                  child: CupertinoDatePickerField(
+                    label: 'Start date',
+                    fontSize: 12,
+                    icon: HugeIcons.strokeRoundedDateTime,
+                    controller: TextEditingController(
+                      text: stopsProvider.formatDate(stop.startDate),
                     ),
+                    validator: stopsProvider.validateStopStartDate,
+                    maxDate: maxStart,
+                    minDate: minStart,
+                    initialDate: initialStart,
+                    onDateChanged: (value) =>
+                        stopsProvider.setStopStartDate(stop.order, value),
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-
-              // Autocomplete -> updates label + coordinates in provider
-              GooglePlacesAutocomplete(
-                initialText: stop.label,
-                service: places,
-                hintText: 'Search address...',
-                icon: HugeIcons.strokeRoundedMapsSearch,
-                onSelected: (placeId, description) async {
-                  await context.read<TravelStopsProvider>().resolveAndSetPlace(
-                    stop: stop,
-                    placeId: placeId,
-                    label: description,
-                  );
-                },
-              ),
-
-              const SizedBox(height: 8),
-
-              // Dates
-              Row(
-                children: [
-                  Expanded(
-                    child: CupertinoDatePickerField(
-                      label: 'Start date',
-                      fontSize: 12,
-                      icon: HugeIcons.strokeRoundedDateTime,
-                      controller: TextEditingController(
-                        text: stopsProvider.formatDate(stop.startDate),
-                      ),
-                      validator: (_) => null,
-                      maxDate: maxStart,
-                      minDate: minStart,
-                      initialDate: initialStart,
-                      onDateChanged: (value) =>
-                          stopsProvider.setStopStartDate(stop.order, value),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: CupertinoDatePickerField(
+                    label: 'End date',
+                    fontSize: 12,
+                    icon: HugeIcons.strokeRoundedDateTime,
+                    controller: TextEditingController(
+                      text: stopsProvider.formatDate(stop.endDate),
                     ),
+                    validator: stopsProvider.validateStopEndDate,
+                    maxDate: maxEnd,
+                    minDate: minEnd,
+                    initialDate: initialEnd,
+                    onDateChanged: (value) =>
+                        stopsProvider.setStopEndDate(stop.order, value),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: CupertinoDatePickerField(
-                      label: 'End date',
-                      fontSize: 12,
-                      icon: HugeIcons.strokeRoundedDateTime,
-                      controller: TextEditingController(
-                        text: stopsProvider.formatDate(stop.endDate),
-                      ),
-                      validator: (_) => null,
-                      maxDate: maxEnd,
-                      minDate: minEnd,
-                      initialDate: initialEnd,
-                      onDateChanged: (value) =>
-                          stopsProvider.setStopEndDate(stop.order, value),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
 
-              const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-              // Notes / Description
-              TravelStopsTextFieldBox(
-                nameButton: 'Activity description',
-                hintText: 'Describe the activities at this location...',
-                icon: HugeIcons.strokeRoundedTicketStar,
-                controller: TextEditingController(text: stop.description),
-                keyboardType: TextInputType.text,
-              ),
-            ],
-          ),
+            // Notes / Description
+            TravelStopsTextFieldBox(
+              nameButton: 'Activity description',
+              hintText: 'Describe the activities at this location...',
+              icon: HugeIcons.strokeRoundedTicketStar,
+              controller: TextEditingController(text: stop.description),
+              keyboardType: TextInputType.text,
+            ),
+          ],
         ),
       ),
     );
