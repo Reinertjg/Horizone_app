@@ -28,6 +28,7 @@ class InterviewProvider extends ChangeNotifier {
   PlacePoint? _destinationPlace;
   String? _originLabel;
   String? _destinationLabel;
+  final String _status = 'not_started';
 
 
   /// Gets the number of participants.

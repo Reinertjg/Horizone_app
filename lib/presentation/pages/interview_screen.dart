@@ -4,17 +4,17 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../../data/repositories/travel_repository_impl.dart';
 import '../../domain/usecases/travel_usecase.dart';
+import '../../repositories/travel_repository_impl.dart';
 import '../state/interview_provider.dart';
 import '../state/participant_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
+import '../widgets/interview_widgets/map_preview_card.dart';
 import '../widgets/interview_widgets/travel_route_card.dart';
 import '../widgets/interview_widgets/travelstops_widgets/add_stop_button.dart';
 import '../widgets/interview_widgets/travelstops_widgets/intermediate_stops_section.dart';
-import '../widgets/interview_widgets/map_preview_card.dart';
 import '../widgets/section_title.dart';
 import 'home_screen.dart';
 
