@@ -12,10 +12,15 @@ import 'participant_handle_bar.dart';
 import 'participant_modal_buttons.dart';
 import 'participant_modal_header.dart';
 
+/// A widget that displays the content of the update participant modal.
+///
+/// It allows editing and updating an existing [Participant].
 class UpdateParticipantContent extends StatefulWidget {
-  const UpdateParticipantContent({super.key, required this.indexParticipant});
+  /// Creates an [UpdateParticipantContent].
+  const UpdateParticipantContent({super.key, required this.participant});
 
-  final int indexParticipant;
+  /// The participant being edited.
+  final Participant participant;
 
   @override
   State<UpdateParticipantContent> createState() =>
@@ -32,12 +37,9 @@ class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
       context,
       listen: false,
     );
-    participantProvider.nameController.text =
-        participantProvider.participants[widget.indexParticipant].name;
-    participantProvider.emailController.text =
-        participantProvider.participants[widget.indexParticipant].email;
-    selectedImage =
-        participantProvider.participants[widget.indexParticipant].photo;
+    participantProvider.nameController.text = widget.participant.name;
+    participantProvider.emailController.text = widget.participant.email;
+    selectedImage = widget.participant.photo;
     super.initState();
   }
 
@@ -99,7 +101,7 @@ class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
                         photo: selectedImage,
                       );
                       participantProvider.updateParcipant(
-                        widget.indexParticipant,
+                        widget.participant,
                         participant,
                       );
                       Navigator.pop(context);

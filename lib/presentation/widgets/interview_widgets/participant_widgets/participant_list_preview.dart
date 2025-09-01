@@ -40,7 +40,7 @@ class ParticipantListPreview extends StatelessWidget {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) =>
-                              OptionsParticipantModal(index: index),
+                              OptionsParticipantModal(participant: participant,),
                         );
                       },
                       child: Container(

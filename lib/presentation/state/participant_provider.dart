@@ -17,6 +17,7 @@ class ParticipantProvider extends ChangeNotifier {
   final emailController = TextEditingController();
 
   List<Participant> get participants => List.unmodifiable(_participants);
+
   File? get selectedImage => _selectedImage;
 
   void setSelectedImage(File? image) {
@@ -30,13 +31,15 @@ class ParticipantProvider extends ChangeNotifier {
    notifyListeners();
   }
 
-  void updateParcipant(int index, Participant participant) {
-    _participants[index] = participant;
+  void updateParcipant(Participant oldParticipant, Participant newParticipant) {
+    final index = _participants.indexOf(oldParticipant);
+    print(index);
+    _participants[index] = newParticipant;
     notifyListeners();
   }
 
-  void delteParticipant(int index){
-    _participants.removeAt(index);
+  void delteParticipant(Participant participant){
+    _participants.remove(participant);
     notifyListeners();
   }
 
