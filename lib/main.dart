@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-import 'database/daos/trip_dao.dart';
 import 'generated/l10n.dart';
 import 'presentation/routes.dart';
 import 'presentation/state/interview_provider.dart';
@@ -33,9 +32,6 @@ Future<void> main() async {
 
         /// Manages interview-related state and logic
         ChangeNotifierProvider(create: (_) => InterviewProvider()),
-
-        /// Handles database operations for trips
-        ChangeNotifierProvider(create: (_) => TripDao()),
 
         /// Manages participant-related state and logic
         ChangeNotifierProvider(create: (_) => ParticipantProvider()),
