@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '../../api/place_details_api.dart';
-import '../../domain/entities/travelstop.dart';
 import '../../domain/entities/travel.dart';
+import '../../domain/entities/travelstop.dart';
 
 /// Provider class responsible for managing the form state and logic
 /// related to a trip interview process.
@@ -16,12 +17,13 @@ class InterviewProvider extends ChangeNotifier {
   /// Controller for the trip end date input field.
   final endDateController = TextEditingController();
 
-  /// Controller for the number of participants input field.
-  final numberOfParticipantsController = TextEditingController();
+  // /// Controller for the number of participants input field.
+  // final numberOfParticipantsController = 0;
 
   int? _participants;
   String? _meansOfTransportation;
   String? _experienceType;
+  String _image = '';
   PlacePoint? _originPlace;
   PlacePoint? _destinationPlace;
   String? _originLabel;
@@ -79,24 +81,24 @@ class InterviewProvider extends ChangeNotifier {
     titleController.dispose();
     startDateController.dispose();
     endDateController.dispose();
-    numberOfParticipantsController.dispose();
     super.dispose();
   }
 
   /// Converts the form data to a [Travel] entity.
-  Travel toEntity() {
+  Travel toEntity(int participants) {
     return Travel(
-      id: 0,
       title: titleController.text.trim(),
       startDate: startDateController.text.trim(),
       endDate: endDateController.text.trim(),
       meansOfTransportation: _meansOfTransportation ?? '',
-      numberOfParticipants: int.parse(numberOfParticipantsController.text),
+      numberOfParticipants: participants,
       experienceType: _experienceType ?? '',
-      originPlace: _originPlace,
+      image: _image,
+      originPlace: _originPlace.toString(),
       originLabel: _originLabel!,
-      destinationPlace: _destinationPlace,
-      destinationLabel: _destinationLabel!
+      destinationPlace: _destinationPlace.toString(),
+      destinationLabel: _destinationLabel!,
+      status: 'in progress'
     );
   }
 

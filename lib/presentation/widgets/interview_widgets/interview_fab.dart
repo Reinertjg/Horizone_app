@@ -16,6 +16,7 @@ class InterviewFab extends StatelessWidget {
   /// The [NameButton] for the form.
   final String nameButton;
 
+  /// The [onPressed] function for the form.
   final void Function()? onPressed;
 
   @override

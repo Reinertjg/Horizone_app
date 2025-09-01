@@ -120,7 +120,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
               ),
               const SizedBox(height: 12),
 
-              /// Add participant button and participant list preview.
+              /// Text field for entering the number of participants.
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
