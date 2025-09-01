@@ -25,12 +25,23 @@ abstract class TravelTable {
   /// Type of experience (e.g. cultural, adventure) (text, required)
   static const String experienceType = 'experienceType';
 
-  /// Origin Place of the Travel
+  /// Image of the trip (text, required)
+  static const String image = 'image';
+
+  /// Origin Place of the Travel (text, required)
   static const String originPlace = 'originPlace';
 
-  /// Destination Place of the Travel
+  /// Origin Label of the Travel (text, required)
+  static const String originLabel = 'originLabel';
+
+  /// Destination Place of the Travel (text, required)
   static const String destinationPlace = 'destinationPlace';
 
+  /// Destination Label of the Travel (text, required)
+  static const String destinationLabel = 'destinationLabel';
+
+  /// Status of the trip (e.g., in progress, completed) (text)
+  static const String status = 'status';
 
   /// SQL statement to create the `Travels` table with the defined schema.
   static const createTable = '''
@@ -41,9 +52,13 @@ abstract class TravelTable {
       $endDate TEXT NOT NULL,
       $meansOfTransportation TEXT NOT NULL,
       $numberOfParticipants INTEGER NOT NULL,
-      $experienceType TEXT NOT NULL
+      $experienceType TEXT NOT NULL,
+      $image TEXT NOT NULL,
       $originPlace TEXT NOT NULL,
-      $destinationPlace TEXT NOT NULL
+      $originLabel TEXT NOT NULL,
+      $destinationPlace TEXT NOT NULL,
+      $destinationLabel TEXT NOT NULL,
+      $status TEXT NOT NULL DEFAULT 'in_progress'
     )
   ''';
 }

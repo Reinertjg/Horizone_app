@@ -1,26 +1,42 @@
-import 'travelstop.dart';
 
 /// A class representing a trip.
 class Travel {
 
   /// The title or name of the trip.
   final String title;
+
   /// The start date of the trip.
   final String startDate;
+
   /// The end date of the trip.
   final String endDate;
+
   /// The transportation method used for the trip.
   final String meansOfTransportation;
+
   /// The number of participants in the trip.
   final int numberOfParticipants;
+
   /// The type of experience the trip offers.
   final String experienceType;
+
+  /// The image of the trip.
+  final String image;
+
   /// The Origin Place the Trip
   final String originPlace;
+
+  /// The Origin Label the Trip
   final String originLabel;
+
   /// The Destination Place the Trip
   final String destinationPlace;
+
+  /// The Destination Label the Trip
   final String destinationLabel;
+
+  /// The status of the trip (e.g., in progress, completed).
+  String status = 'in progress';
 
   /// Constructs a new [Travel] object.
   Travel({
@@ -30,10 +46,12 @@ class Travel {
     required this.meansOfTransportation,
     required this.numberOfParticipants,
     required this.experienceType,
+    required this.image,
     required this.originPlace,
     required this.originLabel,
     required this.destinationPlace,
-    required this.destinationLabel
+    required this.destinationLabel,
+    required String status
   });
 
   /// Converts the [Travel] object to a map.
@@ -45,6 +63,7 @@ class Travel {
       'meansOfTransportation': meansOfTransportation,
       'numberOfParticipants': numberOfParticipants,
       'experienceType': experienceType,
+      'image': image,
       'originLabel': originLabel,
       'destinationLabel': destinationLabel,
       'originPlace': originPlace,
@@ -62,10 +81,12 @@ class Travel {
       meansOfTransportation: map['meansOfTransportation'],
       numberOfParticipants: map['numberOfParticipants'],
       experienceType: map['experienceType'],
+      image: map['image'],
       originPlace: map['originPlace'],
       originLabel: map['originLabel'],
       destinationPlace: map['destinationPlace'],
-      destinationLabel: map['destinationLabel']
+      destinationLabel: map['destinationLabel'],
+      status: map['status']
     );
   }
 }
