@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../data/repositories/profile_repository_impl.dart';
 import '../../domain/entities/profile.dart';
@@ -55,9 +56,13 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             const Spacer(),
             Center(
-              child: Image.asset(
-                'assets/images/logo_horizone.png',
-                fit: BoxFit.cover,
+              child: Text(
+                'HORIZONE',
+                style: GoogleFonts.abel(
+                  color: Colors.white,
+                  fontSize: 60,
+                  letterSpacing: 9.0,
+                ),
               ),
             ),
             const Spacer(),
