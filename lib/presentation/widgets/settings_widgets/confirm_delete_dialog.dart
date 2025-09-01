@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../data/repositories/profile_repository_impl.dart';
 import '../../../domain/usecases/profile_usecase.dart';
 import '../../../generated/l10n.dart';
+import '../../../repositories/profile_repository_impl.dart';
 import '../../pages/getstarted_screen.dart';
 import '../../theme_color/app_colors.dart';
 

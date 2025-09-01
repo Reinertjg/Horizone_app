@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 
-import '../../data/repositories/profile_repository_impl.dart';
-import '../../data/repositories/travel_repository_impl.dart';
 import '../../domain/entities/profile.dart';
 import '../../domain/entities/travel.dart';
 import '../../generated/l10n.dart';
 
+import '../../repositories/profile_repository_impl.dart';
+import '../../repositories/travel_repository_impl.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/iconbutton_notifications.dart';
 import '../widgets/iconbutton_settings.dart';
