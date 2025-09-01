@@ -3,27 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../domain/entities/participant.dart';
 import '../../../../generated/l10n.dart';
 import '../../../state/participant_provider.dart';
 import '../../../theme_color/app_colors.dart';
 import 'modals/update_participant_modal.dart';
 
+/// A widget that displays a options of participants.
+///
+/// It allows the user to update and delete participants.
 class OptionsParticipantModal extends StatelessWidget {
-  const OptionsParticipantModal({super.key, required this.index});
+  /// Creates a custom [OptionsParticipantModal].
+  const OptionsParticipantModal({super.key, required this.participant});
 
-  final int index;
-
+  /// The participant to be displayed.
+  final Participant participant;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final participantProvider = Provider.of<ParticipantProvider>(context);
-
-    if (index < 0 || index >= participantProvider.participants.length) {
-      return const SizedBox.shrink();
-    }
-
-    final name = participantProvider.participants[index].name;
 
     return Container(
       decoration: BoxDecoration(
@@ -48,11 +46,11 @@ class OptionsParticipantModal extends StatelessWidget {
               const SizedBox(height: 20),
 
               Text(
-                name,
+                participant.name,
                 style: GoogleFonts.raleway(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: colors.quaternary, // ex: cor para títulos
+                  color: colors.quaternary,
                 ),
               ),
               const SizedBox(height: 20),
@@ -68,7 +66,7 @@ class OptionsParticipantModal extends StatelessWidget {
                       Provider.of<ParticipantProvider>(
                         context,
                         listen: false,
-                      ).delteParticipant(index);
+                      ).delteParticipant(participant);
                     },
                     backgroundColor: Colors.red.withAlpha(50),
                     iconColor: Colors.red,
@@ -80,7 +78,8 @@ class OptionsParticipantModal extends StatelessWidget {
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
-                      builder: (_) => UpdateParticipantModal(indexParticipant: index),
+                      builder: (_) =>
+                          UpdateParticipantModal(participant: participant),
                     ),
                     backgroundColor: colors.tertiary.withAlpha(50),
                     iconColor: colors.tertiary,
