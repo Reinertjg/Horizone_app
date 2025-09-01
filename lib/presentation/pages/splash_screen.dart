@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../data/repositories/profile_repository_impl.dart';
 import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
+import '../../repositories/profile_repository_impl.dart';
 
 /// Splash screen shown when the app starts.
 /// It checks whether a user profile exists and navigates accordingly
