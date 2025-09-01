@@ -24,6 +24,7 @@ class GetStartedHeader extends StatelessWidget {
         child: DropdownButton<Locale>(
           value: locale,
           underline: SizedBox(),
+          elevation: 2,
           selectedItemBuilder: (_) => List.generate(3, (_) {
             return Align(
               alignment: Alignment.centerRight,
@@ -36,6 +37,7 @@ class GetStartedHeader extends StatelessWidget {
           icon: Icon(Icons.arrow_drop_down, size: 22, color: Colors.white),
           style: TextStyle(color: Colors.white, fontSize: 16),
           dropdownColor: colors.secondary,
+          borderRadius: BorderRadius.circular(10),
           onChanged: (newLocale) {
             if (newLocale != null) {
               localeProvider.setLocale(newLocale);
