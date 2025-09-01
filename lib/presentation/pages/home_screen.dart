@@ -7,6 +7,7 @@ import '../../generated/l10n.dart';
 import '../theme_color/app_colors.dart';
 import 'dashboard_screen.dart';
 import 'interview_screen.dart';
+import 'profile_screen.dart';
 
 /// The main screen displayed after user login,
 /// showing a personalized welcome and main navigation options.
@@ -23,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedScreenIndex = 0;
   final List _screens = [
     {'screen': const DashboardScreen(), 'title': 'Screen A Title'},
-    {'screen': const InterviewScreen(), 'title': 'Screen B Title'}
+    {'screen': const InterviewScreen(), 'title': 'Screen B Title'},
+    {'screen': const ProfileScreen(), 'title': 'Screen C Title'}
   ];
 
   void _selectScreen(int index) {
@@ -53,10 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(HugeIcons.strokeRoundedProfile, color: colors.secondary),
             backgroundColor: colors.primary,
             label: S.of(context).planning,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedCalendar04, color: colors.secondary),
-            label: 'Notifications',
           ),
           BottomNavigationBarItem(
             icon: Icon(HugeIcons.strokeRoundedUser, color: colors.secondary),
