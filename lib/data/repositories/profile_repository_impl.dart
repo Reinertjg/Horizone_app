@@ -14,15 +14,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  Future<void> deleteTableProfile() async {
+    final db = await _dbFuture;
+    await db.delete(ProfileTable.tableName);
+  }
+
+  @override
   Future<List<Profile>> getAllProfiles() async {
     final db = await _dbFuture;
     final result = await db.query(ProfileTable.tableName);
     return result.map(Profile.fromMap).toList();
-  }
-
-  @override
-  Future<void> deleteTableProfile() async {
-    final db = await _dbFuture;
-    await db.delete(ProfileTable.tableName);
   }
 }

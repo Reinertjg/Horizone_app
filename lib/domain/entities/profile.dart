@@ -37,12 +37,14 @@ class Profile {
   }
 
   /// Constructs a new [Profile] object from a map.
-  factory Profile.fromMap(Map<String, dynamic> map) => Profile(
-    id: map['id'] ?? '',
-    name: map['name'] ?? '',
-    biography: map['biography'] ?? '',
-    birthDate: map['birthDate'] ?? '',
-    gender: map['gender'] ?? '',
-    jobTitle: map['job_title'] ?? '',
-  );
+  factory Profile.fromMap(Map<String, dynamic> map) {
+    return Profile(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      biography: map['biography'] ?? '',
+      birthDate: map['birthDate'] ?? '',
+      gender: map['gender'] ?? '',
+      jobTitle: map['job_title'] ?? '',
+    );
+  }
 }
