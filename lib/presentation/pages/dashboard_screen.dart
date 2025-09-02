@@ -7,6 +7,7 @@ import '../../domain/entities/profile.dart';
 import '../../domain/entities/travel.dart';
 import '../../generated/l10n.dart';
 
+import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/profile_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
 import '../theme_color/app_colors.dart';
@@ -366,8 +367,10 @@ class _travelCards extends StatelessWidget {
         GestureDetector(
           onTap: () async {
             print('\n----Inserido com sucesso----\n');
-            final repository = TravelRepositoryImpl();
-            final _ = await repository.getAllTravels();
+            final repositoryParticipant = ParticipantRepositoryImpl();
+            final participant = await repositoryParticipant.getAllParticipants(
+              travels.id!,
+            );
             print('Titile: ${travels.title}');
             print('Start Date: ${travels.startDate}');
             print('End Date: ${travels.endDate}');
@@ -378,6 +381,16 @@ class _travelCards extends StatelessWidget {
             print('Origin Label: ${travels.originLabel}');
             print('Destination Place: ${travels.destinationPlace}');
             print('Destination Label: ${travels.destinationLabel}');
+            print('Status: ${travels.status}');
+            print('-----------------------------');
+            print('Participants:');
+            for (var item in participant) {
+              print('Name: ${item.name}');
+              print('Email: ${item.email}');
+              print('Photo: ${item.photo}');
+              print('-----------------------------');
+            }
+
           },
           child: SizedBox(
             width: 200,

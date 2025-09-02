@@ -1,6 +1,7 @@
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+import 'tables/participants_table.dart';
 import 'tables/profile_table.dart';
 import 'tables/travel_table.dart';
 
@@ -39,5 +40,6 @@ class HorizoneDatabase {
   Future _onCreate(Database db, int version) async {
     await db.execute(ProfileTable.createTable);
     await db.execute(TravelTable.createTable);
+    await db.execute(ParticipantTable.createTable);
   }
 }

@@ -2,6 +2,9 @@
 /// A class representing a trip.
 class Travel {
 
+  /// The unique identifier of the trip.
+  final int? id;
+
   /// The title or name of the trip.
   final String title;
 
@@ -40,6 +43,7 @@ class Travel {
 
   /// Constructs a new [Travel] object.
   Travel({
+    this.id,
     required this.title,
     required this.startDate,
     required this.endDate,
@@ -57,6 +61,7 @@ class Travel {
   /// Converts the [Travel] object to a map.
   Map<String, dynamic> toMap() {
     final map = {
+      'id': id,
       'title': title,
       'startDate': startDate,
       'endDate': endDate,
@@ -75,6 +80,7 @@ class Travel {
   /// Creates a [Travel] object from a map.
   static Travel fromMap(Map<String, dynamic> map) {
     return Travel(
+      id: map['id'],
       title: map['title'],
       startDate: map['startDate'],
       endDate: map['endDate'],

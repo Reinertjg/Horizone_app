@@ -4,7 +4,9 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../domain/usecases/ParticipantUseCase.dart';
 import '../../domain/usecases/travel_usecase.dart';
+import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
 import '../state/interview_provider.dart';
 import '../state/participant_provider.dart';
@@ -88,14 +90,28 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 nameButton: 'Avançar',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
+                    final repositoryTravel = TravelRepositoryImpl();
+
                     final travel = formTravel.toEntity(
                       participantProvider.participants.length,
                     );
-
                     final repository = TravelRepositoryImpl();
                     final useCase = TravelUseCase(repository);
-
                     await useCase.insert(travel);
+
+                    final travelSearched = await repositoryTravel
+                        .getAllTravels();
+
+                    if (participantProvider.participants.isNotEmpty) {
+                      final participants = participantProvider.toEntity(
+                        travelSearched.last.id!,
+                      );
+                      final repositoryParticipant = ParticipantRepositoryImpl();
+                      final useCaseParticipant = ParticipantUseCase(
+                        repositoryParticipant,
+                      );
+                      await useCaseParticipant.insert(participants);
+                    }
 
                     if (!context.mounted) return;
                     await Navigator.of(context).pushAndRemoveUntil(
@@ -131,22 +147,19 @@ class _UpdateTravelImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Icon(
-            HugeIcons.strokeRoundedImage01,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(HugeIcons.strokeRoundedImage01, color: colors.secondary, size: 20),
+        const SizedBox(width: 4),
+        Text(
+          'Alterar capa',
+          style: GoogleFonts.raleway(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
             color: colors.secondary,
-            size: 20,
           ),
-          const SizedBox(width: 4),
-          Text('Alterar capa',
-            style: GoogleFonts.raleway(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: colors.secondary,
-            ),
-          )
-        ]
+        ),
+      ],
     );
   }
 }

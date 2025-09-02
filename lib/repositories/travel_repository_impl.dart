@@ -7,12 +7,14 @@ import '../../domain/repositories/travel_repository.dart';
 class TravelRepositoryImpl implements TravelRepository {
   final _dbFuture = HorizoneDatabase().database;
 
+  /// Inserts a [Travel] into the data source.
   @override
   Future<int> insertTravel(Travel travel) async {
     final db = await _dbFuture;
     return await db.insert(TravelTable.tableName, travel.toMap());
   }
 
+  /// Deletes the trip with the given [id] from the data source.
   @override
   Future<void> deleteTravel(int id) async {
     final db = await _dbFuture;
@@ -23,6 +25,7 @@ class TravelRepositoryImpl implements TravelRepository {
     );
   }
 
+  /// Retrieves all trips from the data source.
   @override
   Future<List<Travel>> getAllTravels() async {
     final db = await _dbFuture;
@@ -30,6 +33,7 @@ class TravelRepositoryImpl implements TravelRepository {
     return result.map(Travel.fromMap).toList();
   }
 
+  /// Retrieves a trip with the given [status] from the data source.
   @override
   Future<List<Travel>> getTravelByStatus(String status) async {
     final db = await _dbFuture;

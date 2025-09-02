@@ -20,6 +20,12 @@ class ParticipantProvider extends ChangeNotifier {
 
   File? get selectedImage => _selectedImage;
 
+  List<Participant> toEntity(int travelId) {
+    return _participants.map((participant) {
+      return participant.copyWith(travelId: travelId);
+    }).toList();
+  }
+
   void setSelectedImage(File? image) {
     _selectedImage = image;
     notifyListeners();
