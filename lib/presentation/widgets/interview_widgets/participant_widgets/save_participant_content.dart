@@ -93,3 +93,23 @@ class _SaveParticipantContentState extends State<SaveParticipantContent> {
     );
   }
 }
+
+class _ParticipantHandleBar extends StatelessWidget {
+  const _ParticipantHandleBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return Center(
+      child: Container(
+        width: 40,
+        height: 4,
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: colors.quaternary.withAlpha(80),
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ),
+    );
+  }
+}

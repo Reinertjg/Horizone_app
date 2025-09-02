@@ -8,6 +8,7 @@ import '../../generated/l10n.dart';
 ///
 class ParticipantProvider extends ChangeNotifier {
   final List<Participant> _participants = [];
+  int _nextId = 1;
   File? _selectedImage;
 
   /// Controller for the name input field.
@@ -16,16 +17,23 @@ class ParticipantProvider extends ChangeNotifier {
   /// Controller for the email input field.
   final emailController = TextEditingController();
 
+  /// Gets the list of participants.
   List<Participant> get participants => List.unmodifiable(_participants);
 
+  /// Gets the selected image.
   File? get selectedImage => _selectedImage;
 
+  int _generateId() => _nextId++;
+
+
+  /// Converts the form data to a list of [Participant] entities.
   List<Participant> toEntity(int travelId) {
     return _participants.map((participant) {
       return participant.copyWith(travelId: travelId);
     }).toList();
   }
 
+  /// Sets the selected image and notifies listeners.
   void setSelectedImage(File? image) {
     _selectedImage = image;
     notifyListeners();
@@ -33,18 +41,24 @@ class ParticipantProvider extends ChangeNotifier {
 
   /// Adds a new [Participant] to the list of participants.
   void addParticipant(Participant participant) {
-   _participants.add(participant);
-   notifyListeners();
-  }
+    _participants.add(participant);
 
-  void updateParcipant(Participant oldParticipant, Participant newParticipant) {
-    final index = _participants.indexOf(oldParticipant);
-    print(index);
-    _participants[index] = newParticipant;
+    for (var participant in _participants) {
+      print(participant.name);
+      print(participant.email);
+      print(participant.photo);
+    }
+
     notifyListeners();
   }
 
-  void delteParticipant(Participant participant){
+  void updateParcipant(Participant oldParticipant, Participant participant) {
+    final index = _participants.indexOf(oldParticipant);
+    _participants[index] = participant;
+    notifyListeners();
+  }
+
+  void delteParticipant(Participant participant) {
     _participants.remove(participant);
     notifyListeners();
   }
@@ -67,6 +81,7 @@ class ParticipantProvider extends ChangeNotifier {
     final isValid = formKey.currentState?.validate() ?? false;
     return isValid;
   }
+
   /// Checks if the [Participant.name] matches the required rules:
   /// cannot be empty
   /// min length of 3 chars

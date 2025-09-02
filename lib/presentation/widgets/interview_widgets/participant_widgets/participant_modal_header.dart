@@ -57,4 +57,5 @@ class ParticipantModalHeader extends StatelessWidget {
       ],
     );
   }
+
 }

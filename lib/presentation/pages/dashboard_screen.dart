@@ -385,9 +385,11 @@ class _travelCards extends StatelessWidget {
             print('-----------------------------');
             print('Participants:');
             for (var item in participant) {
+              print('Id: ${item.id}');
               print('Name: ${item.name}');
               print('Email: ${item.email}');
               print('Photo: ${item.photo}');
+              print('TravelId: ${item.travelId}');
               print('-----------------------------');
             }
 

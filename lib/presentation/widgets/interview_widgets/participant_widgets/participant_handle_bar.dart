@@ -20,4 +20,5 @@ class ParticipantHandleBar extends StatelessWidget {
       ),
     );
   }
+
 }

@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
@@ -11,9 +15,11 @@ import '../../repositories/travel_repository_impl.dart';
 import '../state/interview_provider.dart';
 import '../state/participant_provider.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/interview_widgets/blinking_dot.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
 import '../widgets/interview_widgets/map_preview_card.dart';
+import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
 import '../widgets/interview_widgets/travel_route_card.dart';
 import '../widgets/interview_widgets/travelstops_widgets/add_stop_button.dart';
 import '../widgets/interview_widgets/travelstops_widgets/intermediate_stops_section.dart';
@@ -33,6 +39,8 @@ class InterviewScreen extends StatefulWidget {
 class _InterviewScreenState extends State<InterviewScreen> {
   final formKey = GlobalKey<FormState>();
 
+
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
@@ -47,7 +55,9 @@ class _InterviewScreenState extends State<InterviewScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          S.of(context).planningTravel,
+          S
+              .of(context)
+              .planningTravel,
           style: GoogleFonts.nunito(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -116,7 +126,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     if (!context.mounted) return;
                     await Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (route) => false,
+                          (route) => false,
                     );
                   }
                 },
@@ -146,20 +156,397 @@ class _UpdateTravelImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Icon(HugeIcons.strokeRoundedImage01, color: colors.secondary, size: 20),
-        const SizedBox(width: 4),
-        Text(
-          'Alterar capa',
-          style: GoogleFonts.raleway(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => _TravelImageModal(),
+        );
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Icon(
+            HugeIcons.strokeRoundedImage01,
             color: colors.secondary,
+            size: 20,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            'Alterar capa',
+            style: GoogleFonts.raleway(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: colors.secondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TravelImageModal extends StatefulWidget {
+  const _TravelImageModal({super.key});
+
+  @override
+  State<_TravelImageModal> createState() => _TravelImageModalState();
+}
+
+class _TravelImageModalState extends State<_TravelImageModal> {
+  late File? _image;
+
+  Future<void> _pickImage(OptionPhotoMode mode) async {
+    final picker = ImagePicker();
+    final source = mode == OptionPhotoMode.cameraMode
+        ? ImageSource.camera
+        : ImageSource.gallery;
+
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      setState(() {
+        _image = file;
+      });
+      // widget.onImagePicked(file);
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return AnimatedPadding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery
+            .of(context)
+            .viewInsets
+            .bottom,
+      ),
+      duration: const Duration(milliseconds: 150),
+      child: Container(
+        decoration: BoxDecoration(
+          color: colors.primary,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: colors.quaternary.withValues(alpha: 0.25),
+              blurRadius: 10,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.85,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: colors.quaternary.withAlpha(80),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: colors.secondary.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          HugeIcons.strokeRoundedCameraAdd03,
+                          color: colors.secondary,
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Adicionar imagem',
+                              style: GoogleFonts.raleway(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: colors.quaternary,
+                              ),
+                            ),
+                            Text(
+                              'Adicione uma imagem para o seu cartão de viagem',
+                              style: GoogleFonts.raleway(
+                                fontSize: 14,
+                                color: colors.quaternary.withValues(alpha: 0.5),
+                                height: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  /// Travel cards - Sera implementado em um widget separado
+                  Stack(
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Card(
+                            elevation: 2,
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            color: colors.quinary,
+                            child: Image.asset(
+                              'assets/images/travel_image01.jpg',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 18,
+                        left: 15,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              BlinkingDot(),
+                              SizedBox(width: 6),
+                              Text(
+                                "Em andamento",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 15,
+                        right: 15,
+                        child: Icon(
+                          CupertinoIcons.arrow_up_right_square_fill,
+                          color: colors.quinary,
+                          size: 25,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        left: 10,
+                        child: Container(
+                          width: 50,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(30),
+                            ),
+                            color: colors.quaternary.withValues(alpha: 0.5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              right: 16.0,
+                              left: 16.0,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Viagem Familia Souza',
+                                  style: GoogleFonts.raleway(
+                                    color: colors.quinary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      HugeIcons.strokeRoundedLocation06,
+                                      color: colors.quinary,
+                                      size: 10,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Expanded(
+                                      child: Text(
+                                        'Florida - Orlando',
+                                        style: GoogleFonts.raleway(
+                                          color: colors.quinary,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star_rounded,
+                                      color: colors.tertiary,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Icon(
+                                      Icons.star_rounded,
+                                      color: colors.tertiary,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Icon(
+                                      Icons.star_rounded,
+                                      color: colors.tertiary,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Icon(
+                                      Icons.star_rounded,
+                                      color: colors.tertiary,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Icon(
+                                      Icons.star_outline_rounded,
+                                      color: colors.tertiary,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Text(
+                                      '4.6',
+                                      style: GoogleFonts.nunito(
+                                        color: colors.quinary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text('Example of the added image', style: GoogleFonts.raleway(
+                      fontSize: 14, color: colors.quaternary.withAlpha(100)),),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Selecionar foto',
+                    style: GoogleFonts.raleway(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  /// Image options
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _ImageOption(
+                        icon: CupertinoIcons.camera,
+                        label: 'Câmera',
+                        onTap: () {
+                          _pickImage(OptionPhotoMode.cameraMode);
+                        },
+                        backgroundColor: colors.secondary.withAlpha(50),
+                        iconColor: colors.secondary,
+                      ),
+                      _ImageOption(
+                        icon: CupertinoIcons.photo,
+                        label: 'Galeria',
+                        onTap: () {
+                          _pickImage(OptionPhotoMode.galleryMode);
+                        },
+                        backgroundColor: colors.tertiary.withAlpha(50),
+                        iconColor: colors.tertiary,
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
           ),
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class _ImageOption extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final Color backgroundColor;
+  final Color iconColor;
+
+  const _ImageOption({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.backgroundColor,
+    required this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 32, color: iconColor),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 14)),
+        ],
+      ),
     );
   }
 }

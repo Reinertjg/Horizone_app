@@ -2,6 +2,10 @@ import 'dart:io';
 
 /// A class representing a participant in a trip.
 class Participant {
+
+  /// The ID of the participant.
+  final int? id;
+
   /// The name of the participant.
   final String name;
 
@@ -16,6 +20,7 @@ class Participant {
 
   /// Constructs a new [Participant] object.
   Participant({
+    this.id,
     required this.name,
     required this.email,
     this.photo,
@@ -25,6 +30,7 @@ class Participant {
   /// Converts the [Participant] object to a map.
   Map<String, dynamic> toMap() {
     final map = {
+      'id': id,
       'name': name,
       'email': email,
       'photo': photo?.path,
@@ -36,6 +42,7 @@ class Participant {
   /// Creates a [Participant] object from a map.
   static Participant fromMap(Map<String, dynamic> map) {
     return Participant(
+      id: map['id'],
       name: map['name'],
       email: map['email'],
       photo: File(map['photo']),
@@ -43,8 +50,9 @@ class Participant {
     );
   }
 
-  Participant copyWith({String? name, String? email, File? photo, int? travelId}) {
+  Participant copyWith({int? id, String? name, String? email, File? photo, int? travelId}) {
     return Participant(
+      id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
       photo: photo ?? this.photo,
