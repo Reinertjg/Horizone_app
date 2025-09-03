@@ -222,11 +222,11 @@ class _BottomCardWithAirplane extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
-              top: 12,
-              left: 25,
+              top: MediaQuery.of(context).size.height * 0.018,
+              left: MediaQuery.of(context).size.height * 0.04,
               child: Icon(
                 HugeIcons.strokeRoundedAirplaneTakeOff01,
-                color: colors.quinary,
+                color: colors.primary,
                 size: 40,
               ),
             ),
