@@ -58,7 +58,7 @@ class ParticipantListPreview extends StatelessWidget {
                         child: ClipOval(
                           child: participant.photo == null
                               ? Image.asset(
-                                  'assets/images/user_default_photo.png',
+                                    'assets/images/user_default_photo.png',
                                   fit: BoxFit.cover,
                                 )
                               : Image.file(

@@ -25,7 +25,7 @@ abstract class ParticipantTable {
       $participantId INTEGER PRIMARY KEY AUTOINCREMENT,
       $participantName TEXT NOT NULL,
       $email TEXT NOT NULL,
-      $pathPhoto TEXT NOT NULL,
+      $pathPhoto TEXT,
       $travelId INTEGER NOT NULL,
       FOREIGN KEY ($travelId) REFERENCES travels(id)
     )

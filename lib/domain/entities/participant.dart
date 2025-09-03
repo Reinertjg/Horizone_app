@@ -2,7 +2,6 @@ import 'dart:io';
 
 /// A class representing a participant in a trip.
 class Participant {
-
   /// The ID of the participant.
   final int? id;
 
@@ -50,7 +49,14 @@ class Participant {
     );
   }
 
-  Participant copyWith({int? id, String? name, String? email, File? photo, int? travelId}) {
+  /// Creates a copy of the [Participant] object with the specified values.
+  Participant copyWith({
+    int? id,
+    String? name,
+    String? email,
+    File? photo,
+    int? travelId,
+  }) {
     return Participant(
       id: id ?? this.id,
       name: name ?? this.name,

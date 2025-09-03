@@ -8,7 +8,6 @@ import '../../generated/l10n.dart';
 ///
 class ParticipantProvider extends ChangeNotifier {
   final List<Participant> _participants = [];
-  int _nextId = 1;
   File? _selectedImage;
 
   /// Controller for the name input field.
@@ -22,9 +21,6 @@ class ParticipantProvider extends ChangeNotifier {
 
   /// Gets the selected image.
   File? get selectedImage => _selectedImage;
-
-  int _generateId() => _nextId++;
-
 
   /// Converts the form data to a list of [Participant] entities.
   List<Participant> toEntity(int travelId) {
@@ -42,22 +38,17 @@ class ParticipantProvider extends ChangeNotifier {
   /// Adds a new [Participant] to the list of participants.
   void addParticipant(Participant participant) {
     _participants.add(participant);
-
-    for (var participant in _participants) {
-      print(participant.name);
-      print(participant.email);
-      print(participant.photo);
-    }
-
     notifyListeners();
   }
 
+  /// Updates an existing [Participant] in the list of participants.
   void updateParcipant(Participant oldParticipant, Participant participant) {
     final index = _participants.indexOf(oldParticipant);
     _participants[index] = participant;
     notifyListeners();
   }
 
+  /// Deletes a [Participant] from the list of participants.
   void delteParticipant(Participant participant) {
     _participants.remove(participant);
     notifyListeners();
@@ -70,6 +61,7 @@ class ParticipantProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Clears all form fields.
   void clearFields() {
     nameController.clear();
     emailController.clear();
