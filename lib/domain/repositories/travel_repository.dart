@@ -4,7 +4,7 @@ import '../entities/travel.dart';
 abstract class TravelRepository {
 
   /// Inserts a [Travel] into the data source.
-  Future<void> insertTravel(Travel travel);
+  Future<int> insertTravel(Travel travel);
 
   /// Deletes the trip with the given [id] from the data source.
   Future<void> deleteTravel(int id);

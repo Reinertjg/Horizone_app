@@ -11,7 +11,7 @@ class TravelUseCase {
   TravelUseCase(this.repository);
 
   /// Inserts a new [Travel] into the repository.
-  Future<void> insert(Travel trip) => repository.insertTravel(trip);
+  Future<int> insert(Travel trip) => repository.insertTravel(trip);
 
   /// Retrieves all [Travel] records from the repository.
   Future<List<Travel>> getAll() => repository.getAllTravels();
