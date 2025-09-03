@@ -100,28 +100,22 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 nameButton: 'Avançar',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    final repositoryTravel = TravelRepositoryImpl();
-
                     final travel = formTravel.toEntity(
                       participantProvider.participants.length,
                     );
                     final repository = TravelRepositoryImpl();
                     final useCase = TravelUseCase(repository);
-                    await useCase.insert(travel);
+                    final travelId = await useCase.insert(travel);
 
-                    final travelSearched = await repositoryTravel
-                        .getAllTravels();
-
-                    if (participantProvider.participants.isNotEmpty) {
-                      final participants = participantProvider.toEntity(
-                        travelSearched.last.id!,
+                    final participants = participantProvider.toEntity(
+                        travelId,
                       );
-                      final repositoryParticipant = ParticipantRepositoryImpl();
-                      final useCaseParticipant = ParticipantUseCase(
+                    final repositoryParticipant = ParticipantRepositoryImpl();
+                    final useCaseParticipant = ParticipantUseCase(
                         repositoryParticipant,
                       );
-                      await useCaseParticipant.insert(participants);
-                    }
+                    await useCaseParticipant.insert(participants);
+
 
                     if (!context.mounted) return;
                     await Navigator.of(context).pushAndRemoveUntil(
