@@ -44,7 +44,7 @@ class Participant {
       id: map['id'],
       name: map['name'],
       email: map['email'],
-      photo: File(map['photo']),
+      photo: map['photo'] != null ? File(map['photo']) : null,
       travelId: map['travelId'],
     );
   }
