@@ -141,7 +141,7 @@ Widget _circularLoadingBuilder(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       color: colors.quinary,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(8),
     ),
     height: 50,
     child: Center(
@@ -163,7 +163,7 @@ Widget _textEmptyBuilder(
       : Container(
           decoration: BoxDecoration(
             color: colors.quinary,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(8),
           ),
           height: 50,
           child: Center(
