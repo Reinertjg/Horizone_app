@@ -42,7 +42,7 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           color: colors.quinary,
         ),
         child: Padding(

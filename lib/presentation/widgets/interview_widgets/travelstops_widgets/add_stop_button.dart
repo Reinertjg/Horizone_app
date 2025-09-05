@@ -25,7 +25,7 @@ class AddStopButton extends StatelessWidget {
             colors.secondary.withRed(102).withGreen(178).withBlue(255).withValues(alpha: 0.6),
           ],
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: colors.secondary),
       ),
       child: ElevatedButton(

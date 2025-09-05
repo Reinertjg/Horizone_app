@@ -301,7 +301,7 @@ class _DashboardAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: 380,
+            width: MediaQuery.of(context).size.width * 0.92,
             child: Row(
               children: [
                 Container(

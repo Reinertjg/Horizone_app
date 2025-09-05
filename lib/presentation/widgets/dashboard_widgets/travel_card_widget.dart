@@ -86,7 +86,7 @@ class _travelCards extends StatelessWidget {
                 BlinkingDot(),
                 SizedBox(width: 6),
                 Text(
-                  "Em andamento",
+                  'Em andamento',
                   style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ],

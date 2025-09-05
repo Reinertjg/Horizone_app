@@ -47,7 +47,7 @@ class MapPreviewCard extends StatelessWidget {
           child: Container(
             height: 200,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
