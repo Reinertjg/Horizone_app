@@ -11,6 +11,6 @@ abstract class ParticipantRepository {
   Future<void> deleteParticipant(int id);
 
   /// Retrieves all participants from the data source.
-  Future<List<Participant>> getAllParticipants(int travelId);
+  Future<List<Participant>> getParticipantsByTravelId(int travelId);
 
 }

@@ -19,6 +19,6 @@ class ParticipantUseCase {
   Future<void> delete(int id) => repository.deleteParticipant(id);
 
   /// Retrieves all [Participant] records from the repository.
-  Future<List<Participant>> getAll(int travelId) =>
-      repository.getAllParticipants(travelId);
+  Future<List<Participant>> getParticipantsByTravelId(int travelId) =>
+      repository.getParticipantsByTravelId(travelId);
 }

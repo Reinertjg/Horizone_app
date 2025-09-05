@@ -17,10 +17,10 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
     final db = await _dbFuture;
     await db.transaction((txn) async {
       final batch = txn.batch();
-      for (final p in participants) {
+      for (final participant in participants) {
         batch.insert(
           ParticipantTable.tableName,
-          p.toMap(),
+          participant.toMap(),
           conflictAlgorithm: ConflictAlgorithm.abort,
         );
       }
@@ -42,7 +42,7 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
 
   /// Retrieves all participants with the given [travelId] from the data source.
   @override
-  Future<List<Participant>> getAllParticipants(int travelId) async {
+  Future<List<Participant>> getParticipantsByTravelId(int travelId) async {
     final db = await _dbFuture;
     final result = await db.query(
       ParticipantTable.tableName,
