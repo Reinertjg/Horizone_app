@@ -8,11 +8,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../../domain/usecases/ParticipantUseCase.dart';
+import '../../domain/usecases/participant_usecase.dart';
+import '../../domain/usecases/stop_usecase.dart';
 import '../../domain/usecases/travel_usecase.dart';
 import '../../repositories/participant_repository_impl.dart';
+import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
-import '../state/interview_provider.dart';
+import '../state/stop_provider.dart';
+import '../state/travel_provider.dart';
 import '../state/participant_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/blinking_dot.dart';
@@ -39,13 +42,12 @@ class InterviewScreen extends StatefulWidget {
 class _InterviewScreenState extends State<InterviewScreen> {
   final formKey = GlobalKey<FormState>();
 
-
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final formTravel = Provider.of<InterviewProvider>(context);
+    final travelProvider = Provider.of<InterviewProvider>(context);
     final participantProvider = Provider.of<ParticipantProvider>(context);
+    final stopProvider = Provider.of<StopProvider>(context);
     return Scaffold(
       backgroundColor: colors.primary,
       appBar: AppBar(
@@ -55,9 +57,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          S
-              .of(context)
-              .planningTravel,
+          S.of(context).planningTravel,
           style: GoogleFonts.nunito(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -100,27 +100,31 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 nameButton: 'Avançar',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    final travel = formTravel.toEntity(
+                    
+                    // Save travel data
+                    final travel = travelProvider.toEntity(
                       participantProvider.participants.length,
                     );
-                    final repository = TravelRepositoryImpl();
-                    final useCase = TravelUseCase(repository);
-                    final travelId = await useCase.insert(travel);
+                    final travelId = await TravelUseCase(
+                      TravelRepositoryImpl(),
+                    ).insert(travel);
 
-                    final participants = participantProvider.toEntity(
-                        travelId,
-                      );
-                    final repositoryParticipant = ParticipantRepositoryImpl();
-                    final useCaseParticipant = ParticipantUseCase(
-                        repositoryParticipant,
-                      );
-                    await useCaseParticipant.insert(participants);
+                    // Save participants data
+                    final participants = participantProvider.toEntity(travelId);
+                    await ParticipantUseCase(
+                      ParticipantRepositoryImpl(),
+                    ).insert(participants);
 
-
+                    // Save stops data
+                    final stops = stopProvider.toEntity(travelId);
+                    await StopUseCase(
+                      StopRepositoryImpl(),
+                    ).insert(stops);
+                    
                     if (!context.mounted) return;
                     await Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => HomeScreen()),
-                          (route) => false,
+                      (route) => false,
                     );
                   }
                 },
@@ -145,7 +149,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
 }
 
 class _UpdateTravelImage extends StatelessWidget {
-  const _UpdateTravelImage({super.key});
+  const _UpdateTravelImage();
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +187,7 @@ class _UpdateTravelImage extends StatelessWidget {
 }
 
 class _TravelImageModal extends StatefulWidget {
-  const _TravelImageModal({super.key});
+  const _TravelImageModal();
 
   @override
   State<_TravelImageModal> createState() => _TravelImageModalState();
@@ -208,15 +212,13 @@ class _TravelImageModalState extends State<_TravelImageModal> {
       // widget.onImagePicked(file);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     return AnimatedPadding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery
-            .of(context)
-            .viewInsets
-            .bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       duration: const Duration(milliseconds: 150),
       child: Container(
@@ -238,10 +240,7 @@ class _TravelImageModalState extends State<_TravelImageModal> {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.85,
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -460,8 +459,13 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                       ),
                     ],
                   ),
-                  Text('Example of the added image', style: GoogleFonts.raleway(
-                      fontSize: 14, color: colors.quaternary.withAlpha(100)),),
+                  Text(
+                    'Example of the added image',
+                    style: GoogleFonts.raleway(
+                      fontSize: 14,
+                      color: colors.quaternary.withAlpha(100),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Text(
                     'Selecionar foto',

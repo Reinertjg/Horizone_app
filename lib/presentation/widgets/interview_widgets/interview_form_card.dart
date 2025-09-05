@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../../state/interview_provider.dart';
-import '../../state/travelstops_provider.dart';
+import '../../state/travel_provider.dart';
+import '../../state/stop_provider.dart';
 import '../../theme_color/app_colors.dart';
 import 'build_dropdownform.dart';
 import 'interview_textfield.dart';
@@ -41,7 +41,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<InterviewProvider>(context);
-    final stopsProvider = Provider.of<TravelStopsProvider>(context);
+    final stopsProvider = Provider.of<StopProvider>(context);
 
     return Card(
       elevation: 2,
