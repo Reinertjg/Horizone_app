@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
 import 'presentation/routes.dart';
-import 'presentation/state/interview_provider.dart';
+import 'presentation/state/travel_provider.dart';
 import 'presentation/state/locale_provider.dart';
 import 'presentation/state/participant_provider.dart';
 import 'presentation/state/profileform_provider.dart';
 import 'presentation/state/theme_provider.dart';
-import 'presentation/state/travelstops_provider.dart';
+import 'presentation/state/stop_provider.dart';
 import 'presentation/theme_color/app_theme.dart';
 
 Future<void> main() async {
@@ -37,7 +37,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ParticipantProvider()),
 
         /// Manages travel stop-related state and logic
-        ChangeNotifierProvider(create: (_) => TravelStopsProvider()),
+        ChangeNotifierProvider(create: (_) => StopProvider()),
 
       ],
 
