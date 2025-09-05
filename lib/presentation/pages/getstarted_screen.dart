@@ -223,9 +223,18 @@ class _BottomCardWithAirplane extends StatelessWidget {
           children: [
             Positioned(
               top: MediaQuery.of(context).size.height * 0.018,
-              left: MediaQuery.of(context).size.height * 0.04,
+              left: MediaQuery.of(context).size.height * 0.40,
               child: Icon(
                 HugeIcons.strokeRoundedAirplaneTakeOff01,
+                color: colors.primary,
+                size: 40,
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.013,
+              left: MediaQuery.of(context).size.height * 0.05,
+              child: Icon(
+                HugeIcons.strokeRoundedAirplaneLanding01,
                 color: colors.primary,
                 size: 40,
               ),
