@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../api/place_details_api.dart';
 import '../../domain/entities/travel.dart';
-import '../../domain/entities/travelstop.dart';
+import '../../domain/entities/stop.dart';
 
 /// Provider class responsible for managing the form state and logic
 /// related to a trip interview process.

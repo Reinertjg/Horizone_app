@@ -2,7 +2,6 @@ import '../entities/travel.dart';
 import '../repositories/travel_repository.dart';
 
 /// Use case class responsible for managing [Travel] operations
-/// such as insertion and retrieval.
 class TravelUseCase {
   /// Repository interface for interacting with trip data.
   final TravelRepository repository;

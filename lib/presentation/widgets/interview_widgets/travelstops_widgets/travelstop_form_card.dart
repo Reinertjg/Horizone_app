@@ -4,9 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../domain/entities/travelstop.dart';
+import '../../../../domain/entities/stop.dart';
 import '../../../../domain/usecases/get_place_suggestions.dart';
-import '../../../state/travelstops_provider.dart';
+import '../../../state/stop_provider.dart';
 import '../../../theme_color/app_colors.dart';
 import '../../google_places_autocomplete_textfield.dart';
 import '../cupertino_date_picker.dart';
@@ -25,12 +25,12 @@ class StopFormCard extends StatelessWidget {
   final String label;
   final int order;
   final int index;
-  final TravelStop stop;
+  final Stop stop;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final stopsProvider = Provider.of<TravelStopsProvider>(context);
+    final stopsProvider = Provider.of<StopProvider>(context);
 
     final apiKey = dotenv.env['MAPS_API_KEY'];
     final places = PlacesService(apiKey: apiKey!);
@@ -66,7 +66,7 @@ class StopFormCard extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    final stopsProvider = context.read<TravelStopsProvider>();
+                    final stopsProvider = context.read<StopProvider>();
                     stopsProvider.removeStop(stop);
                   },
                   child: Icon(
@@ -86,7 +86,7 @@ class StopFormCard extends StatelessWidget {
               hintText: 'Search address...',
               icon: HugeIcons.strokeRoundedMapsSearch,
               onSelected: (placeId, description) async {
-                await context.read<TravelStopsProvider>().resolveAndSetPlace(
+                await context.read<StopProvider>().resolveAndSetPlace(
                   stop: stop,
                   placeId: placeId,
                   label: description,

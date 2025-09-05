@@ -5,7 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/usecases/get_place_suggestions.dart';
-import '../../state/interview_provider.dart';
+import '../../state/travel_provider.dart';
 import '../../theme_color/app_colors.dart';
 import '../google_places_autocomplete_textfield.dart';
 
