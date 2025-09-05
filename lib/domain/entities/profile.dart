@@ -1,17 +1,27 @@
+import 'dart:io';
+
 /// A class representing a trip.
 class Profile {
   /// The unique identifier of the profile.
   final int? id;
+
   /// The name of the profile.
   final String name;
+
   /// The biography or description of the profile.
   final String biography;
+
   /// The date of birth of the profile.
   final String birthDate;
+
   /// The gender of the profile.
   final String gender;
+
   /// The job title or role of the profile.
   final String jobTitle;
+
+  /// The photo of the profile.
+  final File? photo;
 
   /// Constructs a new [Profile] object.
   Profile({
@@ -21,6 +31,7 @@ class Profile {
     required this.birthDate,
     required this.gender,
     required this.jobTitle,
+    this.photo,
   });
 
   /// Converts the [Profile] object to a map.
@@ -32,6 +43,7 @@ class Profile {
       'birthDate': birthDate,
       'gender': gender,
       'job_title': jobTitle,
+      'photo': photo?.path,
     };
     return map;
   }
@@ -45,6 +57,7 @@ class Profile {
       birthDate: map['birthDate'] ?? '',
       gender: map['gender'] ?? '',
       jobTitle: map['job_title'] ?? '',
+      photo: map['photo'] != null ? File(map['photo']) : null,
     );
   }
 }

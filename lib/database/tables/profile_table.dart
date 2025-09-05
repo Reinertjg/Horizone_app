@@ -23,6 +23,10 @@ abstract class ProfileTable {
   /// Professional job title or role (text, required)
   static const String jobTitle = 'job_title';
 
+  /// Path to the photo of the user (text, required)
+  static const String pathPhoto = 'photo';
+
+
   /// SQL statement to create the `profiles` table with the defined schema.
   static const createTable = '''
     CREATE TABLE $tableName (
@@ -31,7 +35,8 @@ abstract class ProfileTable {
       $biography TEXT UNIQUE NOT NULL,
       $birthDate TEXT NOT NULL,
       $gender TEXT NOT NULL,
-      $jobTitle TEXT NOT NULL
+      $jobTitle TEXT NOT NULL,
+      $pathPhoto TEXT
     )
   ''';
 

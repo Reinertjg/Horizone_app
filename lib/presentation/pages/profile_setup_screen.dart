@@ -223,17 +223,9 @@ class _SubmitProfileFab extends StatelessWidget {
       nameButton: S.of(context).continueButton,
       onPressed: () async {
         if (formProvider.validateAll(formKey)) {
-          final profile = formProvider.toEntity();
 
-          final repository = ProfileRepositoryImpl();
-          final useCase = ProfileUseCase(repository);
-
-          await useCase.insert(profile);
           if (!context.mounted) return;
-          await Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (route) => false,
-          );
+          await Navigator.pushNamed(context, '/profileSetupPhoto');
         }
       },
     );
