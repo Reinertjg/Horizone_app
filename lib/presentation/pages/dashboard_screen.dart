@@ -9,6 +9,7 @@ import '../../generated/l10n.dart';
 
 import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/profile_repository_impl.dart';
+import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/iconbutton_notifications.dart';
@@ -55,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   /// Loads all travels from the repository and updates the UI.
   Future<void> _uploadTravels() async {
     final TravelsSearched = await repositoryTravel.getTravelByStatus(
-      'in_progress',
+      'active',
     );
     setState(() {
       travels = TravelsSearched;
@@ -368,7 +369,11 @@ class _travelCards extends StatelessWidget {
           onTap: () async {
             print('\n----Inserido com sucesso----\n');
             final repositoryParticipant = ParticipantRepositoryImpl();
-            final participant = await repositoryParticipant.getAllParticipants(
+            final repositoryStop = StopRepositoryImpl();
+            final stop = await repositoryStop.getStopsByTravelId(
+              travels.id!,
+            );
+            final participant = await repositoryParticipant.getParticipantsByTravelId(
               travels.id!,
             );
             print('Titile: ${travels.title}');
@@ -392,7 +397,17 @@ class _travelCards extends StatelessWidget {
               print('TravelId: ${item.travelId}');
               print('-----------------------------');
             }
-
+            print('Stops:');
+            for (var item in stop) {
+              print('Id: ${item.id}');
+              print('Order: ${item.order}');
+              print('Place: ${item.place.toString()}');
+              print('Label: ${item.label}');
+              print('Start Date: ${item.startDate}');
+              print('End Date: ${item.endDate}');
+              print('TravelId: ${item.travelId}');
+              print('-----------------------------');
+            }
           },
           child: SizedBox(
             width: 200,
