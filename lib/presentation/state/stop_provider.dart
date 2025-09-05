@@ -6,22 +6,22 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../api/place_details_api.dart';
-import '../../domain/entities/travelstop.dart';
+import '../../domain/entities/stop.dart';
 import '../pages/google_map_screen.dart';
 
 /// Provider responsible for managing travel stops and trip date rules,
 /// as well as building route arguments for the map.
-class TravelStopsProvider extends ChangeNotifier {
-  /// Creates a [TravelStopsProvider] instance.
-  TravelStopsProvider();
+class StopProvider extends ChangeNotifier {
+  /// Creates a [StopProvider] instance.
+  StopProvider();
 
-  final List<TravelStop> _stops = [];
+  final List<Stop> _stops = [];
 
   DateTime? _tripStart = DateTime.now();
   DateTime? _tripEnd;
 
   /// Current list of travel stops.
-  List<TravelStop> get stops => List.unmodifiable(_stops);
+  List<Stop> get stops => List.unmodifiable(_stops);
 
   /// Number of travel stops.
   int get length => _stops.length;
@@ -31,6 +31,13 @@ class TravelStopsProvider extends ChangeNotifier {
 
   /// Planned end date of the trip.
   DateTime? get tripEnd => _tripEnd;
+
+  /// Converts the list of stops to a list of [Stop] entities.
+  List<Stop> toEntity(int travelId) {
+    return _stops.map((stop) {
+      return stop.copyWith(travelId: travelId);
+    }).toList();
+  }
 
   /// Sets the trip start date.
   void setTripStart(DateTime date) {
@@ -54,7 +61,7 @@ class TravelStopsProvider extends ChangeNotifier {
   void addStop() {
     final lastOrder = _stops.isEmpty ? 0 : _stops.last.order;
     _stops.add(
-      TravelStop(
+      Stop(
         order: lastOrder + 1,
         place: const PlacePoint(latitude: 0, longitude: 0),
         label: '',
@@ -67,13 +74,13 @@ class TravelStopsProvider extends ChangeNotifier {
   }
 
   /// Removes a stop from the list.
-  void removeStop(TravelStop stop) {
+  void removeStop(Stop stop) {
     _stops.remove(stop);
     notifyListeners();
   }
 
   /// Updates the coordinates and label of an existing stop.
-  void updateStop(TravelStop stop, LatLng coords, String label) {
+  void updateStop(Stop stop, LatLng coords, String label) {
     final index = _stops.indexOf(stop);
     if (index == -1) return;
     _stops[index] = _stops[index].copyWith(
@@ -83,6 +90,7 @@ class TravelStopsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Validates the stop place input.
   String? validateStopPlace(String? value) {
     if (value == null || value.isEmpty) {
       return 'Place is required';
@@ -90,6 +98,7 @@ class TravelStopsProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the stop label input.
   String? validateStopStartDate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Start date is required';
@@ -97,6 +106,7 @@ class TravelStopsProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Validates the stop label input.
   String? validateStopEndDate(String? value) {
     if (value == null || value.isEmpty) {
       return 'End date is required';
@@ -106,7 +116,7 @@ class TravelStopsProvider extends ChangeNotifier {
 
   /// Resolves a placeId into coordinates and updates the stop.
   Future<void> resolveAndSetPlace({
-    required TravelStop stop,
+    required Stop stop,
     required String placeId,
     required String label,
   }) async {
@@ -278,6 +288,7 @@ class TravelStopsProvider extends ChangeNotifier {
     return _normalize(DateTime.now());
   }
 
+  /// Formats a date to the "dd/MM/yyyy" format.
   String formatDate(DateTime? date) {
     if (date == null) return '';
     return DateFormat('dd/MM/yyyy').format(date);
