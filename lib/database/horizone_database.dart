@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'tables/participants_table.dart';
 import 'tables/profile_table.dart';
+import 'tables/stop_table.dart';
 import 'tables/travel_table.dart';
 
 /// A class representing a trip.
@@ -41,5 +42,6 @@ class HorizoneDatabase {
     await db.execute(ProfileTable.createTable);
     await db.execute(TravelTable.createTable);
     await db.execute(ParticipantTable.createTable);
+    await db.execute(StopTable.createTable);
   }
 }
