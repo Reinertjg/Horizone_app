@@ -3,8 +3,8 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../pages/google_map_screen.dart';
-import '../../state/interview_provider.dart';
-import '../../state/travelstops_provider.dart';
+import '../../state/travel_provider.dart';
+import '../../state/stop_provider.dart';
 import '../../theme_color/app_colors.dart';
 
 /// Card to preview the map of the travel route.
@@ -22,7 +22,7 @@ class MapPreviewCard extends StatelessWidget {
         const SizedBox(height: 12),
         GestureDetector(
           onTap: () {
-            final args = context.read<TravelStopsProvider>().buildRouteArgs(
+            final args = context.read<StopProvider>().buildRouteArgs(
               origin: interviewProvider.originPlace,
               destination: interviewProvider.destinationPlace,
               originLabel: interviewProvider.originLabel,
