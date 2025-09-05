@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
-import '../../../state/travelstops_provider.dart';
+import '../../../state/stop_provider.dart';
 import '../../section_title.dart';
 import 'empty_state_message.dart';
 import 'travelstop_form_card.dart';
@@ -13,7 +13,7 @@ class IntermediateStopsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stopsProvider = context.watch<TravelStopsProvider>();
+    final stopsProvider = context.watch<StopProvider>();
     final stops = stopsProvider.stops;
     final stopsCount = stops.length;
 
