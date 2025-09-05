@@ -11,6 +11,7 @@ import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/profile_repository_impl.dart';
 import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
+import '../../util/show_app_snackbar.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/iconbutton_notifications.dart';
 import '../widgets/iconbutton_settings.dart';
@@ -55,9 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Loads all travels from the repository and updates the UI.
   Future<void> _uploadTravels() async {
-    final TravelsSearched = await repositoryTravel.getTravelByStatus(
-      'active',
-    );
+    final TravelsSearched = await repositoryTravel.getTravelByStatus('active');
     setState(() {
       travels = TravelsSearched;
     });
@@ -316,10 +315,12 @@ class _DashboardAppBar extends StatelessWidget {
                     color: colors.secondary,
                   ),
                   child: ClipOval(
-                    child: Image.asset(
-                      'assets/images/user_default_photo.png',
-                      fit: BoxFit.cover,
-                    ),
+                    child: profile.photo == null
+                        ? Image.asset(
+                            'assets/images/user_default_photo.png',
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(profile.photo!, fit: BoxFit.cover),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -370,12 +371,9 @@ class _travelCards extends StatelessWidget {
             print('\n----Inserido com sucesso----\n');
             final repositoryParticipant = ParticipantRepositoryImpl();
             final repositoryStop = StopRepositoryImpl();
-            final stop = await repositoryStop.getStopsByTravelId(
-              travels.id!,
-            );
-            final participant = await repositoryParticipant.getParticipantsByTravelId(
-              travels.id!,
-            );
+            final stop = await repositoryStop.getStopsByTravelId(travels.id!);
+            final participant = await repositoryParticipant
+                .getParticipantsByTravelId(travels.id!);
             print('Titile: ${travels.title}');
             print('Start Date: ${travels.startDate}');
             print('End Date: ${travels.endDate}');
@@ -408,6 +406,8 @@ class _travelCards extends StatelessWidget {
               print('TravelId: ${item.travelId}');
               print('-----------------------------');
             }
+
+            await Navigator.pushNamed(context, '/travelDashboard');
           },
           child: SizedBox(
             width: 200,

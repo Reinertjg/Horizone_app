@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
@@ -19,6 +21,9 @@ class ProfileFormProvider extends ChangeNotifier {
   /// Controller for the job title input field.
   final jobTitleController = TextEditingController();
 
+  /// Selected image file.
+  File? _selectedImage;
+
   /// Selected gender value.
   String? _gender;
 
@@ -28,6 +33,15 @@ class ProfileFormProvider extends ChangeNotifier {
   /// Sets the gender property with the provided [value].
   set gender(String? value) {
     _gender = value;
+  }
+
+  /// Gets the selected image.
+  File? get selectedImage => _selectedImage;
+
+  /// Sets the selected image and notifies listeners.
+  void setSelectedImage(File? image) {
+    _selectedImage = image;
+    notifyListeners();
   }
 
 
@@ -50,6 +64,7 @@ class ProfileFormProvider extends ChangeNotifier {
       birthDate: dateOfBirthController.text.trim(),
       gender: _gender ?? '',
       jobTitle: jobTitleController.text.trim(),
+      photo: selectedImage,
     );
   }
 

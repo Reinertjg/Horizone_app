@@ -14,6 +14,7 @@ import '../../domain/usecases/travel_usecase.dart';
 import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
+import '../../util/show_app_snackbar.dart';
 import '../state/stop_provider.dart';
 import '../state/travel_provider.dart';
 import '../state/participant_provider.dart';
@@ -57,7 +58,9 @@ class _InterviewScreenState extends State<InterviewScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          S.of(context).planningTravel,
+          S
+              .of(context)
+              .planningTravel,
           style: GoogleFonts.nunito(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -100,7 +103,6 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 nameButton: 'Avançar',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    
                     // Save travel data
                     final travel = travelProvider.toEntity(
                       participantProvider.participants.length,
@@ -120,11 +122,18 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     await StopUseCase(
                       StopRepositoryImpl(),
                     ).insert(stops);
-                    
+
+                    showAppSnackbar(
+                        context: context,
+                        snackbarMode: SnackbarMode.success,
+                        iconData: HugeIcons.strokeRoundedTick02,
+                        message: 'Viagem criada com sucesso!'
+                    );
+
                     if (!context.mounted) return;
                     await Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (route) => false,
+                          (route) => false,
                     );
                   }
                 },
@@ -218,7 +227,10 @@ class _TravelImageModalState extends State<_TravelImageModal> {
     final colors = Theme.of(context).extension<AppColors>()!;
     return AnimatedPadding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery
+            .of(context)
+            .viewInsets
+            .bottom,
       ),
       duration: const Duration(milliseconds: 150),
       child: Container(
@@ -240,7 +252,10 @@ class _TravelImageModalState extends State<_TravelImageModal> {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.85,
+              maxHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.85,
             ),
             child: SingleChildScrollView(
               child: Column(
