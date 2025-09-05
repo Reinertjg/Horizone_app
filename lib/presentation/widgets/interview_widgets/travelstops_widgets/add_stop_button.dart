@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
-import '../../../state/travelstops_provider.dart';
+import '../../../state/stop_provider.dart';
 import '../../../theme_color/app_colors.dart';
 
 /// Button to add a new stop to the travel route.
@@ -29,7 +29,7 @@ class AddStopButton extends StatelessWidget {
         border: Border.all(color: colors.secondary),
       ),
       child: ElevatedButton(
-        onPressed: () => context.read<TravelStopsProvider>().addStop(),
+        onPressed: () => context.read<StopProvider>().addStop(),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
