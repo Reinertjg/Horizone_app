@@ -1,63 +1,28 @@
-import 'dart:io';
+import 'dart:io' show File;
 
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/usecases/profile_usecase.dart';
 import '../../generated/l10n.dart';
-import '../../repositories/profile_repository_impl.dart';
 import '../state/profileform_provider.dart';
 import '../state/theme_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
-import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
+import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart'
+    show OptionPhotoMode;
 import 'home_screen.dart';
 
 /// Screen used to collect user profile information during onboarding.
-class ProfileSetupPhotoScreen extends StatefulWidget {
-  /// Creates a [ProfileSetupPhotoScreen] widget.
+/// UI-only: all business logic lives in the provider/controller.
+class ProfileSetupPhotoScreen extends StatelessWidget {
   const ProfileSetupPhotoScreen({super.key});
 
   @override
-  State<ProfileSetupPhotoScreen> createState() =>
-      _ProfileSetupPhotoScreenState();
-}
-
-class _ProfileSetupPhotoScreenState extends State<ProfileSetupPhotoScreen> {
-  late ProfileFormProvider _profileProvider;
-  late File? _image;
-
-  @override
-  void initState() {
-    super.initState();
-    _image = null;
-    _profileProvider = Provider.of<ProfileFormProvider>(context, listen: false);
-  }
-
-  Future<void> _pickImage(OptionPhotoMode mode) async {
-    final picker = ImagePicker();
-    final source = mode == OptionPhotoMode.cameraMode
-        ? ImageSource.camera
-        : ImageSource.gallery;
-
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      setState(() {
-        _image = file;
-      });
-      _profileProvider.setSelectedImage(_image);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileFormProvider>(context);
     final colors = Theme.of(context).extension<AppColors>()!;
+    final profileProvider = context.watch<ProfileFormProvider>();
 
     return Scaffold(
       backgroundColor: colors.primary,
@@ -74,27 +39,9 @@ class _ProfileSetupPhotoScreenState extends State<ProfileSetupPhotoScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _AppBarWidget(),
+                    const _AppBarWidget(),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                    Container(
-                      width: 175,
-                      height: 175,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: colors.secondary,
-                      ),
-                      child: ClipOval(
-                        child: profileProvider.selectedImage == null
-                            ? Image.asset(
-                                'assets/images/user_default_photo.png',
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                profileProvider.selectedImage!,
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                    ),
+                    _AvatarPreview(image: profileProvider.selectedImage),
                     const SizedBox(height: 40),
                     InterviewFab(
                       nameButton: 'Select Profile Photo',
@@ -105,67 +52,30 @@ class _ProfileSetupPhotoScreenState extends State<ProfileSetupPhotoScreen> {
                           backgroundColor: Colors.transparent,
                           builder: (_) => ImagePickerSheet(
                             onCameraTap: () {
-                              _pickImage(OptionPhotoMode.cameraMode);
+                              Navigator.pop(context);
+                              context.read<ProfileFormProvider>().pickImage(
+                                OptionPhotoMode.cameraMode,
+                              );
                             },
                             onGalleryTap: () {
-                              _pickImage(OptionPhotoMode.galleryMode);
+                              Navigator.pop(context);
+                              context.read<ProfileFormProvider>().pickImage(
+                                OptionPhotoMode.galleryMode,
+                              );
                             },
                           ),
                         );
                       },
                     ),
                     const SizedBox(height: 50),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Your Photo Should',
-                          style: GoogleFonts.raleway(
-                            color: colors.tertiary,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          'Show yout face clearly',
-                          style: GoogleFonts.raleway(
-                            color: colors.tertiary,
-                            fontSize: 20,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          'Be a close-up face',
-                          style: GoogleFonts.raleway(
-                            color: colors.tertiary,
-                            fontSize: 20,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          'Be clear and sharp',
-                          style: GoogleFonts.raleway(
-                            color: colors.tertiary,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-
-
-
+                    const _PhotoGuidelines(),
                   ],
                 ),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 22.0,
-              vertical: 16.0,
-            ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
             child: _SubmitProfileFab(),
           ),
         ],
@@ -174,16 +84,16 @@ class _ProfileSetupPhotoScreenState extends State<ProfileSetupPhotoScreen> {
   }
 }
 
-/// Builds the app bar for the [ProfileSetupPhotoScreen].
+/// Builds the app bar for the profile photo screen.
 /// Includes a back button, a title, and a theme toggle button.
 class _AppBarWidget extends StatelessWidget {
-  /// Creates a [_AppBarWidget].
   const _AppBarWidget();
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = context.watch<ThemeProvider>();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -219,6 +129,70 @@ class _AppBarWidget extends StatelessWidget {
   }
 }
 
+/// Circular avatar preview: shows default asset or the picked file.
+class _AvatarPreview extends StatelessWidget {
+  final File? image;
+
+  const _AvatarPreview({required this.image});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+
+    return Container(
+      width: 175,
+      height: 175,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: colors.secondary,
+      ),
+      child: ClipOval(
+        child: image == null
+            ? Image.asset(
+                'assets/images/user_default_photo.png',
+                fit: BoxFit.cover,
+              )
+            : Image.file(image!, fit: BoxFit.cover),
+      ),
+    );
+  }
+}
+
+/// Photo guidelines block.
+class _PhotoGuidelines extends StatelessWidget {
+  const _PhotoGuidelines();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    TextStyle itemStyle = GoogleFonts.raleway(
+      color: colors.tertiary,
+      fontSize: 20,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Your Photo Should',
+          style: GoogleFonts.raleway(
+            color: colors.tertiary,
+            fontSize: 28,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 18),
+        Text('Show your face clearly', style: itemStyle),
+        const SizedBox(height: 18),
+        Text('Be a close-up face', style: itemStyle),
+        const SizedBox(height: 18),
+        Text('Be clear and sharp', style: itemStyle),
+      ],
+    );
+  }
+}
+
+/// Bottom sheet for choosing camera or gallery.
 class ImagePickerSheet extends StatelessWidget {
   final VoidCallback onCameraTap;
   final VoidCallback onGalleryTap;
@@ -262,8 +236,6 @@ class ImagePickerSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
-              /// Image options
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -283,7 +255,6 @@ class ImagePickerSheet extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
             ],
           ),
@@ -311,10 +282,7 @@ class _ImageOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-        onTap();
-      },
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -333,29 +301,16 @@ class _ImageOption extends StatelessWidget {
   }
 }
 
-/// A floating action button widget for submitting the profile form.
+/// Submit FAB that delegates side-effects to the provider/controller.
 class _SubmitProfileFab extends StatelessWidget {
-  /// Creates a [_SubmitProfileFab] widget.
   const _SubmitProfileFab();
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = Provider.of<ProfileFormProvider>(
-      context,
-      listen: false,
-    );
     return InterviewFab(
       nameButton: S.of(context).continueButton,
       onPressed: () async {
-        final profile = formProvider.toEntity();
-
-        final repository = ProfileRepositoryImpl();
-        final useCase = ProfileUseCase(repository);
-
-        print('Entidade: $profile');
-        print('Image: ${profile.photo}');
-        print('Image: ${formProvider.selectedImage}');
-        await useCase.insert(profile);
+        await context.read<ProfileFormProvider>().submitProfile(context);
         if (!context.mounted) return;
         await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),

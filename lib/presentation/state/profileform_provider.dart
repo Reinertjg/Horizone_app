@@ -1,8 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../domain/entities/profile.dart';
+import '../../domain/usecases/profile_usecase.dart';
 import '../../generated/l10n.dart';
+import '../../repositories/profile_repository_impl.dart';
+import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
 
 /// Provider class for managing the state and validation of the profile form.
 class ProfileFormProvider extends ChangeNotifier {
@@ -44,6 +48,18 @@ class ProfileFormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Picks an image from the camera or gallery based on the provided [mode].
+  Future<void> pickImage(OptionPhotoMode mode) async {
+    final picker = ImagePicker();
+    final source = mode == OptionPhotoMode.cameraMode
+        ? ImageSource.camera
+        : ImageSource.gallery;
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      setSelectedImage(file);
+    }
+  }
 
   /// Disposes all text controllers to free up resources.
   @override
@@ -66,6 +82,15 @@ class ProfileFormProvider extends ChangeNotifier {
       jobTitle: jobTitleController.text.trim(),
       photo: selectedImage,
     );
+  }
+
+  /// Submits the profile form data to the server.
+  Future<void> submitProfile(BuildContext context) async {
+    final profile = toEntity();
+    final repository = ProfileRepositoryImpl();
+    final useCase = ProfileUseCase(repository);
+
+    await useCase.insert(profile);
   }
 
   /// Validates all form fields using the given [formKey].
