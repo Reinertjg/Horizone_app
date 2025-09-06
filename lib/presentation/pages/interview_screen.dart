@@ -19,6 +19,7 @@ import '../state/stop_provider.dart';
 import '../state/travel_provider.dart';
 import '../state/participant_provider.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/iconbutton_settings.dart';
 import '../widgets/interview_widgets/blinking_dot.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
@@ -28,6 +29,7 @@ import '../widgets/interview_widgets/travel_route_card.dart';
 import '../widgets/interview_widgets/travelstops_widgets/add_stop_button.dart';
 import '../widgets/interview_widgets/travelstops_widgets/intermediate_stops_section.dart';
 import '../widgets/section_title.dart';
+import '../widgets/settings_widgets/settingsbottom_sheetcontent.dart';
 import 'home_screen.dart';
 
 /// Section containing general information about the trip.
@@ -51,24 +53,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
     final stopProvider = Provider.of<StopProvider>(context);
     return Scaffold(
       backgroundColor: colors.primary,
-      appBar: AppBar(
-        backgroundColor: colors.primary,
-        elevation: 0,
-        toolbarHeight: 60,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          S
-              .of(context)
-              .planningTravel,
-          style: GoogleFonts.nunito(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: colors.secondary,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
+      appBar: const _InterviewAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Form(
@@ -76,7 +61,6 @@ class _InterviewScreenState extends State<InterviewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _UpdateTravelImage(),
               SectionTitle(
                 title: 'Informações Gerais',
                 icon: HugeIcons.strokeRoundedInformationCircle,
@@ -119,21 +103,19 @@ class _InterviewScreenState extends State<InterviewScreen> {
 
                     // Save stops data
                     final stops = stopProvider.toEntity(travelId);
-                    await StopUseCase(
-                      StopRepositoryImpl(),
-                    ).insert(stops);
+                    await StopUseCase(StopRepositoryImpl()).insert(stops);
 
                     showAppSnackbar(
-                        context: context,
-                        snackbarMode: SnackbarMode.success,
-                        iconData: HugeIcons.strokeRoundedTick02,
-                        message: 'Viagem criada com sucesso!'
+                      context: context,
+                      snackbarMode: SnackbarMode.success,
+                      iconData: HugeIcons.strokeRoundedTick02,
+                      message: 'Viagem criada com sucesso!',
                     );
 
                     if (!context.mounted) return;
                     await Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => HomeScreen()),
-                          (route) => false,
+                      (route) => false,
                     );
                   }
                 },
@@ -157,39 +139,65 @@ class _InterviewScreenState extends State<InterviewScreen> {
   }
 }
 
-class _UpdateTravelImage extends StatelessWidget {
-  const _UpdateTravelImage();
+class _InterviewAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _InterviewAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (_) => _TravelImageModal(),
-        );
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Icon(
-            HugeIcons.strokeRoundedImage01,
-            color: colors.secondary,
-            size: 20,
+    return AppBar(
+      backgroundColor: colors.primary,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      title: Text(
+        S.of(context).planningTravel,
+        style: GoogleFonts.nunito(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: colors.secondary,
+        ),
+      ),
+      actions: [
+        _IconButtonImage(),
+        const SizedBox(width: 6),
+        IconbuttonSettings(),
+        const SizedBox(width: 12),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _IconButtonImage extends StatelessWidget {
+  const _IconButtonImage();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return Card(
+      color: colors.quinary,
+      shape: CircleBorder(),
+      elevation: 2,
+      child: SizedBox(
+        height: 38,
+        width: 38,
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          icon: Icon(
+            HugeIcons.strokeRoundedImageAdd01,
+            color: colors.quaternary,
           ),
-          const SizedBox(width: 4),
-          Text(
-            'Alterar capa',
-            style: GoogleFonts.raleway(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: colors.secondary,
-            ),
-          ),
-        ],
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => _TravelImageModal(),
+            );
+          },
+        ),
       ),
     );
   }
@@ -227,10 +235,7 @@ class _TravelImageModalState extends State<_TravelImageModal> {
     final colors = Theme.of(context).extension<AppColors>()!;
     return AnimatedPadding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery
-            .of(context)
-            .viewInsets
-            .bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       duration: const Duration(milliseconds: 150),
       child: Container(
@@ -252,10 +257,7 @@ class _TravelImageModalState extends State<_TravelImageModal> {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.85,
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
             ),
             child: SingleChildScrollView(
               child: Column(
