@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../api/place_details_api.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/stop.dart';
+import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
 
 /// Provider class responsible for managing the form state and logic
 /// related to a trip interview process.
-class InterviewProvider extends ChangeNotifier {
+class TravelProvider extends ChangeNotifier {
   /// Controller for the trip title input field.
   final titleController = TextEditingController();
 
@@ -25,13 +27,11 @@ class InterviewProvider extends ChangeNotifier {
   int? _participants;
   String? _meansOfTransportation;
   String? _experienceType;
-  String _image = '';
+  File? _image;
   PlacePoint? _originPlace;
   PlacePoint? _destinationPlace;
   String? _originLabel;
   String? _destinationLabel;
-  final String _status = 'not_started';
-
 
   /// Gets the number of participants.
   int? get participants => _participants;
@@ -42,10 +42,20 @@ class InterviewProvider extends ChangeNotifier {
   /// Gets the selected experience type.
   String? get experienceType => _experienceType;
 
+  /// Gets the selected Place (latitude and longitude).
   PlacePoint? get originPlace => _originPlace;
+
+  /// Gets the selected Place (latitude and longitude).
   PlacePoint? get destinationPlace => _destinationPlace;
+
+  /// Gets the selected Place Label (name).
   String? get originLabel => _originLabel;
+
+  /// Gets the selected Place Label (name).
   String? get destinationLabel => _destinationLabel;
+
+  /// Gets the selected image.
+  File? get getImage => _image;
 
   /// Sets the number of participants and notifies listeners.
   set participants(int? value) {
@@ -62,20 +72,30 @@ class InterviewProvider extends ChangeNotifier {
     _experienceType = value;
   }
 
+  /// Sets the origin place and notifies listeners.
   set originPlace(PlacePoint? value) {
     _originPlace = value;
   }
 
+  /// Sets the destination place and notifies listeners.
   set destinationPlace(PlacePoint? value) {
     _destinationPlace = value;
   }
 
+  /// Sets the origin label and notifies listeners.
   set originLabel(String? value) {
     _originLabel = value;
   }
 
+  /// Sets the destination label and notifies listeners.
   set destinationLabel(String? value) {
     _destinationLabel = value;
+  }
+
+  /// Sets the image and notifies listeners.
+  void setImage(File? value) {
+    _image = value;
+    notifyListeners();
   }
 
   /// Disposes all controllers when the provider is destroyed.
@@ -87,6 +107,7 @@ class InterviewProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Resets all form fields to their initial state.
   void reset() {
     titleController.clear();
     startDateController.clear();
@@ -99,19 +120,19 @@ class InterviewProvider extends ChangeNotifier {
   /// Converts the form data to a [Travel] entity.
   Travel toEntity(int participants, int stops) {
     return Travel(
+      image: getImage,
       title: titleController.text.trim(),
       startDate: startDateController.text.trim(),
       endDate: endDateController.text.trim(),
       meansOfTransportation: _meansOfTransportation ?? '',
       numberOfParticipants: participants,
       experienceType: _experienceType ?? '',
-      image: File(_image),
       numberOfStops: stops,
       originPlace: _originPlace.toString(),
       originLabel: _originLabel!,
       destinationPlace: _destinationPlace.toString(),
       destinationLabel: _destinationLabel!,
-      status: 'in progress'
+      status: 'in progress',
     );
   }
 
@@ -122,7 +143,10 @@ class InterviewProvider extends ChangeNotifier {
     final latLng = await _fetchLatLng(placeId);
     if (latLng == null) return;
     originLabel = label;
-    originPlace = PlacePoint(latitude: latLng.latitude, longitude: latLng.longitude);
+    originPlace = PlacePoint(
+      latitude: latLng.latitude,
+      longitude: latLng.longitude,
+    );
   }
 
   Future<void> resolveAndSetDestination({
@@ -132,7 +156,10 @@ class InterviewProvider extends ChangeNotifier {
     final latLng = await _fetchLatLng(placeId);
     if (latLng == null) return;
     destinationLabel = label;
-    destinationPlace = PlacePoint(latitude: latLng.latitude, longitude: latLng.longitude);
+    destinationPlace = PlacePoint(
+      latitude: latLng.latitude,
+      longitude: latLng.longitude,
+    );
   }
 
   Future<LatLngPoint?> _fetchLatLng(String placeId) async {
@@ -148,10 +175,24 @@ class InterviewProvider extends ChangeNotifier {
     for (final t in travels) {
       final travelStartDate = DateTime.parse(t.startDate);
       final travelEndDate = DateTime.parse(t.endDate);
-      final overlap = start.isBefore(travelEndDate) && travelStartDate.isBefore(end);
+      final overlap =
+          start.isBefore(travelEndDate) && travelStartDate.isBefore(end);
       if (overlap) return true;
     }
     return false;
+  }
+
+  /// Picks an image from the camera or gallery based on the provided [mode].
+  Future<void> pickImage(OptionPhotoMode mode) async {
+    final picker = ImagePicker();
+    final source = mode == OptionPhotoMode.cameraMode
+        ? ImageSource.camera
+        : ImageSource.gallery;
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      setImage(file);
+    }
   }
 
   /// Validates the title field.
@@ -218,8 +259,10 @@ class InterviewProvider extends ChangeNotifier {
     return null;
   }
 }
+
 class LatLngPoint {
   final double latitude;
   final double longitude;
+
   LatLngPoint({required this.latitude, required this.longitude});
 }

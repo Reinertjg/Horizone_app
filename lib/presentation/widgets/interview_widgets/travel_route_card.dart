@@ -32,7 +32,7 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final interviewProvider = context.watch<InterviewProvider>();
+    final interviewProvider = context.watch<TravelProvider>();
     final service = PlacesService(
       apiKey: dotenv.env['MAPS_API_KEY']!,
     );
