@@ -457,7 +457,7 @@ class _travelCards extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 color: colors.quinary,
-                child: travels.image != null
+                child: travels.image == null
                     ? Image.asset(
                   'assets/images/travel_default_photo.png',
                   fit: BoxFit.cover,
