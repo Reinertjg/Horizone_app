@@ -151,7 +151,7 @@ class _GetStartedBottomCard extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        width: double.infinity, // Ocupa toda a largura disponível.
+        width: double.infinity,
         height: MediaQuery.of(context).size.height * 0.3,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
@@ -218,25 +218,19 @@ class _BottomCardWithAirplane extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.35,
+        height: MediaQuery.of(context).size.height * 0.40,
         child: Stack(
           children: [
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.018,
-              left: MediaQuery.of(context).size.height * 0.40,
-              child: Icon(
-                HugeIcons.strokeRoundedAirplaneTakeOff01,
-                color: colors.primary,
-                size: 40,
-              ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.013,
-              left: MediaQuery.of(context).size.height * 0.05,
-              child: Icon(
-                HugeIcons.strokeRoundedAirplaneLanding01,
-                color: colors.primary,
-                size: 40,
+              top: MediaQuery.of(context).size.height * 0.05,
+              left: MediaQuery.of(context).size.height * 0.10,
+              child: Transform.rotate(
+                angle: 25.9, // 90 degrees in radians
+                child: HugeIcon(icon:
+                HugeIcons.strokeRoundedAirplane01,
+                  color: colors.primary,
+                  size: 40,
+                ),
               ),
             ),
             const _GetStartedBottomCard(),

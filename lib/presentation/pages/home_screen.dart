@@ -47,17 +47,17 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedHome09, color: colors.secondary),
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedHome09, color: colors.secondary),
             label: S.of(context).home,
             backgroundColor: colors.primary,
           ),
           BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedProfile, color: colors.secondary),
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedProfile, color: colors.secondary),
             backgroundColor: colors.primary,
             label: S.of(context).planning,
           ),
           BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedUser, color: colors.secondary),
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedUser, color: colors.secondary),
             label: S.of(context).profile,
           ),
         ],

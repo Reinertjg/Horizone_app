@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +13,6 @@ import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/profile_repository_impl.dart';
 import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
-import '../../util/show_app_snackbar.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/iconbutton_notifications.dart';
 import '../widgets/iconbutton_settings.dart';
@@ -56,7 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Loads all travels from the repository and updates the UI.
   Future<void> _uploadTravels() async {
-    final TravelsSearched = await repositoryTravel.getTravelByStatus('active');
+    final TravelsSearched = await repositoryTravel.getAllTravels();
     setState(() {
       travels = TravelsSearched;
     });
@@ -274,7 +275,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         const SizedBox(width: 12),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+          },
           icon: Icon(
             HugeIcons.strokeRoundedSettings05,
             color: colors.tertiary,
@@ -320,7 +322,37 @@ class _DashboardAppBar extends StatelessWidget {
                             'assets/images/user_default_photo.png',
                             fit: BoxFit.cover,
                           )
-                        : Image.file(profile.photo!, fit: BoxFit.cover),
+                        : Image.file(
+                            profile.photo!,
+                            fit: BoxFit.cover,
+                            gaplessPlayback: true,
+
+                            /// Animated image loading
+                            frameBuilder:
+                                (context, child, frame, wasSyncLoaded) {
+                                  if (wasSyncLoaded || frame != null) {
+                                    return child;
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              colors.tertiary,
+                                            ),
+                                        strokeWidth: 3.0,
+                                      ),
+                                    );
+                                  }
+                                },
+
+                            /// Error image loading
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/user_default_photo.png',
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -407,7 +439,11 @@ class _travelCards extends StatelessWidget {
               print('-----------------------------');
             }
 
-            await Navigator.pushNamed(context, '/travelDashboard');
+            await Navigator.pushNamed(
+              context,
+              '/travelDashboard',
+              arguments: travels,
+            );
           },
           child: SizedBox(
             width: 200,
@@ -421,9 +457,41 @@ class _travelCards extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 color: colors.quinary,
-                child: Image.asset(
-                  'assets/images/travel_image01.jpg',
+                child: travels.image != null
+                    ? Image.asset(
+                  'assets/images/travel_default_photo.png',
                   fit: BoxFit.cover,
+                )
+                    : Image.file(
+                  travels.image!,
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+
+                  /// Animated image loading
+                  frameBuilder:
+                      (context, child, frame, wasSyncLoaded) {
+                    if (wasSyncLoaded || frame != null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                          AlwaysStoppedAnimation<Color>(
+                            colors.tertiary,
+                          ),
+                          strokeWidth: 3.0,
+                        ),
+                      );
+                    }
+                  },
+
+                  /// Error image loading
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/travel_default_photo.png',
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
             ),
