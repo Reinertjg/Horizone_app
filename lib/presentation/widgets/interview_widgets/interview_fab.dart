@@ -32,7 +32,7 @@ class InterviewFab extends StatelessWidget {
             colors.secondary.withRed(102).withGreen(178).withBlue(255),
           ],
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: ElevatedButton(
         onPressed: onPressed,

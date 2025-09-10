@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
@@ -15,9 +16,9 @@ import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
 import '../../util/show_app_snackbar.dart';
+import '../state/participant_provider.dart';
 import '../state/stop_provider.dart';
 import '../state/travel_provider.dart';
-import '../state/participant_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/iconbutton_settings.dart';
 import '../widgets/interview_widgets/blinking_dot.dart';
@@ -29,7 +30,6 @@ import '../widgets/interview_widgets/travel_route_card.dart';
 import '../widgets/interview_widgets/travelstops_widgets/add_stop_button.dart';
 import '../widgets/interview_widgets/travelstops_widgets/intermediate_stops_section.dart';
 import '../widgets/section_title.dart';
-import '../widgets/settings_widgets/settingsbottom_sheetcontent.dart';
 import 'home_screen.dart';
 
 /// Section containing general information about the trip.
@@ -81,7 +81,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
               const SizedBox(height: 16),
               AddStopButton(),
               const SizedBox(height: 20),
-              _buildMiddleSection(context),
+              _MiddleSection(),
               const SizedBox(height: 20),
               InterviewFab(
                 nameButton: 'Avançar',
@@ -90,33 +90,57 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     // Save travel data
                     final travel = travelProvider.toEntity(
                       participantProvider.participants.length,
-                    );
-                    final travelId = await TravelUseCase(
-                      TravelRepositoryImpl(),
-                    ).insert(travel);
-
-                    // Save participants data
-                    final participants = participantProvider.toEntity(travelId);
-                    await ParticipantUseCase(
-                      ParticipantRepositoryImpl(),
-                    ).insert(participants);
-
-                    // Save stops data
-                    final stops = stopProvider.toEntity(travelId);
-                    await StopUseCase(StopRepositoryImpl()).insert(stops);
-
-                    showAppSnackbar(
-                      context: context,
-                      snackbarMode: SnackbarMode.success,
-                      iconData: HugeIcons.strokeRoundedTick02,
-                      message: 'Viagem criada com sucesso!',
+                      stopProvider.stops.length,
                     );
 
-                    if (!context.mounted) return;
-                    await Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (route) => false,
+                    final travelUseCase = TravelUseCase(TravelRepositoryImpl());
+                    final isOverlapping = travelUseCase.validateOverlap(
+                      DateFormat('dd/MM/yyyy').parse(travel.startDate),
+                      DateFormat('dd/MM/yyyy').parse(travel.endDate),
                     );
+
+                    if (await isOverlapping) {
+                      showAppSnackbar(
+                        context: context,
+                        snackbarMode: SnackbarMode.error,
+                        iconData: HugeIcons.strokeRoundedAlert01,
+                        message:
+                        'Já existe uma viagem neste período.',
+                      );
+                    } else {
+                      final travelId = await TravelUseCase(
+                        TravelRepositoryImpl(),
+                      ).insert(travel);
+
+                      // Save participants data
+                      final participants = participantProvider.toEntity(
+                        travelId,
+                      );
+                      await ParticipantUseCase(
+                        ParticipantRepositoryImpl(),
+                      ).insert(participants);
+
+                      // Save stops data
+                      final stops = stopProvider.toEntity(travelId);
+                      await StopUseCase(StopRepositoryImpl()).insert(stops);
+
+                      showAppSnackbar(
+                        context: context,
+                        snackbarMode: SnackbarMode.success,
+                        iconData: HugeIcons.strokeRoundedTick02,
+                        message: 'Viagem criada com sucesso!',
+                      );
+
+                      travelProvider.reset();
+                      participantProvider.reset();
+                      stopProvider.reset();
+
+                      if (!context.mounted) return;
+                      await Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                            (route) => false,
+                      );
+                    }
                   }
                 },
               ),
@@ -126,8 +150,13 @@ class _InterviewScreenState extends State<InterviewScreen> {
       ),
     );
   }
+}
 
-  Widget _buildMiddleSection(BuildContext context) {
+class _MiddleSection extends StatelessWidget {
+  const _MiddleSection();
+
+  @override
+  Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     return Container(
       decoration: BoxDecoration(
@@ -150,9 +179,11 @@ class _InterviewAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       title: Text(
-        S.of(context).planningTravel,
+        S
+            .of(context)
+            .planningTravel,
         style: GoogleFonts.nunito(
-          fontSize: 22,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
           color: colors.secondary,
         ),
@@ -235,7 +266,10 @@ class _TravelImageModalState extends State<_TravelImageModal> {
     final colors = Theme.of(context).extension<AppColors>()!;
     return AnimatedPadding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery
+            .of(context)
+            .viewInsets
+            .bottom,
       ),
       duration: const Duration(milliseconds: 150),
       child: Container(
@@ -257,7 +291,10 @@ class _TravelImageModalState extends State<_TravelImageModal> {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.85,
+              maxHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.85,
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -498,7 +535,7 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _ImageOption(
-                        icon: CupertinoIcons.camera,
+                        icon: HugeIcons.strokeRoundedCameraAdd03,
                         label: 'Câmera',
                         onTap: () {
                           _pickImage(OptionPhotoMode.cameraMode);
@@ -507,7 +544,7 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                         iconColor: colors.secondary,
                       ),
                       _ImageOption(
-                        icon: CupertinoIcons.photo,
+                        icon: HugeIcons.strokeRoundedAlbum01,
                         label: 'Galeria',
                         onTap: () {
                           _pickImage(OptionPhotoMode.galleryMode);

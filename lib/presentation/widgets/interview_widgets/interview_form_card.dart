@@ -64,7 +64,6 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 icon: HugeIcons.strokeRoundedTextCircle,
                 controller: interviewProvider.titleController,
                 validator: interviewProvider.validateTitle,
-                keyboardType: TextInputType.text,
               ),
               const SizedBox(height: 12),
               Row(
@@ -115,6 +114,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 items: ['Carro', 'Avião', 'Ônibus', 'Trem'],
                 icon: HugeIcons.strokeRoundedAirplane01,
                 validator: interviewProvider.validateMeansOfTransportation,
+                value: interviewProvider.meansOfTransportation,
                 onChanged: (value) =>
                     interviewProvider.meansOfTransportation = value,
               ),
@@ -167,6 +167,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                 ],
                 icon: HugeIcons.strokeRoundedLocationFavourite01,
                 validator: interviewProvider.validateExperienceType,
+                value: interviewProvider.experienceType,
                 onChanged: (value) => interviewProvider.experienceType = value,
               ),
               const SizedBox(height: 12),

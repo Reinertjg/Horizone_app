@@ -15,8 +15,8 @@ class InterviewTextField extends StatefulWidget {
     required this.hintText,
     required this.icon,
     required this.controller,
+    this.maxLength,
     this.validator,
-    required this.keyboardType,
     super.key,
   });
 
@@ -26,6 +26,9 @@ class InterviewTextField extends StatefulWidget {
   /// The hint text displayed when the field is empty.
   final String hintText;
 
+  /// The maximum length of the input text.
+  final int? maxLength;
+
   /// The icon displayed inside the field as prefix.
   final IconData icon;
 
@@ -34,9 +37,6 @@ class InterviewTextField extends StatefulWidget {
 
   /// An optional validator for form validation.
   final String? Function(String?)? validator;
-
-  /// The type of keyboard to use for the field (e.g., number, text).
-  final TextInputType keyboardType;
 
   @override
   State<InterviewTextField> createState() => _InterviewTextFieldState();
@@ -61,7 +61,7 @@ class _InterviewTextFieldState extends State<InterviewTextField> {
         TextFormField(
           controller: widget.controller,
           validator: widget.validator,
-          keyboardType: widget.keyboardType,
+          maxLength: widget.maxLength ?? 20,
           style: GoogleFonts.raleway(color: colors.secondary, fontSize: 16),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
