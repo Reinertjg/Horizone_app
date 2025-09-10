@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../domain/entities/travel.dart';
 import 'pages/dashboard_screen.dart';
 import 'pages/getstarted_screen.dart';
 import 'pages/google_map_screen.dart';
@@ -41,6 +42,10 @@ abstract class AppRoutes {
     /// Screen for viewing trip stops
     '/googleMap': (context) => const TravelRoutePage(),
 
-    '/travelDashboard': (context) => const TravelDashboardScreen(),
+    // AppRoutes.routes
+    '/travelDashboard': (context) {
+      final travel = ModalRoute.of(context)!.settings.arguments as Travel;
+      return TravelDashboardScreen(travel: travel);
+    },
   };
 }

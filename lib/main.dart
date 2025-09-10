@@ -8,7 +8,7 @@ import 'presentation/routes.dart';
 import 'presentation/state/travel_provider.dart';
 import 'presentation/state/locale_provider.dart';
 import 'presentation/state/participant_provider.dart';
-import 'presentation/state/profileform_provider.dart';
+import 'presentation/state/profile_provider.dart';
 import 'presentation/state/theme_provider.dart';
 import 'presentation/state/stop_provider.dart';
 import 'presentation/theme_color/app_theme.dart';
@@ -28,7 +28,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
 
         /// Manages the state of the profile form (e.g., ProfileFormScreen)
-        ChangeNotifierProvider(create: (_) => ProfileFormProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
 
         /// Manages interview-related state and logic
         ChangeNotifierProvider(create: (_) => InterviewProvider()),
