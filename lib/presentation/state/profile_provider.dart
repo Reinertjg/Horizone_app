@@ -9,7 +9,7 @@ import '../../repositories/profile_repository_impl.dart';
 import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
 
 /// Provider class for managing the state and validation of the profile form.
-class ProfileFormProvider extends ChangeNotifier {
+class ProfileProvider extends ChangeNotifier {
   /// Controller for the name input field.
   final nameController = TextEditingController();
 
@@ -25,8 +25,11 @@ class ProfileFormProvider extends ChangeNotifier {
   /// Controller for the job title input field.
   final jobTitleController = TextEditingController();
 
+  /// Date of birth value.
+  DateTime? dateOfBirth;
+
   /// Selected image file.
-  File? _selectedImage;
+  File? _photo;
 
   /// Selected gender value.
   String? _gender;
@@ -34,17 +37,23 @@ class ProfileFormProvider extends ChangeNotifier {
   /// Gets the selected gender.
   String? get gender => _gender;
 
+  /// Gets the selected image.
+  File? get getPhoto => _photo;
+
   /// Sets the gender property with the provided [value].
   set gender(String? value) {
     _gender = value;
   }
 
-  /// Gets the selected image.
-  File? get selectedImage => _selectedImage;
-
   /// Sets the selected image and notifies listeners.
   void setSelectedImage(File? image) {
-    _selectedImage = image;
+    _photo = image;
+    notifyListeners();
+  }
+
+  /// Sets the date of birth and notifies listeners.
+  void setDateOfBirth(DateTime date) {
+    dateOfBirth = date;
     notifyListeners();
   }
 
@@ -61,6 +70,38 @@ class ProfileFormProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> pickImageData(OptionPhotoMode mode, int id) async {
+    final repository = ProfileRepositoryImpl();
+    final picker = ImagePicker();
+    final source = mode == OptionPhotoMode.cameraMode
+        ? ImageSource.camera
+        : ImageSource.gallery;
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      await repository.updateProfilePicture(id, file);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> loadProfileData() async {
+    final repository = ProfileRepositoryImpl();
+    final useCase = ProfileUseCase(repository);
+    final profiles = await useCase.getAll();
+    if (profiles.isNotEmpty) {
+      final profile = profiles.first;
+      nameController.text = profile.name;
+      bioController.text = profile.biography;
+      dateOfBirthController.text = profile.birthDate;
+      gender = profile.gender;
+      jobTitleController.text = profile.jobTitle;
+      _photo = profile.photo;
+    }
+    notifyListeners();
+  }
+
   /// Disposes all text controllers to free up resources.
   @override
   void dispose() {
@@ -75,12 +116,13 @@ class ProfileFormProvider extends ChangeNotifier {
   /// Converts the form data into a [Profile] entity.
   Profile toEntity() {
     return Profile(
+      id: 1,
       name: nameController.text.trim(),
       biography: bioController.text.trim(),
       birthDate: dateOfBirthController.text.trim(),
       gender: _gender ?? '',
       jobTitle: jobTitleController.text.trim(),
-      photo: selectedImage,
+      photo: getPhoto,
     );
   }
 
@@ -92,6 +134,8 @@ class ProfileFormProvider extends ChangeNotifier {
 
     await useCase.insert(profile);
   }
+
+
 
   /// Validates all form fields using the given [formKey].
   bool validateAll(GlobalKey<FormState> formKey) {

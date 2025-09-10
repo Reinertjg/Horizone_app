@@ -6,7 +6,8 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
-import '../state/profileform_provider.dart';
+import '../../util/option_dialog.dart';
+import '../state/profile_provider.dart';
 import '../state/theme_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
@@ -22,7 +23,7 @@ class ProfileSetupPhotoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final profileProvider = context.watch<ProfileFormProvider>();
+    final profileProvider = context.watch<ProfileProvider>();
 
     return Scaffold(
       backgroundColor: colors.primary,
@@ -41,7 +42,7 @@ class ProfileSetupPhotoScreen extends StatelessWidget {
                   children: [
                     const _AppBarWidget(),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                    _AvatarPreview(image: profileProvider.selectedImage),
+                    _AvatarPreview(image: profileProvider.getPhoto),
                     const SizedBox(height: 40),
                     InterviewFab(
                       nameButton: 'Select Profile Photo',
@@ -53,13 +54,13 @@ class ProfileSetupPhotoScreen extends StatelessWidget {
                           builder: (_) => ImagePickerSheet(
                             onCameraTap: () {
                               Navigator.pop(context);
-                              context.read<ProfileFormProvider>().pickImage(
+                              context.read<ProfileProvider>().pickImage(
                                 OptionPhotoMode.cameraMode,
                               );
                             },
                             onGalleryTap: () {
                               Navigator.pop(context);
-                              context.read<ProfileFormProvider>().pickImage(
+                              context.read<ProfileProvider>().pickImage(
                                 OptionPhotoMode.galleryMode,
                               );
                             },
@@ -116,8 +117,8 @@ class _AppBarWidget extends StatelessWidget {
           onPressed: () {
             themeProvider.toggleTheme(isOn: !themeProvider.isDarkMode);
           },
-          icon: Icon(
-            themeProvider.isDarkMode
+          icon: HugeIcon(
+            icon: themeProvider.isDarkMode
                 ? HugeIcons.strokeRoundedMoon02
                 : HugeIcons.strokeRoundedSun03,
             size: 25,
@@ -165,10 +166,7 @@ class _PhotoGuidelines extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    TextStyle itemStyle = GoogleFonts.raleway(
-      color: colors.tertiary,
-      fontSize: 20,
-    );
+    var itemStyle = GoogleFonts.raleway(color: colors.tertiary, fontSize: 20);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,11 +179,11 @@ class _PhotoGuidelines extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 26),
         Text('Show your face clearly', style: itemStyle),
-        const SizedBox(height: 18),
+        const SizedBox(height: 12),
         Text('Be a close-up face', style: itemStyle),
-        const SizedBox(height: 18),
+        const SizedBox(height: 12),
         Text('Be clear and sharp', style: itemStyle),
       ],
     );
@@ -307,16 +305,38 @@ class _SubmitProfileFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formProvider = context.watch<ProfileProvider>();
     return InterviewFab(
       nameButton: S.of(context).continueButton,
       onPressed: () async {
-        await context.read<ProfileFormProvider>().submitProfile(context);
-        if (!context.mounted) return;
-        await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false,
-        );
+        if (formProvider.getPhoto == null) {
+          final shouldContinue = await showDialog(
+            context: context,
+            builder: (context) => OptionDialog(
+              title: 'No Photo Selected',
+              message: 'Do you want to continue without a photo?',
+              buttonText: S.of(context).continueButton,
+            ),
+          );
+          if (shouldContinue == true) {
+            await _submitAndNavigate(context, formProvider);
+          }
+        } else {
+          await _submitAndNavigate(context, formProvider);
+        }
       },
+    );
+  }
+
+  Future<void> _submitAndNavigate(
+    BuildContext context,
+    ProfileProvider formProvider,
+  ) async {
+    await formProvider.submitProfile(context);
+    if (!context.mounted) return;
+    await Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (route) => false,
     );
   }
 }

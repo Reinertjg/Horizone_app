@@ -2,10 +2,8 @@ import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/usecases/profile_usecase.dart';
 import '../../generated/l10n.dart';
-import '../../repositories/profile_repository_impl.dart';
-import '../state/profileform_provider.dart';
+import '../state/profile_provider.dart';
 import '../state/theme_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/interview_widgets/build_dropdownform.dart';
@@ -13,8 +11,6 @@ import '../widgets/interview_widgets/cupertino_date_picker.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_textfield.dart';
 import '../widgets/interview_widgets/interview_textfield_box.dart';
-import '../widgets/profile_widgets/profile_info_text.dart';
-import 'home_screen.dart';
 
 /// Screen used to collect user profile information during onboarding.
 class ProfileSetUpScreen extends StatefulWidget {
@@ -42,7 +38,7 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(
                   left: 22.0,
-                  top: 30,
+                  top: 40,
                   right: 22.0,
                 ),
                 child: Column(
@@ -50,7 +46,11 @@ class _ProfileSetUpScreenState extends State<ProfileSetUpScreen> {
                   children: [
                     _AppBarWidget(),
                     const SizedBox(height: 40),
-                    const _ProfileInfoTextWidget(),
+                    _ProfileInfoTextWidget(
+                      tellUs: S.of(context).tellUs,
+                      whoYouAre: S.of(context).whoYouAre,
+                      andWellTake: S.of(context).andWellTake,
+                    ),
                     _ProfileForm(formKey),
                   ],
                 ),
@@ -102,8 +102,8 @@ class _AppBarWidget extends StatelessWidget {
           onPressed: () {
             themeProvider.toggleTheme(isOn: !themeProvider.isDarkMode);
           },
-          icon: Icon(
-            themeProvider.isDarkMode
+          icon: HugeIcon(
+            icon: themeProvider.isDarkMode
                 ? HugeIcons.strokeRoundedMoon02
                 : HugeIcons.strokeRoundedSun03,
             size: 25,
@@ -118,14 +118,39 @@ class _AppBarWidget extends StatelessWidget {
 /// A widget that displays the introductory text for the profile setup screen.
 class _ProfileInfoTextWidget extends StatelessWidget {
   /// Creates a [_ProfileInfoTextWidget].
-  const _ProfileInfoTextWidget();
+  const _ProfileInfoTextWidget({
+    required this.tellUs,
+    required this.whoYouAre,
+    required this.andWellTake,
+  });
+
+  /// Text before the emphasized part.
+  final String tellUs;
+
+  /// Emphasized part, styled with the secondary color.
+  final String whoYouAre;
+
+  /// Text after the emphasized part.
+  final String andWellTake;
 
   @override
   Widget build(BuildContext context) {
-    return ProfileInfoText(
-      tellUs: S.of(context).tellUs,
-      whoYouAre: S.of(context).whoYouAre,
-      andWellTake: S.of(context).andWellTake,
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(fontSize: 16, color: colors.tertiary),
+        children: [
+          TextSpan(text: tellUs),
+          TextSpan(
+            text: whoYouAre,
+            style: TextStyle(color: colors.secondary),
+          ),
+          TextSpan(
+            text: andWellTake,
+            style: TextStyle(overflow: TextOverflow.ellipsis),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -140,7 +165,7 @@ class _ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = Provider.of<ProfileFormProvider>(context);
+    final formProvider = Provider.of<ProfileProvider>(context);
 
     /// Variables that handle the CupertinoDatePickerField
     final now = DateTime.now();
@@ -160,7 +185,6 @@ class _ProfileForm extends StatelessWidget {
             icon: HugeIcons.strokeRoundedUser,
             controller: formProvider.nameController,
             validator: formProvider.validateName,
-            keyboardType: TextInputType.text,
           ),
           const SizedBox(height: 7),
           InterviewTextFieldBox(
@@ -169,7 +193,6 @@ class _ProfileForm extends StatelessWidget {
             icon: HugeIcons.strokeRoundedTextIndent01,
             controller: formProvider.bioController,
             validator: formProvider.validateBio,
-            keyboardType: TextInputType.text,
           ),
           const SizedBox(height: 7),
           CupertinoDatePickerField(
@@ -180,13 +203,15 @@ class _ProfileForm extends StatelessWidget {
             validator: formProvider.validateDateOfBirth,
             maxDate: maxDate,
             minDate: minDate,
-            initialDate: initialDate,
+            initialDate: formProvider.dateOfBirth ?? initialDate,
+            onDateChanged: formProvider.setDateOfBirth,
           ),
           const SizedBox(height: 7),
           BuildDropdownform(
             label: S.of(context).gender,
             items: ['Masculino', 'Feminino', 'Outro'],
             icon: HugeIcons.strokeRoundedUserLove01,
+            value: formProvider.gender,
             validator: formProvider.validateGender,
             onChanged: (value) => formProvider.gender = value,
           ),
@@ -197,7 +222,6 @@ class _ProfileForm extends StatelessWidget {
             icon: HugeIcons.strokeRoundedJobLink,
             controller: formProvider.jobTitleController,
             validator: formProvider.validateJobTitle,
-            keyboardType: TextInputType.text,
           ),
         ],
       ),
@@ -215,15 +239,11 @@ class _SubmitProfileFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = Provider.of<ProfileFormProvider>(
-      context,
-      listen: false,
-    );
+    final formProvider = Provider.of<ProfileProvider>(context, listen: false);
     return InterviewFab(
       nameButton: S.of(context).continueButton,
       onPressed: () async {
         if (formProvider.validateAll(formKey)) {
-
           if (!context.mounted) return;
           await Navigator.pushNamed(context, '/profileSetupPhoto');
         }
