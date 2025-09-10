@@ -39,7 +39,7 @@ class AddStopButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(HugeIcons.strokeRoundedPlayListAdd, color: Colors.white, size: 20),
+            const HugeIcon(icon: HugeIcons.strokeRoundedPlayListAdd, color: Colors.white, size: 20),
             const SizedBox(width: 12),
             Text(
               'Adicionar Parada',
