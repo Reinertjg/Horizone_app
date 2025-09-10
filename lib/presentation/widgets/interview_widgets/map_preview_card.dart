@@ -72,8 +72,8 @@ class MapPreviewCard extends StatelessWidget {
                       color: colors.quinary,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Icon(
-                      HugeIcons.strokeRoundedGoogleMaps,
+                    child: HugeIcon(
+                      icon: HugeIcons.strokeRoundedGoogleMaps,
                       size: 40,
                       color: colors.secondary,
                     ),

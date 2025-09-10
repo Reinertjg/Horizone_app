@@ -39,7 +39,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   final _ctl = Completer<GoogleMapController>();
   Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
-  bool _ran = false; // evita chamadas repetidas
+  bool _ran = false;
   late final TravelRouteArgs _args;
 
   @override
@@ -51,7 +51,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     _draw();
   }
 
-  // ----- Helpers -----
   double _deg2rad(double d) => d * math.pi / 180.0;
 
   double _haversineKm(LatLng a, LatLng b) {
@@ -87,7 +86,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       polylineId: const PolylineId('route_straight'),
       points: pts,
       width: 5,
-      geodesic: true, // “reta” geodésica (melhor visual em longas distâncias)
+      geodesic: true,
     );
   }
 
@@ -98,7 +97,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       return;
     }
 
-    // Distância total, considerando waypoints como “pernas”
     final legs = <LatLng>[_args.origin, ..._args.waypoints, _args.destination];
     double totalKm = 0;
     for (int i = 0; i < legs.length - 1; i++) {
@@ -107,7 +105,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
 
     List<LatLng> coords = [];
 
-    // Tenta Directions apenas se a distância não for absurda
     if (totalKm <= _kMaxDistanceKmForDirections) {
       final polylinePoints = PolylinePoints(apiKey: apiKey);
       final wp = _args.waypoints
@@ -141,7 +138,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       }
     }
 
-    // Fallback: desenha linha reta (origin -> waypoints -> dest)
     if (coords.isEmpty) {
       final straightPts = <LatLng>[
         _args.origin,
@@ -182,7 +178,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       return;
     }
 
-    // Caso Directions tenha funcionado
     setState(() {
       _polylines = {
         Polyline(
@@ -232,7 +227,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
         ),
       ),
       body: GoogleMap(
-        onMapCreated: (c) => _ctl.complete(c),
+        onMapCreated: _ctl.complete,
         initialCameraPosition: CameraPosition(target: _args.origin, zoom: 12),
         markers: _markers,
         polylines: _polylines,

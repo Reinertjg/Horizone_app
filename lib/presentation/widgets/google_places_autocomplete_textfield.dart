@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 import '../../domain/usecases/get_place_suggestions.dart';
 import '../theme_color/app_colors.dart';
 
@@ -13,8 +14,10 @@ class GooglePlacesAutocomplete extends StatefulWidget {
   /// An optional validator for form validation.
   final String? Function(String?)? validator;
 
+  /// Callback when a suggestion is selected.
   final void Function(String placeId, String description) onSelected;
 
+  /// Creates a [GooglePlacesAutocomplete] widget.
   const GooglePlacesAutocomplete({
     super.key,
     this.initialText,
@@ -85,7 +88,7 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
               color: colors.secondary.withValues(alpha: 0.3),
               fontSize: 16,
             ),
-            prefixIcon: Icon(widget.icon, color: colors.tertiary, size: 20),
+            prefixIcon: HugeIcon(icon: widget.icon, color: colors.tertiary, size: 20),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: colors.tertiary),
