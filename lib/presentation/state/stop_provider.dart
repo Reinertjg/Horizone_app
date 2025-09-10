@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../api/place_details_api.dart';
 import '../../domain/entities/stop.dart';
+import '../../util/string_utils.dart';
 import '../pages/google_map_screen.dart';
 
 /// Provider responsible for managing travel stops and trip date rules,
@@ -31,6 +32,13 @@ class StopProvider extends ChangeNotifier {
 
   /// Planned end date of the trip.
   DateTime? get tripEnd => _tripEnd;
+
+  void reset() {
+    _stops.clear();
+    _tripStart = DateTime.now();
+    _tripEnd = null;
+    notifyListeners();
+  }
 
   /// Converts the list of stops to a list of [Stop] entities.
   List<Stop> toEntity(int travelId) {
@@ -151,8 +159,8 @@ class StopProvider extends ChangeNotifier {
       destination: LatLng(destination!.latitude, destination.longitude),
       waypoints: waypoints,
       title:
-          '${_beforeComma(originLabel ?? '')} → '
-                  '${_beforeComma(destinationLabel ?? '')}'
+          '${beforeComma(originLabel ?? '')} → '
+                  '${beforeComma(destinationLabel ?? '')}'
               .trim(),
     );
   }
@@ -293,12 +301,5 @@ class StopProvider extends ChangeNotifier {
     if (date == null) return '';
     return DateFormat('dd/MM/yyyy').format(date);
   }
-}
-
-/// Returns the text before the first separator (comma, hyphen, or slash), if
-/// present.
-String _beforeComma(String text) {
-  final i = text.indexOf(RegExp(r'[,/-]'));
-  return (i == -1) ? text : text.substring(0, i);
 }
 
