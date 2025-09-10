@@ -72,15 +72,17 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
   @override
   void initState() {
     super.initState();
-    if (widget.controller.text.isEmpty) {
-      widget.controller.text =
-          '${widget.initialDate.day.toString().padLeft(2, '0')}/${widget.initialDate.month.toString().padLeft(2, '0')}/${widget.initialDate.year}';
-
-      if (widget.onDateChanged != null) {
-        widget.onDateChanged!(widget.initialDate);
-      }
-    }
     _updateEffectiveInitialDate();
+    // Defer the state update until after the first frame is built.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && widget.controller.text.isEmpty) {
+        widget.controller.text =
+            '${widget.initialDate.day.toString().padLeft(2, '0')}/${widget.initialDate.month.toString().padLeft(2, '0')}/${widget.initialDate.year}';
+        if (widget.onDateChanged != null) {
+          widget.onDateChanged!(widget.initialDate);
+        }
+      }
+    });
   }
 
   void _showDatePicker() {
