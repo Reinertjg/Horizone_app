@@ -67,11 +67,12 @@ class CupertinoDatePickerField extends StatefulWidget {
 }
 
 class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
+  late DateTime _effectiveInitialDate;
 
-  void _showDatePicker() {
-    final colors = Theme.of(context).extension<AppColors>()!;
+  @override
+  void initState() {
+    super.initState();
     if (widget.controller.text.isEmpty) {
-      // Set initial date in the controller when the widget initializes
       widget.controller.text =
           '${widget.initialDate.day.toString().padLeft(2, '0')}/${widget.initialDate.month.toString().padLeft(2, '0')}/${widget.initialDate.year}';
 
@@ -79,6 +80,12 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
         widget.onDateChanged!(widget.initialDate);
       }
     }
+    _updateEffectiveInitialDate();
+  }
+
+  void _showDatePicker() {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    _updateEffectiveInitialDate();
     showCupertinoModalPopup(
       context: context,
       builder: (_) => Container(
@@ -93,7 +100,7 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
           ),
           child: CupertinoDatePicker(
             mode: CupertinoDatePickerMode.date,
-            initialDateTime: widget.initialDate,
+            initialDateTime: _effectiveInitialDate,
             minimumDate: widget.minDate,
             maximumDate: widget.maxDate,
             onDateTimeChanged: (value) {
@@ -110,6 +117,17 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
         ),
       ),
     );
+  }
+
+  void _updateEffectiveInitialDate() {
+    // The initialDateTime of CupertinoDatePicker must be greater than or equal to the minimumDate.
+    // If the provided initialDate is before the minDate, adjust it to be the minDate
+    // to prevent an assertion failure.
+    if (widget.initialDate.isBefore(widget.minDate)) {
+      _effectiveInitialDate = widget.minDate;
+    } else {
+      _effectiveInitialDate = widget.initialDate;
+    }
   }
 
   @override

@@ -15,6 +15,7 @@ class BuildDropdownform extends StatefulWidget {
     super.key,
     required this.label,
     required this.items,
+    required this.value,
     required this.icon,
     this.validator,
     this.onChanged,
@@ -25,6 +26,9 @@ class BuildDropdownform extends StatefulWidget {
 
   /// The list of selectable items.
   final List<String> items;
+
+  /// The currently selected value, managed by the parent widget.
+  final String? value;
 
   /// The icon displayed as a prefix inside the input.
   final IconData icon;
@@ -42,17 +46,13 @@ class BuildDropdownform extends StatefulWidget {
 /// State class for [BuildDropdownform]
 /// responsible for managing selection state.
 class _BuildDropdownformState extends State<BuildDropdownform> {
-  /// The currently selected value.
-  String? selectedValue;
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
 
     void onChanged(String? newValue) {
-      setState(() {
-        selectedValue = newValue;
-      });
+      // O estado agora é gerenciado pelo pai, então não precisamos mais de setState aqui.
+      // Apenas notificamos o pai da mudança.
 
       if (widget.onChanged != null) {
         widget.onChanged!(newValue);
@@ -72,7 +72,7 @@ class _BuildDropdownformState extends State<BuildDropdownform> {
         ),
         const SizedBox(height: 5),
         DropdownButtonFormField<String>(
-          value: selectedValue,
+          value: widget.value,
           items: widget.items.map((value) {
             return DropdownMenuItem<String>(
               value: value,

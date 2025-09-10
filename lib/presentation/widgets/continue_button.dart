@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/usecases/profile_usecase.dart';
 import '../../repositories/profile_repository_impl.dart';
-import '../state/profileform_provider.dart';
+import '../state/profile_provider.dart';
 import '../theme_color/app_colors.dart';
 
 /// A reusable button widget that validates a form,
@@ -30,7 +30,7 @@ class ContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = Provider.of<ProfileFormProvider>(context);
+    final formProvider = Provider.of<ProfileProvider>(context);
     final colors = Theme.of(context).extension<AppColors>()!;
 
     return ElevatedButton(
