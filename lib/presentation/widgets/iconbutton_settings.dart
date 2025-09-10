@@ -21,7 +21,10 @@ class IconbuttonSettings extends StatelessWidget {
         width: 38,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(HugeIcons.strokeRoundedSettings02, color: colors.quaternary),
+          icon: HugeIcon(
+            icon: HugeIcons.strokeRoundedSettings01,
+            color: colors.quaternary,
+          ),
           onPressed: () {
             showModalBottomSheet(
               context: context,

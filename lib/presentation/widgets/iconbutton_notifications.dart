@@ -19,7 +19,7 @@ class IconbuttonNotifications extends StatelessWidget {
         width: 38,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: Icon(HugeIcons.strokeRoundedNotification02, color: colors.quaternary),
+          icon: HugeIcon(icon: HugeIcons.strokeRoundedNotification02, color: colors.quaternary),
           onPressed: () {},
         ),
       ),
