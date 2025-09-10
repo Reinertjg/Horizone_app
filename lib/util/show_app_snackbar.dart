@@ -6,7 +6,10 @@ enum SnackbarMode {
   success,
 
   /// Error mode.
-  error
+  error,
+
+  /// Info mode.
+  info,
 }
 
 /// Displays a custom snackbar.
@@ -19,16 +22,30 @@ void showAppSnackbar({
   // Remove any existing snackbar before showing a new one.
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
-  final backgroundColor = snackbarMode == SnackbarMode.success
-      ? Colors.green[600]!
-      : Colors.red[600]!;
+  late final Color backgroundColor;
+  late final Color textColor;
+
+  switch (snackbarMode) {
+    case SnackbarMode.success:
+      backgroundColor = Colors.green[600]!;
+      textColor = Colors.white;
+      break;
+    case SnackbarMode.error:
+      backgroundColor = Colors.red[600]!;
+      textColor = Colors.white;
+      break;
+    case SnackbarMode.info:
+      backgroundColor = Colors.yellow[600]!;
+      textColor = Colors.black;
+      break;
+  }
 
   final snackBar = SnackBar(
     content: Row(
       children: [
-        Icon(iconData, color: Colors.white, size: 25),
+        Icon(iconData, color: textColor, size: 25),
         const SizedBox(width: 12),
-        Text(message),
+        Text(message, style: TextStyle(color: textColor)),
       ],
     ),
     backgroundColor: backgroundColor,
