@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../domain/entities/participant.dart';
@@ -76,6 +77,7 @@ class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
                 const ParticipantModalHeader(
                   title: 'Altere os dados',
                   subtitle: 'Altere os dados do integrante',
+                  icon: HugeIcons.strokeRoundedEdit01,
                 ),
                 const SizedBox(height: 16),
                 ParticipantAvatarPicker(

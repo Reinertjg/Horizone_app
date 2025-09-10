@@ -120,8 +120,8 @@ Widget addParticipantClipOval(BuildContext context) {
                   ),
                 ),
                 child: ClipOval(
-                  child: Icon(
-                    HugeIcons.strokeRoundedUserAdd01,
+                  child: HugeIcon(icon:
+                  HugeIcons.strokeRoundedUserAdd01,
                     color: colors.secondary,
                   ),
                 ),

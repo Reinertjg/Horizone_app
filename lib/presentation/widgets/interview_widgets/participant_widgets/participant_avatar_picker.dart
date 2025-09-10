@@ -19,7 +19,8 @@ class ParticipantAvatarPicker extends StatefulWidget {
   final void Function(File file) onImagePicked;
 
   @override
-  State<ParticipantAvatarPicker> createState() => _ParticipantAvatarPickerState();
+  State<ParticipantAvatarPicker> createState() =>
+      _ParticipantAvatarPickerState();
 }
 
 class _ParticipantAvatarPickerState extends State<ParticipantAvatarPicker> {
@@ -75,12 +76,22 @@ class _ParticipantAvatarPickerState extends State<ParticipantAvatarPicker> {
               ),
             ),
             child: _image == null
-                ? Icon(CupertinoIcons.camera_on_rectangle, size: 40, color: colors.secondary)
+                ? Icon(
+                    CupertinoIcons.camera_on_rectangle,
+                    size: 40,
+                    color: colors.secondary,
+                  )
                 : ClipOval(child: Image.file(_image!, fit: BoxFit.cover)),
           ),
         ),
         const SizedBox(height: 8),
-        Text('Adicione uma foto de perfil', style: GoogleFonts.raleway(fontSize: 14, color: colors.quaternary.withAlpha(100)),)
+        Text(
+          'Adicione uma foto de perfil',
+          style: GoogleFonts.raleway(
+            fontSize: 14,
+            color: colors.quaternary.withAlpha(100),
+          ),
+        ),
       ],
     );
   }

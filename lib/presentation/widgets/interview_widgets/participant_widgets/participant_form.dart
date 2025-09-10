@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import '../interview_textfield.dart';
 
@@ -32,19 +33,17 @@ class _ParticipantFormState extends State<ParticipantForm> {
           InterviewTextField(
             nameButton: 'Nome',
             hintText: 'Nome do participante',
-            icon: Icons.person_outline_rounded,
+            icon: HugeIcons.strokeRoundedUser,
             controller: widget.nameController,
             validator: widget.validateName,
-            keyboardType: TextInputType.text,
           ),
-          const SizedBox(height: 8),
           InterviewTextField(
             nameButton: 'E-mail',
             hintText: 'E-mail do participante',
-            icon: Icons.email_outlined,
+            icon: HugeIcons.strokeRoundedMail01,
             controller: widget.emailController,
             validator: widget.validateEmail,
-            keyboardType: TextInputType.text,
+            maxLength: 50,
           ),
         ],
       ),

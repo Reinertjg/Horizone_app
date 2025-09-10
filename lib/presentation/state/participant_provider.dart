@@ -22,6 +22,12 @@ class ParticipantProvider extends ChangeNotifier {
   /// Gets the selected image.
   File? get selectedImage => _selectedImage;
 
+  void reset() {
+    _participants.clear();
+    _selectedImage = null;
+    notifyListeners();
+  }
+
   /// Converts the form data to a list of [Participant] entities.
   List<Participant> toEntity(int travelId) {
     return _participants.map((participant) {

@@ -8,10 +8,12 @@ class ParticipantModalHeader extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    required this.icon,
   });
 
   final String title;
   final String subtitle;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ParticipantModalHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
-            Icons.person_add_rounded,
+            icon,
             color: colors.secondary,
             size: 22,
           ),
@@ -57,5 +59,4 @@ class ParticipantModalHeader extends StatelessWidget {
       ],
     );
   }
-
 }
