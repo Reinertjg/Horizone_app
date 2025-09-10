@@ -15,7 +15,7 @@ class MapPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final interviewProvider = Provider.of<InterviewProvider>(context);
+    final travelProvider = Provider.of<TravelProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -23,10 +23,10 @@ class MapPreviewCard extends StatelessWidget {
         GestureDetector(
           onTap: () {
             final args = context.read<StopProvider>().buildRouteArgs(
-              origin: interviewProvider.originPlace,
-              destination: interviewProvider.destinationPlace,
-              originLabel: interviewProvider.originLabel,
-              destinationLabel: interviewProvider.destinationLabel,
+              origin: travelProvider.originPlace,
+              destination: travelProvider.destinationPlace,
+              originLabel: travelProvider.originLabel,
+              destinationLabel: travelProvider.destinationLabel,
             );
             if (args == null) {
               ScaffoldMessenger.of(context).showSnackBar(
