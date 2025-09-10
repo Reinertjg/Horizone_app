@@ -69,8 +69,8 @@ class StopFormCard extends StatelessWidget {
                     final stopsProvider = context.read<StopProvider>();
                     stopsProvider.removeStop(stop);
                   },
-                  child: Icon(
-                    HugeIcons.strokeRoundedDelete02,
+                  child: HugeIcon(
+                    icon: HugeIcons.strokeRoundedDelete02,
                     color: colors.secondary,
                     size: 25,
                   ),

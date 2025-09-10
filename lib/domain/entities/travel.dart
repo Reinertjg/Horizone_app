@@ -1,9 +1,12 @@
+import 'dart:io';
 
 /// A class representing a trip.
 class Travel {
-
   /// The unique identifier of the trip.
   final int? id;
+
+  /// The image of the trip.
+  final File? image;
 
   /// The title or name of the trip.
   final String title;
@@ -23,8 +26,8 @@ class Travel {
   /// The type of experience the trip offers.
   final String experienceType;
 
-  /// The image of the trip.
-  final String image;
+  /// The number of stops in the trip.
+  final int numberOfStops;
 
   /// The Origin Place the Trip
   final String originPlace;
@@ -44,35 +47,37 @@ class Travel {
   /// Constructs a new [Travel] object.
   Travel({
     this.id,
+    required this.image,
     required this.title,
     required this.startDate,
     required this.endDate,
     required this.meansOfTransportation,
     required this.numberOfParticipants,
     required this.experienceType,
-    required this.image,
+    required this.numberOfStops,
     required this.originPlace,
     required this.originLabel,
     required this.destinationPlace,
     required this.destinationLabel,
-    required String status
+    required String status,
   });
 
   /// Converts the [Travel] object to a map.
   Map<String, dynamic> toMap() {
     final map = {
       'id': id,
+      'image': image?.path,
       'title': title,
       'startDate': startDate,
       'endDate': endDate,
       'meansOfTransportation': meansOfTransportation,
       'numberOfParticipants': numberOfParticipants,
       'experienceType': experienceType,
-      'image': image,
+      'numberOfStops': numberOfStops,
       'originLabel': originLabel,
       'destinationLabel': destinationLabel,
       'originPlace': originPlace,
-      'destinationPlace': destinationPlace
+      'destinationPlace': destinationPlace,
     };
     return map;
   }
@@ -81,18 +86,19 @@ class Travel {
   static Travel fromMap(Map<String, dynamic> map) {
     return Travel(
       id: map['id'],
+      image: map['image'] != null ? File(map['image']) : null,
       title: map['title'],
       startDate: map['startDate'],
       endDate: map['endDate'],
       meansOfTransportation: map['meansOfTransportation'],
       numberOfParticipants: map['numberOfParticipants'],
       experienceType: map['experienceType'],
-      image: map['image'],
+      numberOfStops: map['numberOfStops'],
       originPlace: map['originPlace'],
       originLabel: map['originLabel'],
       destinationPlace: map['destinationPlace'],
       destinationLabel: map['destinationLabel'],
-      status: map['status']
+      status: map['status'],
     );
   }
 }

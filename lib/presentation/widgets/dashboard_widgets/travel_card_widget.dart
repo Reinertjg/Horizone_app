@@ -25,9 +25,8 @@ class _travelCards extends StatelessWidget {
           onTap: () async {
             print('\n----Inserido com sucesso----\n');
             final repositoryParticipant = ParticipantRepositoryImpl();
-            final participant = await repositoryParticipant.getParticipantsByTravelId(
-              travels.id!,
-            );
+            final participant = await repositoryParticipant
+                .getParticipantsByTravelId(travels.id!);
             print('Titile: ${travels.title}');
             print('Start Date: ${travels.startDate}');
             print('End Date: ${travels.endDate}');
@@ -49,7 +48,6 @@ class _travelCards extends StatelessWidget {
               print('TravelId: ${item.travelId}');
               print('-----------------------------');
             }
-
           },
           child: SizedBox(
             width: 200,
@@ -130,8 +128,8 @@ class _travelCards extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(
-                        HugeIcons.strokeRoundedLocation06,
+                      HugeIcon(
+                        icon: HugeIcons.strokeRoundedLocation06,
                         color: colors.quinary,
                         size: 10,
                       ),

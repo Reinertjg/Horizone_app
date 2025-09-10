@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -85,8 +87,17 @@ class InterviewProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  void reset() {
+    titleController.clear();
+    startDateController.clear();
+    endDateController.clear();
+    _participants = null;
+    _meansOfTransportation = null;
+    _experienceType = null;
+  }
+
   /// Converts the form data to a [Travel] entity.
-  Travel toEntity(int participants) {
+  Travel toEntity(int participants, int stops) {
     return Travel(
       title: titleController.text.trim(),
       startDate: startDateController.text.trim(),
@@ -94,7 +105,8 @@ class InterviewProvider extends ChangeNotifier {
       meansOfTransportation: _meansOfTransportation ?? '',
       numberOfParticipants: participants,
       experienceType: _experienceType ?? '',
-      image: _image,
+      image: File(_image),
+      numberOfStops: stops,
       originPlace: _originPlace.toString(),
       originLabel: _originLabel!,
       destinationPlace: _destinationPlace.toString(),
@@ -132,6 +144,15 @@ class InterviewProvider extends ChangeNotifier {
     return LatLngPoint(latitude: ll.latitude, longitude: ll.longitude);
   }
 
+  bool validateOverlap(List<Travel> travels, DateTime start, DateTime end) {
+    for (final t in travels) {
+      final travelStartDate = DateTime.parse(t.startDate);
+      final travelEndDate = DateTime.parse(t.endDate);
+      final overlap = start.isBefore(travelEndDate) && travelStartDate.isBefore(end);
+      if (overlap) return true;
+    }
+    return false;
+  }
 
   /// Validates the title field.
   String? validateTitle(String? value) {

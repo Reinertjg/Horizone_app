@@ -27,6 +27,9 @@ abstract class TravelTable {
   /// Image of the trip (text, required)
   static const String image = 'image';
 
+  /// Number of stops (integer, required)
+  static const String numberOfStops = 'numberOfStops';
+
   /// Origin Place of the Travel (text, required)
   static const String originPlace = 'originPlace';
 
@@ -47,18 +50,19 @@ abstract class TravelTable {
       '''
     CREATE TABLE $tableName (
       $travelId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $image TEXT NOT NULL,
       $travelTitle TEXT NOT NULL,
       $startDate TEXT NOT NULL,
       $endDate TEXT NOT NULL,
       $meansOfTransportation TEXT NOT NULL,
       $numberOfParticipants INTEGER NOT NULL,
       $experienceType TEXT NOT NULL,
-      $image TEXT NOT NULL,
+      $numberOfStops INTEGER NOT NULL,
       $originPlace TEXT NOT NULL,
       $originLabel TEXT NOT NULL,
       $destinationPlace TEXT NOT NULL,
       $destinationLabel TEXT NOT NULL,
-      $status TEXT NOT NULL DEFAULT 'active'
+      $status TEXT NOT NULL DEFAULT 'in_progress'
     )
   ''';
 }

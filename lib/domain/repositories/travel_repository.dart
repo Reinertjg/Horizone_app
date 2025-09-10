@@ -14,4 +14,5 @@ abstract class TravelRepository {
 
   /// Retrieves a trip with the given [status] from the data source.
   Future<List<Travel>> getTravelByStatus(String status);
+
 }

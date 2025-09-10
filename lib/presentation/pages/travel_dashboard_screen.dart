@@ -1,445 +1,529 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:intl/intl.dart';
+
+import '../../domain/entities/stop.dart';
+import '../../domain/entities/travel.dart';
+import '../../repositories/stop_repository_impl.dart';
+import '../../util/string_utils.dart';
+import '../theme_color/app_colors.dart';
+import '../widgets/iconbutton_settings.dart';
+import '../widgets/section_title.dart';
 
 class TravelDashboardScreen extends StatefulWidget {
-  const TravelDashboardScreen({Key? key}) : super(key: key);
+  const TravelDashboardScreen({super.key, required this.travel});
+  final Travel travel;
 
   @override
   State<TravelDashboardScreen> createState() => _TravelDashboardScreenState();
 }
 
 class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
-  int currentStopIndex = 1; // Parada atual (0 = origem, último = destino)
+  final repositoryStop = StopRepositoryImpl();
+  List<Stop> stops = [];
+  String currentLocation = '';
+  String? currentLocationDate;
 
-  // Mock data
-  final tripData = {
-    'title': 'Eurotrip 2025',
-    'startDate': '15 Mar 2025',
-    'endDate': '30 Mar 2025',
-    'duration': '15 dias',
-    'participants': 4,
-    'status': 'Em andamento',
-  };
-
-  final stops = [
-    {
-      'name': 'São Paulo, Brasil',
-      'type': 'origin',
-      'date': '15 Mar',
-      'activities': 'Partida - Aeroporto Guarulhos',
-      'status': 'completed',
-    },
-    {
-      'name': 'Paris, França',
-      'type': 'stop',
-      'date': '16-20 Mar',
-      'activities': 'Torre Eiffel, Louvre, cruzeiro no Sena, restaurantes típicos',
-      'status': 'current',
-    },
-    {
-      'name': 'Roma, Itália',
-      'type': 'stop',
-      'date': '21-25 Mar',
-      'activities': 'Coliseu, Vaticano, Fontana di Trevi, gastronomia italiana',
-      'status': 'upcoming',
-    },
-    {
-      'name': 'Barcelona, España',
-      'type': 'stop',
-      'date': '26-29 Mar',
-      'activities': 'Sagrada Família, Park Güell, Las Ramblas, praia',
-      'status': 'upcoming',
-    },
-    {
-      'name': 'São Paulo, Brasil',
-      'type': 'destination',
-      'date': '30 Mar',
-      'activities': 'Chegada - Aeroporto Guarulhos',
-      'status': 'upcoming',
-    },
-  ];
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'completed':
-        return Colors.green;
-      case 'current':
-        return Colors.blue;
-      case 'upcoming':
-        return Colors.grey;
-      default:
-        return Colors.grey;
-    }
+  Future<void> _uploadStops() async {
+    final searched = await repositoryStop.getStopsByTravelId(widget.travel.id!);
+    setState(() {
+      stops = searched;
+      _determineCurrentLocation();
+    });
   }
 
-  IconData _getStatusIcon(String status) {
-    switch (status) {
-      case 'completed':
-        return Icons.check_circle;
-      case 'current':
-        return Icons.location_on;
-      case 'upcoming':
-        return Icons.schedule;
-      default:
-        return Icons.circle_outlined;
+  void _determineCurrentLocation() {
+    final today = DateTime.now();
+    final todayOnly = DateTime(today.year, today.month, today.day);
+    final currentStop = stops.where((stop) {
+      final date = stop.startDate!;
+      final stopOnly = DateTime(date.year, date.month, date.day);
+      return stopOnly.isAtSameMomentAs(todayOnly);
+    }).firstOrNull;
+
+    if (currentStop != null) {
+      currentLocation = currentStop.label ?? '';
+      currentLocationDate = _formatStopShort(currentStop.startDate!);
+    } else {
+      final endDate = _parseTravelDate(widget.travel.endDate);
+      final endDateOnly = DateTime(endDate.year, endDate.month, endDate.day);
+      final startDate = _parseTravelDate(widget.travel.startDate);
+      final startDateOnly = DateTime(startDate.year, startDate.month, startDate.day);
+
+      if (todayOnly.isAtSameMomentAs(endDateOnly)) {
+        currentLocation = widget.travel.destinationLabel;
+        currentLocationDate = _formatStopShort(endDate);
+      } else if (todayOnly.isBefore(startDateOnly)) {
+        currentLocation = widget.travel.originLabel;
+        currentLocationDate = null;
+      } else {
+        currentLocation = '';
+        currentLocationDate = null;
+      }
     }
   }
 
   @override
+  void initState() {
+    super.initState();
+    _uploadStops();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: Text(
-          tripData['title'].toString(),
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // TODO: Implementar menu de opções
-            },
-            icon: const Icon(Icons.more_vert),
-          ),
-        ],
-      ),
+      backgroundColor: colors.primary,
+      appBar: const _AppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Trip Header Card
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.blue[400]!, Colors.blue[600]!],
-                ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.blue.withOpacity(0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${tripData['startDate']} - ${tripData['endDate']}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            tripData['duration']!.toString(),
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          tripData['status']!.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.group_outlined,
-                        color: Colors.white.withOpacity(0.9),
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${tripData['participants']} participantes',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Spacer(),
-                      Icon(
-                        Icons.route_outlined,
-                        color: Colors.white.withOpacity(0.9),
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${stops.length - 2} paradas',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            // Current Location Banner
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.blue[200]!, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.blue[600],
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Localização atual',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          stops[currentStopIndex]['name']!,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1A1A1A),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    stops[currentStopIndex]['date']!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.blue[600],
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Route Timeline
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        CupertinoIcons.map_pin_ellipse,
-                        color: Colors.grey[700],
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Roteiro da Viagem',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Timeline
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: stops.length,
-                    separatorBuilder: (context, index) => _buildTimelineConnector(),
-                    itemBuilder: (context, index) {
-                      final stop = stops[index];
-                      final isFirst = index == 0;
-                      final isLast = index == stops.length - 1;
-
-                      return _buildStopCard(stop, isFirst, isLast);
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Action Buttons
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        // TODO: Ver participantes
-                      },
-                      icon: const Icon(Icons.group_outlined),
-                      label: const Text('Participantes'),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // TODO: Editar viagem
-                      },
-                      icon: const Icon(Icons.edit_outlined),
-                      label: const Text('Editar Viagem'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[600],
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
-                      ),
-                    ),
-                  ),
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: SectionTitle(
+                title: widget.travel.title,
+                icon: HugeIcons.strokeRoundedTextCircle,
               ),
             ),
-
-            const SizedBox(height: 32),
+            _TravelInfoCard(travel: widget.travel),
+            if (currentLocation.isNotEmpty)
+              _CurrentLocationCard(
+                currentLocation: currentLocation,
+                currentLocationDate: currentLocationDate,
+              ),
+            _TravelTimeline(
+              travel: widget.travel,
+              stops: stops,
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildStopCard(Map<String, String> stop, bool isFirst, bool isLast) {
-    final statusColor = _getStatusColor(stop['status']!);
-    final statusIcon = _getStatusIcon(stop['status']!);
+class _AppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _AppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return AppBar(
+      backgroundColor: colors.primary,
+      elevation: 0,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: colors.secondary),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+      title: Text(
+        'Detalhes da Viagem',
+        style: GoogleFonts.nunito(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: colors.secondary,
+        ),
+      ),
+      actions: const [IconbuttonSettings(), SizedBox(width: 12)],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _TravelInfoCard extends StatelessWidget {
+  const _TravelInfoCard({required this.travel});
+  final Travel travel;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    final inputDateFormat = DateFormat('dd/MM/yyyy');
+    final startDate = inputDateFormat.tryParse(travel.startDate);
+    final endDate = inputDateFormat.tryParse(travel.endDate);
+    final duration = (startDate != null && endDate != null)
+        ? endDate.difference(startDate).inDays + 1
+        : 0;
+    final dateFormat = DateFormat('dd MMM yyyy', 'pt_BR');
+    final formattedStartDate = startDate != null ? dateFormat.format(startDate) : '';
+    final formattedEndDate = endDate != null ? dateFormat.format(endDate) : '';
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            colors.secondary,
+            colors.secondary.withRed(102).withGreen(178).withBlue(255),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '$formattedStartDate - $formattedEndDate',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    '',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                  Text(
+                    '$duration dias',
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: colors.quaternary.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  travel.status,
+                  style: TextStyle(
+                    color: colors.quaternary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Icon(
+                Icons.group_outlined,
+                color: Colors.white.withOpacity(0.9),
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${travel.numberOfParticipants} participantes',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              Icon(
+                Icons.route_outlined,
+                color: Colors.white.withOpacity(0.9),
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${travel.numberOfStops} paradas',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CurrentLocationCard extends StatelessWidget {
+  const _CurrentLocationCard({
+    super.key,
+    required this.currentLocation,
+    this.currentLocationDate,
+  });
+
+  final String currentLocation;
+  final String? currentLocationDate;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: colors.secondary.withOpacity(0.5),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colors.secondary.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: colors.secondary.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              HugeIcons.strokeRoundedLocation05,
+              color: colors.secondary,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Localização Atual',
+                  style: GoogleFonts.nunito(
+                    fontSize: 13,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  currentLocation,
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1A1A1A),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          if (currentLocationDate != null)
+            Text(
+              currentLocationDate!,
+              style: GoogleFonts.nunito(
+                fontSize: 14,
+                color: colors.secondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TravelTimeline extends StatelessWidget {
+  const _TravelTimeline({required this.travel, required this.stops});
+  final Travel travel;
+  final List<Stop> stops;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                HugeIcons.strokeRoundedRoute03,
+                color: Colors.grey[700],
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Roteiro da Viagem',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: stops.length + 2,
+            separatorBuilder: (context, index) => const _TimelineConnector(),
+            itemBuilder: (context, index) {
+              final isOrigin = index == 0;
+              final isDestination = index == stops.length + 1;
+
+              if (isOrigin) {
+                final start = _parseTravelDate(travel.startDate);
+                return _EndpointCard(
+                  label: travel.originLabel,
+                  date: start,
+                  isOrigin: true,
+                );
+              }
+
+              if (isDestination) {
+                final end = _parseTravelDate(travel.endDate);
+                return _EndpointCard(
+                  label: travel.destinationLabel,
+                  date: end,
+                  isOrigin: false,
+                );
+              }
+
+              final stop = stops[index - 1];
+              final status = _getStopStatus(stop);
+              final isFirst = index == 1;
+              final isLast = index == stops.length;
+              return _StopCard(
+                stop: stop,
+                status: status,
+                isFirst: isFirst,
+                isLast: isLast,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TimelineConnector extends StatelessWidget {
+  const _TimelineConnector();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 24,
+          height: 20,
+          child: Center(
+            child: SizedBox(
+              width: 2,
+              height: 20,
+              child: ColoredBox(color: Color(0xFFD6D6D6)),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        const Expanded(child: SizedBox()),
+      ],
+    );
+  }
+}
+
+class _EndpointCard extends StatelessWidget {
+  const _EndpointCard({
+    required this.label,
+    required this.date,
+    required this.isOrigin,
+  });
+
+  final String label;
+  final DateTime date;
+  final bool isOrigin;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    final today = DateTime.now();
+    final todayOnly = DateTime(today.year, today.month, today.day);
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    final isPast = dateOnly.isBefore(todayOnly);
+
+    final dotColor = isOrigin
+        ? (isPast ? Colors.green : colors.secondary)
+        : (isPast ? Colors.green : Colors.redAccent);
+    final dotIcon = isOrigin ? HugeIcons.strokeRoundedLocation05 : Icons.flag_outlined;
+    final dateLabel = _formatStopShort(date);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Timeline dot
         Column(
           children: [
             Container(
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: statusColor,
+                color: dotColor,
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 3,
-                ),
+                border: Border.all(color: Colors.white, width: 3),
                 boxShadow: [
                   BoxShadow(
-                    color: statusColor.withOpacity(0.3),
+                    color: dotColor.withOpacity(0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
-              child: Icon(
-                statusIcon,
-                size: 12,
-                color: Colors.white,
-              ),
+              child: Icon(dotIcon, size: 12, color: Colors.white),
             ),
           ],
         ),
         const SizedBox(width: 16),
-
-        // Stop content
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: stop['status'] == 'current'
-                  ? Colors.blue[50]
-                  : Colors.grey[50],
-              borderRadius: BorderRadius.circular(12),
-              border: stop['status'] == 'current'
-                  ? Border.all(color: Colors.blue[200]!, width: 2)
-                  : null,
+              color: isPast
+                  ? Colors.green.withOpacity(0.06)
+                  : isOrigin
+                  ? colors.secondary.withOpacity(0.06)
+                  : Colors.redAccent.withOpacity(0.06),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isPast
+                    ? Colors.green.withOpacity(0.35)
+                    : isOrigin
+                    ? colors.secondary.withOpacity(0.35)
+                    : Colors.redAccent.withOpacity(0.35),
+                width: 2,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,31 +533,28 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        stop['name']!,
+                        beforeComma(label),
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: stop['status'] == 'current'
-                              ? Colors.blue[700]
-                              : Colors.grey[800],
+                          color:
+                          isPast ? Colors.green : (isOrigin ? colors.secondary : Colors.redAccent),
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.1),
+                        color: dotColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        stop['date']!,
+                        dateLabel,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: statusColor,
+                          color: dotColor,
                         ),
                       ),
                     ),
@@ -481,7 +562,7 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  stop['activities']!,
+                  isOrigin ? 'Starting point' : 'Final point',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -495,24 +576,171 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
       ],
     );
   }
+}
 
-  Widget _buildTimelineConnector() {
+class _StopCard extends StatelessWidget {
+  const _StopCard({
+    required this.stop,
+    required this.status,
+    required this.isFirst,
+    required this.isLast,
+  });
+
+  final Stop stop;
+  final StopStatus status;
+  final bool isFirst;
+  final bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    final statusColor = _getStatusColor(context, status);
+    final statusIcon = _getStatusIcon(status);
+    final dateLabel = _formatStopShort(stop.startDate!);
+    final activities = (stop.description?.trim().isNotEmpty ?? false)
+        ? stop.description!.trim()
+        : (stop.label ?? '');
+
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 24,
-          height: 20,
-          child: Center(
-            child: Container(
-              width: 2,
-              height: 20,
-              color: Colors.grey[300],
+        Column(
+          children: [
+            Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: statusColor,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: statusColor.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Icon(statusIcon, size: 12, color: Colors.white),
+            ),
+          ],
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: status == StopStatus.current
+                  ? colors.secondary.withOpacity(0.06)
+                  : status == StopStatus.past
+                  ? Colors.green.withOpacity(0.06)
+                  : Colors.grey[50],
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: status == StopStatus.current
+                    ? colors.secondary.withOpacity(0.35)
+                    : status == StopStatus.past
+                    ? Colors.green.withOpacity(0.35)
+                    : Colors.transparent,
+                width: status == StopStatus.upcoming ? 0 : 2,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        beforeComma(stop.label) ?? 'Parada',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: status == StopStatus.current
+                              ? colors.secondary
+                              : status == StopStatus.past
+                              ? Colors.green
+                              : Colors.grey[800],
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        dateLabel,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (activities.isNotEmpty)
+                  Text(
+                    activities,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                      height: 1.4,
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
-        const SizedBox(width: 16),
-        const Expanded(child: SizedBox()),
       ],
     );
+  }
+}
+
+enum StopStatus { past, current, upcoming }
+
+DateTime _parseTravelDate(String raw) {
+  final f = DateFormat('dd/MM/yyyy');
+  return f.tryParse(raw)?.toLocal() ?? DateTime.now();
+}
+
+DateTime _asDateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+StopStatus _getStopStatus(Stop stop) {
+  final stopDateOnly = _asDateOnly(stop.startDate!);
+  final todayDateOnly = _asDateOnly(DateTime.now());
+  if (stopDateOnly.isBefore(todayDateOnly)) return StopStatus.past;
+  if (stopDateOnly.isAtSameMomentAs(todayDateOnly)) return StopStatus.current;
+  return StopStatus.upcoming;
+}
+
+String _formatStopShort(DateTime d) =>
+    DateFormat('dd MMM', 'pt_BR').format(d.toLocal());
+
+Color _getStatusColor(BuildContext context, StopStatus status) {
+  final colors = Theme.of(context).extension<AppColors>()!;
+  switch (status) {
+    case StopStatus.current:
+      return colors.secondary;
+    case StopStatus.past:
+      return Colors.green;
+    case StopStatus.upcoming:
+      return Colors.grey.shade500;
+  }
+}
+
+IconData _getStatusIcon(StopStatus status) {
+  switch (status) {
+    case StopStatus.current:
+      return HugeIcons.strokeRoundedLocation05;
+    case StopStatus.past:
+      return HugeIcons.strokeRoundedTick02;
+    case StopStatus.upcoming:
+      return HugeIcons.strokeRoundedCalendar03;
   }
 }
