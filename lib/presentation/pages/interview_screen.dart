@@ -48,7 +48,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final travelProvider = Provider.of<InterviewProvider>(context);
+    final travelProvider = Provider.of<TravelProvider>(context);
     final participantProvider = Provider.of<ParticipantProvider>(context);
     final stopProvider = Provider.of<StopProvider>(context);
     return Scaffold(
@@ -104,8 +104,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                         context: context,
                         snackbarMode: SnackbarMode.error,
                         iconData: HugeIcons.strokeRoundedAlert01,
-                        message:
-                        'Já existe uma viagem neste período.',
+                        message: 'Já existe uma viagem neste período.',
                       );
                     } else {
                       final travelId = await TravelUseCase(
@@ -138,7 +137,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                       if (!context.mounted) return;
                       await Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => HomeScreen()),
-                            (route) => false,
+                        (route) => false,
                       );
                     }
                   }
@@ -179,9 +178,7 @@ class _InterviewAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       title: Text(
-        S
-            .of(context)
-            .planningTravel,
+        S.of(context).planningTravel,
         style: GoogleFonts.nunito(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -242,34 +239,14 @@ class _TravelImageModal extends StatefulWidget {
 }
 
 class _TravelImageModalState extends State<_TravelImageModal> {
-  late File? _image;
-
-  Future<void> _pickImage(OptionPhotoMode mode) async {
-    final picker = ImagePicker();
-    final source = mode == OptionPhotoMode.cameraMode
-        ? ImageSource.camera
-        : ImageSource.gallery;
-
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      setState(() {
-        _image = file;
-      });
-      // widget.onImagePicked(file);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
+    final travelProvider = Provider.of<TravelProvider>(context);
     return AnimatedPadding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery
-            .of(context)
-            .viewInsets
-            .bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       duration: const Duration(milliseconds: 150),
       child: Container(
@@ -291,10 +268,7 @@ class _TravelImageModalState extends State<_TravelImageModal> {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.85,
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -368,9 +342,41 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             color: colors.quinary,
-                            child: Image.asset(
-                              'assets/images/travel_image01.jpg',
+                            child: travelProvider.getImage == null
+                                ? Image.asset(
+                              'assets/images/travel_default_photo.png',
                               fit: BoxFit.cover,
+                            )
+                                : Image.file(
+                              travelProvider.getImage!,
+                              fit: BoxFit.cover,
+                              gaplessPlayback: true,
+
+                              /// Animated image loading
+                              frameBuilder:
+                                  (context, child, frame, wasSyncLoaded) {
+                                if (wasSyncLoaded || frame != null) {
+                                  return child;
+                                } else {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      valueColor:
+                                      AlwaysStoppedAnimation<Color>(
+                                        colors.tertiary,
+                                      ),
+                                      strokeWidth: 3.0,
+                                    ),
+                                  );
+                                }
+                              },
+
+                              /// Error image loading
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/travel_default_photo.png',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -535,10 +541,13 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _ImageOption(
-                        icon: HugeIcons.strokeRoundedCameraAdd03,
+                        icon: CupertinoIcons.photo_camera_solid,
+
                         label: 'Câmera',
                         onTap: () {
-                          _pickImage(OptionPhotoMode.cameraMode);
+                          context.read<TravelProvider>().pickImage(
+                            OptionPhotoMode.cameraMode,
+                          );
                         },
                         backgroundColor: colors.secondary.withAlpha(50),
                         iconColor: colors.secondary,
@@ -547,7 +556,9 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                         icon: HugeIcons.strokeRoundedAlbum01,
                         label: 'Galeria',
                         onTap: () {
-                          _pickImage(OptionPhotoMode.galleryMode);
+                          context.read<TravelProvider>().pickImage(
+                            OptionPhotoMode.galleryMode,
+                          );
                         },
                         backgroundColor: colors.tertiary.withAlpha(50),
                         iconColor: colors.tertiary,

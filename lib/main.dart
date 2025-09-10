@@ -31,7 +31,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
 
         /// Manages interview-related state and logic
-        ChangeNotifierProvider(create: (_) => InterviewProvider()),
+        ChangeNotifierProvider(create: (_) => TravelProvider()),
 
         /// Manages participant-related state and logic
         ChangeNotifierProvider(create: (_) => ParticipantProvider()),

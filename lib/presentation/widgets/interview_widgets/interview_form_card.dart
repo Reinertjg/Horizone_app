@@ -32,7 +32,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
 
   @override
   void initState() {
-    Provider.of<InterviewProvider>(context, listen: false).startDateController.text =
+    Provider.of<TravelProvider>(context, listen: false).startDateController.text =
        DateFormat('dd/MM/yyyy').format(today);
     super.initState();
   }
@@ -40,7 +40,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final interviewProvider = Provider.of<InterviewProvider>(context);
+    final interviewProvider = Provider.of<TravelProvider>(context);
     final stopsProvider = Provider.of<StopProvider>(context);
 
     return Card(
