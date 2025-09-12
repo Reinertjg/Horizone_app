@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../domain/entities/travel.dart';
 import '../../domain/usecases/participant_usecase.dart';
 import '../../domain/usecases/stop_usecase.dart';
 import '../../domain/usecases/travel_usecase.dart';
@@ -20,8 +21,9 @@ import '../state/participant_provider.dart';
 import '../state/stop_provider.dart';
 import '../state/travel_provider.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/dashboard_widgets/travel_card_widget.dart';
 import '../widgets/iconbutton_settings.dart';
-import '../widgets/interview_widgets/blinking_dot.dart';
+import '../widgets/dashboard_widgets/blinking_dot.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
 import '../widgets/interview_widgets/map_preview_card.dart';
@@ -218,6 +220,10 @@ class _IconButtonImage extends StatelessWidget {
             color: colors.quaternary,
           ),
           onPressed: () {
+            /// Close keyboard
+            FocusManager.instance.primaryFocus?.unfocus();
+
+            /// Show modal bottom sheet
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -239,11 +245,15 @@ class _TravelImageModal extends StatefulWidget {
 }
 
 class _TravelImageModalState extends State<_TravelImageModal> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    final travelProvider = Provider.of<TravelProvider>(context);
+    final travelProvider = context.watch<TravelProvider>();
     return AnimatedPadding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -328,197 +338,25 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                   const SizedBox(height: 16),
 
                   /// Travel cards - Sera implementado em um widget separado
-                  Stack(
-                    children: [
-                      SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Card(
-                            elevation: 2,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            color: colors.quinary,
-                            child: travelProvider.getImage == null
-                                ? Image.asset(
-                              'assets/images/travel_default_photo.png',
-                              fit: BoxFit.cover,
-                            )
-                                : Image.file(
-                              travelProvider.getImage!,
-                              fit: BoxFit.cover,
-                              gaplessPlayback: true,
-
-                              /// Animated image loading
-                              frameBuilder:
-                                  (context, child, frame, wasSyncLoaded) {
-                                if (wasSyncLoaded || frame != null) {
-                                  return child;
-                                } else {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(
-                                        colors.tertiary,
-                                      ),
-                                      strokeWidth: 3.0,
-                                    ),
-                                  );
-                                }
-                              },
-
-                              /// Error image loading
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/images/travel_default_photo.png',
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 18,
-                        left: 15,
-                        child: Container(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                            color: Colors.white.withValues(alpha: 0.5),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              BlinkingDot(),
-                              SizedBox(width: 6),
-                              Text(
-                                "Em andamento",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 15,
-                        right: 15,
-                        child: Icon(
-                          CupertinoIcons.arrow_up_right_square_fill,
-                          color: colors.quinary,
-                          size: 25,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        left: 10,
-                        child: Container(
-                          width: 50,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                            color: colors.quaternary.withValues(alpha: 0.5),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              right: 16.0,
-                              left: 16.0,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Viagem Familia Souza',
-                                  style: GoogleFonts.raleway(
-                                    color: colors.quinary,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      HugeIcons.strokeRoundedLocation06,
-                                      color: colors.quinary,
-                                      size: 10,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Expanded(
-                                      child: Text(
-                                        'Florida - Orlando',
-                                        style: GoogleFonts.raleway(
-                                          color: colors.quinary,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star_rounded,
-                                      color: colors.tertiary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Icon(
-                                      Icons.star_rounded,
-                                      color: colors.tertiary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Icon(
-                                      Icons.star_rounded,
-                                      color: colors.tertiary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Icon(
-                                      Icons.star_rounded,
-                                      color: colors.tertiary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Icon(
-                                      Icons.star_outline_rounded,
-                                      color: colors.tertiary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Text(
-                                      '4.6',
-                                      style: GoogleFonts.nunito(
-                                        color: colors.quinary,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  TravelCardsWidget(
+                    travel: Travel(
+                      image: travelProvider.getImage,
+                      title: travelProvider.getTitle ?? 'Example',
+                      startDate: '01/01/2026',
+                      endDate: '02/01/2026',
+                      meansOfTransportation: 'Car',
+                      numberOfParticipants: 1,
+                      experienceType: 'Solo',
+                      numberOfStops: 1,
+                      originPlace: '',
+                      originLabel: '',
+                      destinationPlace: '',
+                      destinationLabel:
+                          travelProvider.destinationLabel ?? 'Exemple',
+                      status: 'in_progress',
+                    ),
                   ),
+
                   Text(
                     'Example of the added image',
                     style: GoogleFonts.raleway(
