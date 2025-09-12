@@ -296,13 +296,22 @@ class AvatarProfile extends StatelessWidget {
                       fit: BoxFit.cover,
                       gaplessPlayback: true,
                       frameBuilder: (context, child, frame, wasSyncLoaded) {
-                        if (wasSyncLoaded || frame != null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              colors.tertiary,
+                        if (wasSyncLoaded) return child;
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          child: frame == null
+                              ? Center(
+                            key: const ValueKey('loader'),
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(colors.tertiary),
+                              strokeWidth: 3.0,
                             ),
-                            strokeWidth: 3.0,
+                          )
+                              : KeyedSubtree(
+                            key: const ValueKey('img'),
+                            child: child,
                           ),
                         );
                       },
