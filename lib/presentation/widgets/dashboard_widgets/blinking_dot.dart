@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BlinkingDot extends StatefulWidget {
-  const BlinkingDot({super.key});
+  const BlinkingDot({super.key, required this.color});
+
+  final Color color;
 
   @override
   State<BlinkingDot> createState() => _BlinkingDotState();
@@ -33,12 +35,12 @@ class _BlinkingDotState extends State<BlinkingDot>
       child: Container(
         width: 12,
         height: 12,
-        decoration: const BoxDecoration(
-          color: Colors.green,
+        decoration: BoxDecoration(
+          color: widget.color,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.green,
+              color: widget.color,
               blurRadius: 10,
               spreadRadius: 3,
             ),

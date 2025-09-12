@@ -4,19 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:printing/printing.dart';
 
 import '../../domain/entities/profile.dart';
 import '../../domain/entities/travel.dart';
 import '../../generated/l10n.dart';
 
+import '../../pdf_test.dart';
 import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/profile_repository_impl.dart';
 import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/dashboard_widgets/travel_card_widget.dart';
 import '../widgets/iconbutton_notifications.dart';
 import '../widgets/iconbutton_settings.dart';
-import '../widgets/interview_widgets/blinking_dot.dart';
+import '../widgets/dashboard_widgets/blinking_dot.dart';
 
 /// The main screen displayed after user login,
 /// showing a personalized welcome and main navigation options.
@@ -146,9 +149,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         itemCount: travels.length,
                         scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) => _travelCards(
-                          travels: travels.reversed.toList()[index],
-                        ),
+                        itemBuilder: (context, index) {
+                          final reversedTravels = travels.reversed.toList();
+                          final travel = reversedTravels[index];
+                          return TravelCardsWidget(
+                            onTap: () async {
+                              final result = await Navigator.pushNamed(
+                                context,
+                                '/travelDashboard',
+                                arguments: travel,
+                              );
+                            },
+                            travel: travel,
+                          );
+                        },
                       ),
                     ),
 
@@ -275,7 +289,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         const SizedBox(width: 12),
         IconButton(
-          onPressed: () {
+          onPressed: () async {
+            final bytes = await (await pdfTest()).readAsBytes();
+            await Printing.layoutPdf(onLayout: (_) async => bytes);
           },
           icon: Icon(
             HugeIcons.strokeRoundedSettings05,
@@ -322,37 +338,44 @@ class _DashboardAppBar extends StatelessWidget {
                             'assets/images/user_default_photo.png',
                             fit: BoxFit.cover,
                           )
-                        : Image.file(
-                            profile.photo!,
-                            fit: BoxFit.cover,
-                            gaplessPlayback: true,
-
-                            /// Animated image loading
-                            frameBuilder:
-                                (context, child, frame, wasSyncLoaded) {
-                                  if (wasSyncLoaded || frame != null) {
-                                    return child;
-                                  } else {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              colors.tertiary,
-                                            ),
-                                        strokeWidth: 3.0,
+                        :  Image.file(
+                              profile.photo!,
+                              fit: BoxFit.cover,
+                              width: 50,
+                              height: 50,
+                              frameBuilder:
+                                  (context, child, frame, wasSyncLoaded) {
+                                    if (wasSyncLoaded) return child;
+                                    return AnimatedSwitcher(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      switchInCurve: Curves.easeOut,
+                                      switchOutCurve: Curves.easeIn,
+                                      child: frame == null
+                                          ? Center(
+                                        key: const ValueKey('loader'),
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                          AlwaysStoppedAnimation<
+                                              Color
+                                          >(colors.tertiary),
+                                          strokeWidth: 3.0,
+                                        ),
+                                      )
+                                          : KeyedSubtree(
+                                        key: const ValueKey('img'),
+                                        child: child,
                                       ),
                                     );
-                                  }
-                                },
-
-                            /// Error image loading
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                'assets/images/user_default_photo.png',
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          ),
+                                  },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/user_default_photo.png',
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -381,262 +404,6 @@ class _DashboardAppBar extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Widget representing a travel card.
-class _travelCards extends StatelessWidget {
-  const _travelCards({required this.travels});
-
-  /// The index of the travel card.
-  final Travel travels;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<AppColors>()!;
-
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            print('\n----Inserido com sucesso----\n');
-            final repositoryParticipant = ParticipantRepositoryImpl();
-            final repositoryStop = StopRepositoryImpl();
-            final stop = await repositoryStop.getStopsByTravelId(travels.id!);
-            final participant = await repositoryParticipant
-                .getParticipantsByTravelId(travels.id!);
-            print('Titile: ${travels.title}');
-            print('Start Date: ${travels.startDate}');
-            print('End Date: ${travels.endDate}');
-            print('Means of Transportation: ${travels.meansOfTransportation}');
-            print('Number of Participants: ${travels.numberOfParticipants}');
-            print('Experience Type: ${travels.experienceType}');
-            print('Origin Place: ${travels.originPlace}');
-            print('Origin Label: ${travels.originLabel}');
-            print('Destination Place: ${travels.destinationPlace}');
-            print('Destination Label: ${travels.destinationLabel}');
-            print('Status: ${travels.status}');
-            print('-----------------------------');
-            print('Participants:');
-            for (var item in participant) {
-              print('Id: ${item.id}');
-              print('Name: ${item.name}');
-              print('Email: ${item.email}');
-              print('Photo: ${item.photo ?? 'No photo'}');
-              print('TravelId: ${item.travelId}');
-              print('-----------------------------');
-            }
-            print('Stops:');
-            for (var item in stop) {
-              print('Id: ${item.id}');
-              print('Order: ${item.order}');
-              print('Place: ${item.place.toString()}');
-              print('Label: ${item.label}');
-              print('Start Date: ${item.startDate}');
-              print('End Date: ${item.endDate}');
-              print('TravelId: ${item.travelId}');
-              print('-----------------------------');
-            }
-
-            await Navigator.pushNamed(
-              context,
-              '/travelDashboard',
-              arguments: travels,
-            );
-          },
-          child: SizedBox(
-            width: 200,
-            height: 200,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Card(
-                elevation: 2,
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                color: colors.quinary,
-                child: travels.image == null
-                    ? Image.asset(
-                  'assets/images/travel_default_photo.png',
-                  fit: BoxFit.cover,
-                )
-                    : Image.file(
-                  travels.image!,
-                  fit: BoxFit.cover,
-                  gaplessPlayback: true,
-
-                  /// Animated image loading
-                  frameBuilder:
-                      (context, child, frame, wasSyncLoaded) {
-                    if (wasSyncLoaded || frame != null) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                          AlwaysStoppedAnimation<Color>(
-                            colors.tertiary,
-                          ),
-                          strokeWidth: 3.0,
-                        ),
-                      );
-                    }
-                  },
-
-                  /// Error image loading
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      'assets/images/travel_default_photo.png',
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 18,
-          left: 15,
-          child: Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              color: Colors.white.withValues(alpha: 0.5),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                BlinkingDot(),
-                SizedBox(width: 6),
-                Text(
-                  "Em andamento",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 15,
-          right: 15,
-          child: Icon(
-            CupertinoIcons.arrow_up_right_square_fill,
-            color: colors.quinary,
-            size: 25,
-          ),
-        ),
-        Positioned(
-          bottom: 10,
-          right: 10,
-          left: 10,
-          child: Container(
-            width: 50,
-            height: 55,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(30)),
-              color: colors.quaternary.withValues(alpha: 0.5),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0, left: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    travels.title,
-                    style: GoogleFonts.raleway(
-                      color: colors.quinary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        HugeIcons.strokeRoundedLocation06,
-                        color: colors.quinary,
-                        size: 10,
-                      ),
-                      SizedBox(width: 2),
-                      Expanded(
-                        child: Text(
-                          travels.destinationLabel,
-                          style: GoogleFonts.raleway(
-                            color: colors.quinary,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // ListView.builder(
-                  //   itemCount: 5,
-                  //   shrinkWrap: true,
-                  //   scrollDirection: Axis.horizontal,
-                  //   physics: const NeverScrollableScrollPhysics(),
-                  //   itemBuilder: (context, index) {
-                  //     return Icon(
-                  //       HugeIcons.strokeRoundedStar,
-                  //       color: colors.quinary,
-                  //       size: 12,
-                  //     );
-                  //   },
-                  // ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.star_rounded,
-                        color: colors.tertiary,
-                        size: 16,
-                      ),
-                      SizedBox(width: 2),
-                      Icon(
-                        Icons.star_rounded,
-                        color: colors.tertiary,
-                        size: 16,
-                      ),
-                      SizedBox(width: 2),
-                      Icon(
-                        Icons.star_rounded,
-                        color: colors.tertiary,
-                        size: 16,
-                      ),
-                      SizedBox(width: 2),
-                      Icon(
-                        Icons.star_rounded,
-                        color: colors.tertiary,
-                        size: 16,
-                      ),
-                      SizedBox(width: 2),
-                      Icon(
-                        Icons.star_outline_rounded,
-                        color: colors.tertiary,
-                        size: 16,
-                      ),
-                      SizedBox(width: 2),
-                      Text(
-                        '4.6',
-                        style: GoogleFonts.nunito(
-                          color: colors.quinary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
