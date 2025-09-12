@@ -22,6 +22,10 @@ class MapPreviewCard extends StatelessWidget {
         const SizedBox(height: 12),
         GestureDetector(
           onTap: () {
+            /// Close keyboard
+            FocusManager.instance.primaryFocus?.unfocus();
+
+            /// Check if origin and destination are valid
             final args = context.read<StopProvider>().buildRouteArgs(
               origin: travelProvider.originPlace,
               destination: travelProvider.destinationPlace,
@@ -42,7 +46,10 @@ class MapPreviewCard extends StatelessWidget {
                 builder: (_) => const TravelRoutePage(),
                 settings: RouteSettings(arguments: args),
               ),
-            );
+            ).then((_) {
+              FocusScope.of(context).unfocus();
+              Future.microtask(() => FocusScope.of(context).unfocus());
+            });
           },
           child: Container(
             height: 200,

@@ -10,12 +10,21 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../theme_color/app_colors.dart';
 
+/// Args for the [TravelRoutePage].
 class TravelRouteArgs {
+  /// The starting point of the route.
   final LatLng origin;
+
+  /// The ending point of the route.
   final LatLng destination;
+
+  /// The title to be displayed in the AppBar.
   final String title;
+
+  /// A list of intermediate points (stops) between origin and destination.
   final List<LatLng> waypoints;
 
+  /// Creates arguments for the travel route page.
   const TravelRouteArgs({
     required this.origin,
     required this.destination,
@@ -24,7 +33,9 @@ class TravelRouteArgs {
   });
 }
 
+/// Page to show the route between two points.
 class TravelRoutePage extends StatefulWidget {
+  /// Creates a custom [TravelRoutePage].
   const TravelRoutePage({super.key});
 
   @override
@@ -32,10 +43,10 @@ class TravelRoutePage extends StatefulWidget {
 }
 
 class _TravelRoutePageState extends State<TravelRoutePage> {
-  // ----- Config -----
+  /// The maximum distance in kilometers for directions.
   static const double _kMaxDistanceKmForDirections = 2000;
 
-  // ----- State -----
+  /// Controller for the Google Map.
   final _ctl = Completer<GoogleMapController>();
   Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
@@ -51,29 +62,30 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     _draw();
   }
 
-  double _deg2rad(double d) => d * math.pi / 180.0;
 
-  double _haversineKm(LatLng a, LatLng b) {
-    const R = 6371.0;
-    final dLat = _deg2rad(b.latitude - a.latitude);
-    final dLng = _deg2rad(b.longitude - a.longitude);
-    final la1 = _deg2rad(a.latitude);
-    final la2 = _deg2rad(b.latitude);
-    final h =
+  double _deg2rad(double degrees) => degrees * math.pi / 180.0;
+
+  double _haversineKm(LatLng point1, LatLng point2) {
+    const earthRadiusKm = 6371.0;
+    final dLat = _deg2rad(point2.latitude - point1.latitude);
+    final dLng = _deg2rad(point2.longitude - point1.longitude);
+    final lat1Rad = _deg2rad(point1.latitude);
+    final lat2Rad = _deg2rad(point2.latitude);
+    final a =
         math.sin(dLat / 2) * math.sin(dLat / 2) +
-        math.cos(la1) * math.cos(la2) * math.sin(dLng / 2) * math.sin(dLng / 2);
-    final c = 2 * math.atan2(math.sqrt(h), math.sqrt(1 - h));
-    return R * c;
+        math.cos(lat1Rad) * math.cos(lat2Rad) * math.sin(dLng / 2) * math.sin(dLng / 2);
+    final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    return earthRadiusKm * c;
   }
 
   LatLngBounds _bounds(List<LatLng> pts) {
     double minLat = pts.first.latitude, maxLat = pts.first.latitude;
     double minLng = pts.first.longitude, maxLng = pts.first.longitude;
-    for (final p in pts) {
-      if (p.latitude < minLat) minLat = p.latitude;
-      if (p.latitude > maxLat) maxLat = p.latitude;
-      if (p.longitude < minLng) minLng = p.longitude;
-      if (p.longitude > maxLng) maxLng = p.longitude;
+    for (final point in pts) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+      if (point.longitude < minLng) minLng = point.longitude;
+      if (point.longitude > maxLng) maxLng = point.longitude;
     }
     return LatLngBounds(
       southwest: LatLng(minLat, minLng),
@@ -103,14 +115,15 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       totalKm += _haversineKm(legs[i], legs[i + 1]);
     }
 
-    List<LatLng> coords = [];
+
+    var coords = <LatLng>[];
 
     if (totalKm <= _kMaxDistanceKmForDirections) {
       final polylinePoints = PolylinePoints(apiKey: apiKey);
-      final wp = _args.waypoints
+      final waypoints = _args.waypoints
           .map(
-            (w) => PolylineWayPoint(
-              location: '${w.latitude},${w.longitude}',
+            (waypoint) => PolylineWayPoint(
+              location: '${waypoint.latitude},${waypoint.longitude}',
               stopOver: true,
             ),
           )
@@ -124,14 +137,14 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
             _args.destination.longitude,
           ),
           mode: TravelMode.driving,
-          wayPoints: wp,
+          wayPoints: waypoints,
           // optimizeWaypoints: true,
         ),
       );
 
       if (result.points.isNotEmpty) {
         coords = result.points
-            .map((p) => LatLng(p.latitude, p.longitude))
+            .map((point) => LatLng(point.latitude, point.longitude))
             .toList(growable: false);
       } else {
         debugPrint('Directions vazio: ${result.errorMessage}');
@@ -159,10 +172,10 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
             infoWindow: const InfoWindow(title: 'Destino'),
           ),
           ..._args.waypoints.asMap().entries.map(
-            (e) => Marker(
-              markerId: MarkerId('wp${e.key}'),
-              position: e.value,
-              infoWindow: InfoWindow(title: 'Parada ${e.key + 1}'),
+            (entry) => Marker(
+              markerId: MarkerId('wp${entry.key}'),
+              position: entry.value,
+              infoWindow: InfoWindow(title: 'Parada ${entry.key + 1}'),
               icon: BitmapDescriptor.defaultMarkerWithHue(
                 BitmapDescriptor.hueAzure,
               ),
@@ -198,10 +211,10 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
           infoWindow: const InfoWindow(title: 'Destino'),
         ),
         ..._args.waypoints.asMap().entries.map(
-          (e) => Marker(
-            markerId: MarkerId('wp${e.key}'),
-            position: e.value,
-            infoWindow: InfoWindow(title: 'Parada ${e.key + 1}'),
+          (entry) => Marker(
+            markerId: MarkerId('wp${entry.key}'),
+            position: entry.value,
+            infoWindow: InfoWindow(title: 'Parada ${entry.key + 1}'),
             icon: BitmapDescriptor.defaultMarkerWithHue(
               BitmapDescriptor.hueAzure,
             ),
@@ -223,7 +236,11 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
         centerTitle: true,
         title: Text(
           _args.title,
-          style: GoogleFonts.raleway(color: colors.tertiary, fontSize: 16, fontWeight: FontWeight.bold),
+          style: GoogleFonts.raleway(
+            color: colors.tertiary,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: GoogleMap(
