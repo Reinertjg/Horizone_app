@@ -42,7 +42,10 @@ abstract class TravelTable {
   /// Destination Label of the Travel (text, required)
   static const String destinationLabel = 'destinationLabel';
 
-  /// Status of the trip (e.g., in progress, completed) (text)
+  /// Rating of the trip (integer, required)
+  static const String rating = 'rating';
+
+  /// Status of the trip (e.g. active, completed, cancelled) (text)
   static const String status = 'status';
 
   /// SQL statement to create the `Travels` table with the defined schema.
@@ -62,7 +65,8 @@ abstract class TravelTable {
       $originLabel TEXT NOT NULL,
       $destinationPlace TEXT NOT NULL,
       $destinationLabel TEXT NOT NULL,
-      $status TEXT NOT NULL DEFAULT 'in_progress'
+      $rating REAL,
+      $status TEXT NOT NULL DEFAULT 'active'
     )
   ''';
 }

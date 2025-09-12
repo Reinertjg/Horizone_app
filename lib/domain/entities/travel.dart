@@ -41,6 +41,9 @@ class Travel {
   /// The Destination Label the Trip
   final String destinationLabel;
 
+  /// The rating of the trip.
+  final double? rating;
+
   /// The status of the trip (e.g., in progress, completed).
   String status = 'in progress';
 
@@ -59,6 +62,7 @@ class Travel {
     required this.originLabel,
     required this.destinationPlace,
     required this.destinationLabel,
+    this.rating,
     required String status,
   });
 
@@ -78,6 +82,8 @@ class Travel {
       'destinationLabel': destinationLabel,
       'originPlace': originPlace,
       'destinationPlace': destinationPlace,
+      'rating': rating,
+      'status': status,
     };
     return map;
   }
@@ -98,6 +104,7 @@ class Travel {
       originLabel: map['originLabel'],
       destinationPlace: map['destinationPlace'],
       destinationLabel: map['destinationLabel'],
+      rating: map['rating'],
       status: map['status'],
     );
   }

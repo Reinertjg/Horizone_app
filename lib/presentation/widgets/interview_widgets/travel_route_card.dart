@@ -33,9 +33,7 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = context.watch<TravelProvider>();
-    final service = PlacesService(
-      apiKey: dotenv.env['MAPS_API_KEY']!,
-    );
+    final service = PlacesService(apiKey: dotenv.env['MAPS_API_KEY']!);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -65,7 +63,10 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
                 hintText: 'Pesquisar endereço...',
                 icon: HugeIcons.strokeRoundedAirplaneTakeOff01,
                 onSelected: (placeId, description) async {
-                  await interviewProvider.resolveAndSetOrigin(placeId: placeId, label: description);
+                  await interviewProvider.resolveAndSetOrigin(
+                    placeId: placeId,
+                    label: description,
+                  );
                 },
                 validator: interviewProvider.validateOriginPlace,
               ),
@@ -77,9 +78,12 @@ class _TravelRouteCardState extends State<TravelRouteCard> {
               GooglePlacesAutocomplete(
                 service: service,
                 hintText: 'Pesquisar endereço...',
-                  icon: HugeIcons.strokeRoundedAirplaneLanding01,
+                icon: HugeIcons.strokeRoundedAirplaneLanding01,
                 onSelected: (placeId, description) async {
-                  await interviewProvider.resolveAndSetDestination(placeId: placeId, label: description);
+                  await interviewProvider.resolveAndSetDestination(
+                    placeId: placeId,
+                    label: description,
+                  );
                 },
                 validator: interviewProvider.validateDestinationPlace,
               ),

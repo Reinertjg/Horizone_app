@@ -33,6 +33,9 @@ class TravelProvider extends ChangeNotifier {
   String? _originLabel;
   String? _destinationLabel;
 
+  /// Gets the trip title.
+  String? get getTitle => titleController.text.trim();
+
   /// Gets the number of participants.
   int? get participants => _participants;
 
@@ -132,7 +135,8 @@ class TravelProvider extends ChangeNotifier {
       originLabel: _originLabel!,
       destinationPlace: _destinationPlace.toString(),
       destinationLabel: _destinationLabel!,
-      status: 'in progress',
+      rating: 0.0,
+      status: 'active',
     );
   }
 

@@ -6,13 +6,18 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/stop.dart';
 import '../../domain/entities/travel.dart';
 import '../../repositories/stop_repository_impl.dart';
+import '../../util/date_utils.dart';
 import '../../util/string_utils.dart';
+import '../../util/travel_status.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/dashboard_widgets/status_chip.dart';
+import '../widgets/dashboard_widgets/travel_card_widget.dart' hide TravelStatus;
 import '../widgets/iconbutton_settings.dart';
 import '../widgets/section_title.dart';
 
 class TravelDashboardScreen extends StatefulWidget {
   const TravelDashboardScreen({super.key, required this.travel});
+
   final Travel travel;
 
   @override
@@ -25,17 +30,61 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
   String currentLocation = '';
   String? currentLocationDate;
 
+
+
+  bool _isTravelOngoing() {
+    final today = DateTime.now();
+    final todayOnly = DateTime(today.year, today.month, today.day);
+    final endDate = parseTravelDate(widget.travel.endDate);
+    final endDateOnly = DateTime(endDate.year, endDate.month, endDate.day);
+    final startDate = parseTravelDate(widget.travel.startDate);
+    final startDateOnly = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+    );
+
+    final status = getTravelStatus(
+      startDate: parseTravelDate(widget.travel.startDate),
+      endDate: parseTravelDate(widget.travel.endDate),
+    );
+    ;
+
+    if (status == TravelStatus.inProgress) {
+      return true;
+    }
+
+    return false;
+  }
+
   Future<void> _uploadStops() async {
-    final searched = await repositoryStop.getStopsByTravelId(widget.travel.id!);
-    setState(() {
-      stops = searched;
-      _determineCurrentLocation();
-    });
+    try {
+      final searched = await repositoryStop.getStopsByTravelId(
+          widget.travel.id!);
+      setState(() {
+        stops = searched;
+        _determineCurrentLocation();
+      });
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   void _determineCurrentLocation() {
     final today = DateTime.now();
     final todayOnly = DateTime(today.year, today.month, today.day);
+    final startDate = parseTravelDate(widget.travel.startDate);
+    final startDateOnly = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+    );
+    final endDate = parseTravelDate(widget.travel.endDate);
+    final endDateOnly = DateTime(endDate.year, endDate.month, endDate.day);
+
+    // Default to origin location if no other condition is met within the travel period
+    currentLocation = widget.travel.originLabel;
+
     final currentStop = stops.where((stop) {
       final date = stop.startDate!;
       final stopOnly = DateTime(date.year, date.month, date.day);
@@ -46,17 +95,12 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
       currentLocation = currentStop.label ?? '';
       currentLocationDate = _formatStopShort(currentStop.startDate!);
     } else {
-      final endDate = _parseTravelDate(widget.travel.endDate);
-      final endDateOnly = DateTime(endDate.year, endDate.month, endDate.day);
-      final startDate = _parseTravelDate(widget.travel.startDate);
-      final startDateOnly = DateTime(startDate.year, startDate.month, startDate.day);
-
-      if (todayOnly.isAtSameMomentAs(endDateOnly)) {
+      if (todayOnly.isAtSameMomentAs(startDateOnly)) {
+        currentLocation = widget.travel.originLabel;
+        currentLocationDate = _formatStopShort(startDate);
+      } else if (todayOnly.isAtSameMomentAs(endDateOnly)) {
         currentLocation = widget.travel.destinationLabel;
         currentLocationDate = _formatStopShort(endDate);
-      } else if (todayOnly.isBefore(startDateOnly)) {
-        currentLocation = widget.travel.originLabel;
-        currentLocationDate = null;
       } else {
         currentLocation = '';
         currentLocationDate = null;
@@ -86,16 +130,19 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
                 icon: HugeIcons.strokeRoundedTextCircle,
               ),
             ),
-            _TravelInfoCard(travel: widget.travel),
-            if (currentLocation.isNotEmpty)
+            _TravelInfoCard(
+              travel: widget.travel,
+              status: getTravelStatus(
+                startDate: parseTravelDate(widget.travel.startDate),
+                endDate: parseTravelDate(widget.travel.endDate),
+              ),
+            ),
+            if (_isTravelOngoing())
               _CurrentLocationCard(
                 currentLocation: currentLocation,
                 currentLocationDate: currentLocationDate,
               ),
-            _TravelTimeline(
-              travel: widget.travel,
-              stops: stops,
-            ),
+            _TravelTimeline(travel: widget.travel, stops: stops),
           ],
         ),
       ),
@@ -133,8 +180,10 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _TravelInfoCard extends StatelessWidget {
-  const _TravelInfoCard({required this.travel});
+  const _TravelInfoCard({required this.travel, required this.status});
+
   final Travel travel;
+  final TravelStatus status;
 
   @override
   Widget build(BuildContext context) {
@@ -143,10 +192,14 @@ class _TravelInfoCard extends StatelessWidget {
     final startDate = inputDateFormat.tryParse(travel.startDate);
     final endDate = inputDateFormat.tryParse(travel.endDate);
     final duration = (startDate != null && endDate != null)
-        ? endDate.difference(startDate).inDays + 1
+        ? endDate
+        .difference(startDate)
+        .inDays + 1
         : 0;
     final dateFormat = DateFormat('dd MMM yyyy', 'pt_BR');
-    final formattedStartDate = startDate != null ? dateFormat.format(startDate) : '';
+    final formattedStartDate = startDate != null
+        ? dateFormat.format(startDate)
+        : '';
     final formattedEndDate = endDate != null ? dateFormat.format(endDate) : '';
 
     return Container(
@@ -164,7 +217,7 @@ class _TravelInfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -188,32 +241,14 @@ class _TravelInfoCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    '',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
-                  ),
+                  const SizedBox(height: 18),
                   Text(
                     '$duration dias',
                     style: const TextStyle(color: Colors.white70, fontSize: 14),
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: colors.quaternary.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  travel.status,
-                  style: TextStyle(
-                    color: colors.quaternary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              StatusChip(status: status),
             ],
           ),
           const SizedBox(height: 20),
@@ -221,7 +256,7 @@ class _TravelInfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.group_outlined,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -344,6 +379,7 @@ class _CurrentLocationCard extends StatelessWidget {
 
 class _TravelTimeline extends StatelessWidget {
   const _TravelTimeline({required this.travel, required this.stops});
+
   final Travel travel;
   final List<Stop> stops;
 
@@ -396,7 +432,7 @@ class _TravelTimeline extends StatelessWidget {
               final isDestination = index == stops.length + 1;
 
               if (isOrigin) {
-                final start = _parseTravelDate(travel.startDate);
+                final start = parseTravelDate(travel.startDate);
                 return _EndpointCard(
                   label: travel.originLabel,
                   date: start,
@@ -405,7 +441,7 @@ class _TravelTimeline extends StatelessWidget {
               }
 
               if (isDestination) {
-                final end = _parseTravelDate(travel.endDate);
+                final end = parseTravelDate(travel.endDate);
                 return _EndpointCard(
                   label: travel.destinationLabel,
                   date: end,
@@ -478,7 +514,9 @@ class _EndpointCard extends StatelessWidget {
     final dotColor = isOrigin
         ? (isPast ? Colors.green : colors.secondary)
         : (isPast ? Colors.green : Colors.redAccent);
-    final dotIcon = isOrigin ? HugeIcons.strokeRoundedLocation05 : Icons.flag_outlined;
+    final dotIcon = isOrigin
+        ? HugeIcons.strokeRoundedLocation05
+        : Icons.flag_outlined;
     final dateLabel = _formatStopShort(date);
 
     return Row(
@@ -537,14 +575,20 @@ class _EndpointCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color:
-                          isPast ? Colors.green : (isOrigin ? colors.secondary : Colors.redAccent),
+                          color: isPast
+                              ? Colors.green
+                              : (isOrigin
+                              ? colors.secondary
+                              : Colors.redAccent),
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: dotColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -597,7 +641,9 @@ class _StopCard extends StatelessWidget {
     final statusColor = _getStatusColor(context, status);
     final statusIcon = _getStatusIcon(status);
     final dateLabel = _formatStopShort(stop.startDate!);
-    final activities = (stop.description?.trim().isNotEmpty ?? false)
+    final activities = (stop.description
+        ?.trim()
+        .isNotEmpty ?? false)
         ? stop.description!.trim()
         : (stop.label ?? '');
 
@@ -667,7 +713,10 @@ class _StopCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: statusColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -704,10 +753,6 @@ class _StopCard extends StatelessWidget {
 
 enum StopStatus { past, current, upcoming }
 
-DateTime _parseTravelDate(String raw) {
-  final f = DateFormat('dd/MM/yyyy');
-  return f.tryParse(raw)?.toLocal() ?? DateTime.now();
-}
 
 DateTime _asDateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
