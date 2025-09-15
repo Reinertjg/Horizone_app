@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 /// A class representing a point on the map.
+@immutable
 class PlacePoint {
   /// The latitude of the place.
   final double latitude;
@@ -21,9 +23,21 @@ class PlacePoint {
     final longitude = double.parse(parts[1]);
     return PlacePoint(latitude: latitude, longitude: longitude);
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlacePoint &&
+          runtimeType == other.runtimeType &&
+          latitude == other.latitude &&
+          longitude == other.longitude;
+
+  @override
+  int get hashCode => latitude.hashCode ^ longitude.hashCode;
 }
 
-/// Represents a stop in a travel.
+@immutable
+/// A class representing a stop in a travel.
 class Stop {
   /// The ID of the stop in the travel.
   final int? id;
@@ -50,7 +64,7 @@ class Stop {
   final int? travelId;
 
   /// Creates a new [Stop] object.
-  Stop({
+  const Stop({
     this.id,
     required this.order,
     required this.place,
@@ -83,10 +97,12 @@ class Stop {
       order: map['sort_order'] ?? 0,
       place: PlacePoint.fromString(map['place']),
       label: map['label'],
-      startDate:
-          map['startDate'] != null && map['startDate'].isNotEmpty ? DateFormat('dd/MM/yyyy').parse(map['startDate']) : null,
-      endDate:
-          map['endDate'] != null && map['endDate'].isNotEmpty ? DateFormat('dd/MM/yyyy').parse(map['endDate']) : null,
+      startDate: map['startDate'] != null && map['startDate'].isNotEmpty
+          ? DateFormat('dd/MM/yyyy').parse(map['startDate'])
+          : null,
+      endDate: map['endDate'] != null && map['endDate'].isNotEmpty
+          ? DateFormat('dd/MM/yyyy').parse(map['endDate'])
+          : null,
       description: map['description'],
       travelId: map['travelId'],
     );
@@ -118,11 +134,31 @@ class Stop {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Stop && runtimeType == other.runtimeType && order == other.order;
+      other is Stop &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          order == other.order &&
+          place == other.place &&
+          label == other.label &&
+          startDate == other.startDate &&
+          endDate == other.endDate &&
+          description == other.description &&
+          travelId == other.travelId;
 
   @override
-  int get hashCode => order.hashCode;
+  int get hashCode =>
+      Object.hash(
+        id,
+        order,
+        place,
+        label,
+        startDate,
+        endDate,
+        description,
+        travelId,
+      );
 
+  /// Formats a [DateTime] object to a string in the format 'dd/MM/yyyy'.
   String formatDate(DateTime? date) {
     if (date == null) return '';
     return DateFormat('dd/MM/yyyy').format(date);
