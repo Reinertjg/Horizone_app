@@ -28,16 +28,15 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
     });
   }
 
-
   /// Deletes the participant with the given [id] from the data source.
   @override
   Future<void> deleteParticipant(int id) async {
-   final db = await _dbFuture;
-   await db.delete(
-     ParticipantTable.tableName,
-     where: '${ParticipantTable.participantId} = ?',
-     whereArgs: [id],
-   );
+    final db = await _dbFuture;
+    await db.delete(
+      ParticipantTable.tableName,
+      where: '${ParticipantTable.participantId} = ?',
+      whereArgs: [id],
+    );
   }
 
   /// Retrieves all participants with the given [travelId] from the data source.

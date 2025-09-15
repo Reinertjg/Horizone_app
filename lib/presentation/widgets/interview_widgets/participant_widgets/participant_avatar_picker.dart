@@ -4,18 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../theme_color/app_colors.dart';
-import 'image_picker_sheet.dart';
+import '../../bottom_sheet_widgets/options_image_modal.dart';
+import '../../show_dialog_image.dart';
 
-enum OptionPhotoMode { cameraMode, galleryMode }
+/// Options for picking a photo.
+enum OptionPhotoMode {
+  /// Pick an image from the camera.
+  cameraMode,
 
+  /// Pick an image from the gallery.
+  galleryMode,
+}
+
+/// A widget that allows the user to pick an avatar for a participant.
 class ParticipantAvatarPicker extends StatefulWidget {
+  /// Creates a [ParticipantAvatarPicker].
   const ParticipantAvatarPicker({
     super.key,
     required this.image,
     required this.onImagePicked,
   });
 
+  /// The image file to display.
   final File? image;
+
+  /// A callback that is called when an image is picked.
   final void Function(File file) onImagePicked;
 
   @override
@@ -59,7 +72,10 @@ class _ParticipantAvatarPickerState extends State<ParticipantAvatarPicker> {
             showModalBottomSheet(
               context: context,
               builder: (context) => ImagePickerSheet(
+                title: 'Opções',
                 onCameraTap: () => _pickImage(OptionPhotoMode.cameraMode),
+                onVisualizeTap: () =>
+                    showDialogImage(context, _image, MainAxisAlignment.start),
                 onGalleryTap: () => _pickImage(OptionPhotoMode.galleryMode),
               ),
             );

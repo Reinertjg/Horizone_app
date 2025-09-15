@@ -3,8 +3,8 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 import '../../pages/google_map_screen.dart';
-import '../../state/travel_provider.dart';
 import '../../state/stop_provider.dart';
+import '../../state/travel_provider.dart';
 import '../../theme_color/app_colors.dart';
 
 /// Card to preview the map of the travel route.
@@ -47,8 +47,8 @@ class MapPreviewCard extends StatelessWidget {
                 settings: RouteSettings(arguments: args),
               ),
             ).then((_) {
+              if (!context.mounted) return;
               FocusScope.of(context).unfocus();
-              Future.microtask(() => FocusScope.of(context).unfocus());
             });
           },
           child: Container(

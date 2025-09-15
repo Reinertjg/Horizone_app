@@ -44,5 +44,4 @@ class TravelRepositoryImpl implements TravelRepository {
     );
     return result.map(Travel.fromMap).toList();
   }
-
 }

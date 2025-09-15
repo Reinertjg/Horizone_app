@@ -26,9 +26,9 @@ abstract class ProfileTable {
   /// Path to the photo of the user (text, required)
   static const String pathPhoto = 'photo';
 
-
   /// SQL statement to create the `profiles` table with the defined schema.
-  static const createTable = '''
+  static const createTable =
+      '''
     CREATE TABLE $tableName (
       $profileId INTEGER PRIMARY KEY AUTOINCREMENT,
       $profileName TEXT NOT NULL,
@@ -39,5 +39,4 @@ abstract class ProfileTable {
       $pathPhoto TEXT
     )
   ''';
-
 }

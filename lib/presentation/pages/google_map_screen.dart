@@ -62,7 +62,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     _draw();
   }
 
-
   double _deg2rad(double degrees) => degrees * math.pi / 180.0;
 
   double _haversineKm(LatLng point1, LatLng point2) {
@@ -73,14 +72,17 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     final lat2Rad = _deg2rad(point2.latitude);
     final a =
         math.sin(dLat / 2) * math.sin(dLat / 2) +
-        math.cos(lat1Rad) * math.cos(lat2Rad) * math.sin(dLng / 2) * math.sin(dLng / 2);
+        math.cos(lat1Rad) *
+            math.cos(lat2Rad) *
+            math.sin(dLng / 2) *
+            math.sin(dLng / 2);
     final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
     return earthRadiusKm * c;
   }
 
   LatLngBounds _bounds(List<LatLng> pts) {
-    double minLat = pts.first.latitude, maxLat = pts.first.latitude;
-    double minLng = pts.first.longitude, maxLng = pts.first.longitude;
+    var minLat = pts.first.latitude, maxLat = pts.first.latitude;
+    var minLng = pts.first.longitude, maxLng = pts.first.longitude;
     for (final point in pts) {
       if (point.latitude < minLat) minLat = point.latitude;
       if (point.latitude > maxLat) maxLat = point.latitude;
@@ -111,10 +113,9 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
 
     final legs = <LatLng>[_args.origin, ..._args.waypoints, _args.destination];
     double totalKm = 0;
-    for (int i = 0; i < legs.length - 1; i++) {
+    for (var i = 0; i < legs.length - 1; i++) {
       totalKm += _haversineKm(legs[i], legs[i + 1]);
     }
-
 
     var coords = <LatLng>[];
 
@@ -130,6 +131,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
           .toList();
 
       final result = await polylinePoints.getRouteBetweenCoordinates(
+        // ignore: deprecated_member_use
         request: PolylineRequest(
           origin: PointLatLng(_args.origin.latitude, _args.origin.longitude),
           destination: PointLatLng(

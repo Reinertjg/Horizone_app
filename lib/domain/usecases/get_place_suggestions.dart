@@ -26,7 +26,8 @@ class PlacesService {
         'Content-Type': 'application/json; charset=utf-8',
         'X-Goog-Api-Key': apiKey,
         'X-Goog-FieldMask':
-            'suggestions.placePrediction.placeId,suggestions.placePrediction.text',
+            'suggestions.placePrediction.placeId,'
+            'suggestions.placePrediction.text',
         'X-Goog-Maps-Platform-Session-Token': _sessionToken,
       },
       body: jsonEncode({'input': input}),

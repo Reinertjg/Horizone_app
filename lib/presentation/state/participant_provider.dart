@@ -22,6 +22,7 @@ class ParticipantProvider extends ChangeNotifier {
   /// Gets the selected image.
   File? get selectedImage => _selectedImage;
 
+  /// Resets the list of participants and notifies listeners.
   void reset() {
     _participants.clear();
     _selectedImage = null;

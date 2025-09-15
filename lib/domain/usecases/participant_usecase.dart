@@ -4,7 +4,6 @@ import '../repositories/participant_repository.dart';
 /// Use case class responsible for managing [Participant] operations
 /// such as insertion and retrieval.
 class ParticipantUseCase {
-
   /// Repository interface for interacting with trip data.
   final ParticipantRepository repository;
 

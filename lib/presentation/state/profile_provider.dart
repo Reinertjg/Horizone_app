@@ -29,25 +29,14 @@ class ProfileProvider extends ChangeNotifier {
   DateTime? dateOfBirth;
 
   /// Selected image file.
-  File? _photo;
+  File? photo;
 
   /// Selected gender value.
-  String? _gender;
-
-  /// Gets the selected gender.
-  String? get gender => _gender;
-
-  /// Gets the selected image.
-  File? get getPhoto => _photo;
-
-  /// Sets the gender property with the provided [value].
-  set gender(String? value) {
-    _gender = value;
-  }
+  String? gender;
 
   /// Sets the selected image and notifies listeners.
   void setSelectedImage(File? image) {
-    _photo = image;
+    photo = image;
     notifyListeners();
   }
 
@@ -70,6 +59,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  /// Updates the profile picture based on the provided [mode] and [id].
   Future<bool> pickImageData(OptionPhotoMode mode, int id) async {
     final repository = ProfileRepositoryImpl();
     final picker = ImagePicker();
@@ -86,6 +76,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  /// Loads the profile data from the repository.
   Future<void> loadProfileData() async {
     final repository = ProfileRepositoryImpl();
     final useCase = ProfileUseCase(repository);
@@ -97,7 +88,7 @@ class ProfileProvider extends ChangeNotifier {
       dateOfBirthController.text = profile.birthDate;
       gender = profile.gender;
       jobTitleController.text = profile.jobTitle;
-      _photo = profile.photo;
+      photo = profile.photo;
     }
     notifyListeners();
   }
@@ -120,9 +111,9 @@ class ProfileProvider extends ChangeNotifier {
       name: nameController.text.trim(),
       biography: bioController.text.trim(),
       birthDate: dateOfBirthController.text.trim(),
-      gender: _gender ?? '',
+      gender: gender ?? '',
       jobTitle: jobTitleController.text.trim(),
-      photo: getPhoto,
+      photo: photo,
     );
   }
 
@@ -134,8 +125,6 @@ class ProfileProvider extends ChangeNotifier {
 
     await useCase.insert(profile);
   }
-
-
 
   /// Validates all form fields using the given [formKey].
   bool validateAll(GlobalKey<FormState> formKey) {

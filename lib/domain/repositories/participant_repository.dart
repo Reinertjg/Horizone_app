@@ -1,9 +1,7 @@
-
 import '../entities/participant.dart';
 
 /// Abstract repository that defines the contract for trip data operations.
 abstract class ParticipantRepository {
-
   /// Inserts a [Participant] into the data source.
   Future<void> insertParticipants(List<Participant> participant);
 
@@ -12,5 +10,4 @@ abstract class ParticipantRepository {
 
   /// Retrieves all participants from the data source.
   Future<List<Participant>> getParticipantsByTravelId(int travelId);
-
 }

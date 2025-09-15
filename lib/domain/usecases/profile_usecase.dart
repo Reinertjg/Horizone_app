@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import '../../presentation/state/profile_provider.dart';
-import '../../repositories/profile_repository_impl.dart';
 import '../entities/profile.dart';
 import '../repositories/profile_repository.dart';
 
@@ -17,7 +15,8 @@ class ProfileUseCase {
   Future<void> insert(Profile profile) => repository.insertProfile(profile);
 
   /// Updates an existing [profile] in the data source.
-  Future<void> updateProfile(Profile profile) => repository.updateProfile(profile);
+  Future<void> updateProfile(Profile profile) =>
+      repository.updateProfile(profile);
 
   /// Updates the name of an existing [profile] in the data source.
   Future<void> updateName(int id, String name) =>

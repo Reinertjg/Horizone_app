@@ -4,45 +4,59 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../domain/entities/participant.dart';
-import '../../../state/participant_provider.dart';
-import '../../../theme_color/app_colors.dart';
-import 'participant_avatar_picker.dart';
-import 'participant_form.dart';
-import 'participant_handle_bar.dart';
-import 'participant_modal_buttons.dart';
-import 'participant_modal_header.dart';
+import '../../../domain/entities/participant.dart';
+import '../../state/participant_provider.dart';
+import '../../theme_color/app_colors.dart';
+import '../interview_widgets/participant_widgets/participant_avatar_picker.dart';
+import '../interview_widgets/participant_widgets/participant_form.dart';
+import '../interview_widgets/participant_widgets/participant_handle_bar.dart';
+import '../interview_widgets/participant_widgets/participant_modal_buttons.dart';
+import '../interview_widgets/participant_widgets/participant_modal_header.dart';
 
-/// A widget that displays the content of the update participant modal.
-///
-/// It allows editing and updating an existing [Participant].
-class UpdateParticipantContent extends StatefulWidget {
-  /// Creates an [UpdateParticipantContent].
-  const UpdateParticipantContent({super.key, required this.participant});
-
-  /// The participant being edited.
-  final Participant participant;
+/// A widget that displays the content of the save participant modal.
+class SaveParticipantModal extends StatefulWidget {
+  /// Creates an [SaveParticipantModal].
+  const SaveParticipantModal({super.key});
 
   @override
-  State<UpdateParticipantContent> createState() =>
-      _UpdateParticipantContentState();
+  State<SaveParticipantModal> createState() => _SaveParticipantModalState();
 }
 
-class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
-  final formKey = GlobalKey<FormState>();
-  File? selectedImage;
-
+class _SaveParticipantModalState extends State<SaveParticipantModal> {
   @override
   void initState() {
+    super.initState();
     final participantProvider = Provider.of<ParticipantProvider>(
       context,
       listen: false,
     );
-    participantProvider.nameController.text = widget.participant.name;
-    participantProvider.emailController.text = widget.participant.email;
-    selectedImage = widget.participant.photo;
-    super.initState();
+    participantProvider.clearFields();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedPadding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      duration: const Duration(milliseconds: 150),
+      child: const SaveParticipantContent(),
+    );
+  }
+}
+
+/// A widget that displays the content of the save participant modal.
+class SaveParticipantContent extends StatefulWidget {
+  /// Creates an [SaveParticipantContent].
+  const SaveParticipantContent({super.key});
+
+  @override
+  State<SaveParticipantContent> createState() => _SaveParticipantContentState();
+}
+
+class _SaveParticipantContentState extends State<SaveParticipantContent> {
+  final formKey = GlobalKey<FormState>();
+  File? selectedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +89,9 @@ class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
                 const ParticipantHandleBar(),
                 const SizedBox(height: 20),
                 const ParticipantModalHeader(
-                  title: 'Altere os dados',
-                  subtitle: 'Altere os dados do integrante',
-                  icon: HugeIcons.strokeRoundedEdit01,
+                  title: 'Novo Integrante',
+                  subtitle: 'Adicione um novo membro à viagem',
+                  icon: HugeIcons.strokeRoundedUserAdd01,
                 ),
                 const SizedBox(height: 16),
                 ParticipantAvatarPicker(
@@ -91,9 +105,9 @@ class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
                   validateName: participantProvider.validateName,
                   validateEmail: participantProvider.validateEmail,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 ParticipantModalButtons(
-                  actionLabel: 'Alterar',
+                  actionLabel: 'Adicionar',
                   onCancel: () => Navigator.pop(context),
                   onConfirm: () {
                     if (formKey.currentState!.validate()) {
@@ -102,10 +116,7 @@ class _UpdateParticipantContentState extends State<UpdateParticipantContent> {
                         email: participantProvider.emailController.text,
                         photo: selectedImage,
                       );
-                      participantProvider.updateParcipant(
-                        widget.participant,
-                        participant,
-                      );
+                      participantProvider.addParticipant(participant);
                       Navigator.pop(context);
                     }
                   },

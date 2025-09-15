@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme_color/app_colors.dart';
+
 /// A reusable widget for displaying a section title with an icon.
 ///
 /// Typically used to separate content sections in a form or screen.
 class SectionTitle extends StatelessWidget {
   /// Creates a custom [SectionTitle] with the given parameters.
   const SectionTitle({super.key, required this.title, required this.icon});
+
   /// The text to be displayed as the section title.
   final String title;
+
   /// The icon shown at the start of the title.
   final IconData icon;
 

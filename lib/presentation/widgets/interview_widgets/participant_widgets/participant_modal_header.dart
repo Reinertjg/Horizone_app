@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../theme_color/app_colors.dart';
 
+/// Header for the participant modal.
 class ParticipantModalHeader extends StatelessWidget {
+  /// Creates a [ParticipantModalHeader].
   const ParticipantModalHeader({
     super.key,
     required this.title,
@@ -11,8 +13,13 @@ class ParticipantModalHeader extends StatelessWidget {
     required this.icon,
   });
 
+  /// The title of the modal.
   final String title;
+
+  /// The subtitle of the modal.
   final String subtitle;
+
+  /// The icon to display.
   final IconData icon;
 
   @override
@@ -26,11 +33,7 @@ class ParticipantModalHeader extends StatelessWidget {
             color: colors.secondary.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            icon,
-            color: colors.secondary,
-            size: 22,
-          ),
+          child: Icon(icon, color: colors.secondary, size: 22),
         ),
         const SizedBox(width: 16),
         Expanded(

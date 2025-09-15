@@ -1,6 +1,5 @@
 /// Contains constants and SQL statement related to the `trips` table schema.
 abstract class ParticipantTable {
-
   /// Private constructor to prevent instantiation.
   static const tableName = 'participants';
 
@@ -20,7 +19,8 @@ abstract class ParticipantTable {
   static const String travelId = 'travelId';
 
   /// SQL statement to create the `Travels` table with the defined schema.
-  static const createTable = '''
+  static const createTable =
+      '''
     CREATE TABLE $tableName (
       $participantId INTEGER PRIMARY KEY AUTOINCREMENT,
       $participantName TEXT NOT NULL,

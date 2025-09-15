@@ -245,7 +245,11 @@ class _SubmitProfileFab extends StatelessWidget {
       onPressed: () async {
         if (formProvider.validateAll(formKey)) {
           if (!context.mounted) return;
-          await Navigator.pushNamed(context, '/profileSetupPhoto');
+          await Navigator.pushNamed(
+            context,
+            '/profileSetupPhoto',
+            arguments: formProvider.toEntity(),
+          );
         }
       },
     );

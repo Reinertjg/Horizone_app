@@ -1,6 +1,7 @@
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+import 'tables/experience_table.dart';
 import 'tables/participants_table.dart';
 import 'tables/profile_table.dart';
 import 'tables/stop_table.dart';
@@ -34,7 +35,7 @@ class HorizoneDatabase {
       onCreate: _onCreate,
       onConfigure: (onConfigure) async {
         await onConfigure.execute('PRAGMA foreign_keys = ON');
-      }
+      },
     );
   }
 
@@ -43,5 +44,6 @@ class HorizoneDatabase {
     await db.execute(TravelTable.createTable);
     await db.execute(ParticipantTable.createTable);
     await db.execute(StopTable.createTable);
+    await db.execute(ExperienceTable.createTable);
   }
 }

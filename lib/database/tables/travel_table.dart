@@ -53,7 +53,7 @@ abstract class TravelTable {
       '''
     CREATE TABLE $tableName (
       $travelId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $image TEXT NOT NULL,
+      $image TEXT,
       $travelTitle TEXT NOT NULL,
       $startDate TEXT NOT NULL,
       $endDate TEXT NOT NULL,

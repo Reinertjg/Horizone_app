@@ -22,7 +22,11 @@ class AddStopButton extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             colors.secondary.withValues(alpha: 0.6),
-            colors.secondary.withRed(102).withGreen(178).withBlue(255).withValues(alpha: 0.6),
+            colors.secondary
+                .withRed(102)
+                .withGreen(178)
+                .withBlue(255)
+                .withValues(alpha: 0.6),
           ],
         ),
         borderRadius: BorderRadius.circular(10),
@@ -33,18 +37,28 @@ class AddStopButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           elevation: 0,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const HugeIcon(icon: HugeIcons.strokeRoundedPlayListAdd, color: Colors.white, size: 20),
+            const HugeIcon(
+              icon: HugeIcons.strokeRoundedPlayListAdd,
+              color: Colors.white,
+              size: 20,
+            ),
             const SizedBox(width: 12),
             Text(
               'Adicionar Parada',
               style: GoogleFonts.raleway(
-                  fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white, letterSpacing: 0.5),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                letterSpacing: 0.5,
+              ),
             ),
           ],
         ),

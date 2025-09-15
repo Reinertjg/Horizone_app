@@ -113,10 +113,13 @@ class _InterviewTextFieldBoxState extends State<InterviewTextFieldBox> {
                   borderSide: BorderSide(color: colors.tertiary),
                 ),
                 alignLabelWithHint: true,
-                contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                errorStyle:
-                const TextStyle(backgroundColor: Colors.transparent),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                errorStyle: const TextStyle(
+                  backgroundColor: Colors.transparent,
+                ),
               ),
             ),
           ),

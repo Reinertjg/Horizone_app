@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+
 import '../../domain/usecases/get_place_suggestions.dart';
 import '../theme_color/app_colors.dart';
 
+/// A widget that displays a text field with autocomplete functionality.
 class GooglePlacesAutocomplete extends StatefulWidget {
+  /// The initial text to display in the text field.
   final String? initialText;
+
+  /// The service to fetch place suggestions.
   final PlacesService service;
+
+  /// The hint text to display when the text field is empty.
   final String hintText;
+
+  /// The icon to display in the text field.
   final IconData icon;
 
   /// An optional validator for form validation.
@@ -88,7 +97,11 @@ class _GooglePlacesAutocompleteState extends State<GooglePlacesAutocomplete> {
               color: colors.secondary.withValues(alpha: 0.3),
               fontSize: 16,
             ),
-            prefixIcon: HugeIcon(icon: widget.icon, color: colors.tertiary, size: 20),
+            prefixIcon: HugeIcon(
+              icon: widget.icon,
+              color: colors.tertiary,
+              size: 20,
+            ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: colors.tertiary),

@@ -27,18 +27,20 @@ class PlacePoint {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PlacePoint &&
-          runtimeType == other.runtimeType &&
-          latitude == other.latitude &&
-          longitude == other.longitude;
+          other is PlacePoint &&
+              runtimeType == other.runtimeType &&
+              latitude == other.latitude &&
+              longitude == other.longitude;
 
   @override
   int get hashCode => latitude.hashCode ^ longitude.hashCode;
 }
 
 @immutable
+
 /// A class representing a stop in a travel.
-class Stop {
+  class Stop {
+
   /// The ID of the stop in the travel.
   final int? id;
 
@@ -134,16 +136,16 @@ class Stop {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Stop &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          order == other.order &&
-          place == other.place &&
-          label == other.label &&
-          startDate == other.startDate &&
-          endDate == other.endDate &&
-          description == other.description &&
-          travelId == other.travelId;
+          other is Stop &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              order == other.order &&
+              place == other.place &&
+              label == other.label &&
+              startDate == other.startDate &&
+              endDate == other.endDate &&
+              description == other.description &&
+              travelId == other.travelId;
 
   @override
   int get hashCode =>

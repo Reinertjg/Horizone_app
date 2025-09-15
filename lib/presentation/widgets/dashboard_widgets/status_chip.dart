@@ -8,7 +8,7 @@ import 'blinking_dot.dart';
 /// Widget that displays the status of the travel.
 class StatusChip extends StatelessWidget {
   /// Creates a [TTravelStatus] widget.
-  const StatusChip({required this.status});
+  const StatusChip({super.key, required this.status});
 
   /// The status of the travel.
   final TravelStatus status;
@@ -38,30 +38,26 @@ class StatusChip extends StatelessWidget {
         break;
     }
 
-    return Positioned(
-      top: 18,
-      left: 15,
-      child: Container(
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: colors.quaternary.withValues(alpha: 0.7),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BlinkingDot(color: statusColor),
-            const SizedBox(width: 6),
-            Text(
-              statusText,
-              style: GoogleFonts.nunito(
-                color: colors.quinary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        color: colors.quaternary.withValues(alpha: 0.7),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          BlinkingDot(color: statusColor),
+          const SizedBox(width: 6),
+          Text(
+            statusText,
+            style: GoogleFonts.nunito(
+              color: colors.quinary,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

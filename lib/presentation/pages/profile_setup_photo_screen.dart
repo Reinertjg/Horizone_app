@@ -5,20 +5,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
+import '../../domain/entities/profile.dart';
 import '../../generated/l10n.dart';
 import '../../util/option_dialog.dart';
 import '../state/profile_provider.dart';
 import '../state/theme_provider.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/bottom_sheet_widgets/options_image_modal.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart'
     show OptionPhotoMode;
+import '../widgets/show_dialog_image.dart';
 import 'home_screen.dart';
 
 /// Screen used to collect user profile information during onboarding.
 /// UI-only: all business logic lives in the provider/controller.
 class ProfileSetupPhotoScreen extends StatelessWidget {
-  const ProfileSetupPhotoScreen({super.key});
+  /// Creates a custom [ProfileSetupPhotoScreen].
+  const ProfileSetupPhotoScreen({super.key, required this.profile});
+
+  /// The profile data to be displayed.
+  final Profile profile;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +49,7 @@ class ProfileSetupPhotoScreen extends StatelessWidget {
                   children: [
                     const _AppBarWidget(),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.12),
-                    _AvatarPreview(image: profileProvider.getPhoto),
+                    _AvatarPreview(image: profileProvider.photo),
                     const SizedBox(height: 40),
                     InterviewFab(
                       nameButton: 'Select Profile Photo',
@@ -52,10 +59,18 @@ class ProfileSetupPhotoScreen extends StatelessWidget {
                           isScrollControlled: true,
                           backgroundColor: Colors.transparent,
                           builder: (_) => ImagePickerSheet(
+                            title: 'Opções',
                             onCameraTap: () {
                               Navigator.pop(context);
                               context.read<ProfileProvider>().pickImage(
                                 OptionPhotoMode.cameraMode,
+                              );
+                            },
+                            onVisualizeTap: () {
+                              showDialogImage(
+                                context,
+                                profile.photo!,
+                                MainAxisAlignment.start,
                               );
                             },
                             onGalleryTap: () {
@@ -190,115 +205,6 @@ class _PhotoGuidelines extends StatelessWidget {
   }
 }
 
-/// Bottom sheet for choosing camera or gallery.
-class ImagePickerSheet extends StatelessWidget {
-  final VoidCallback onCameraTap;
-  final VoidCallback onGalleryTap;
-
-  const ImagePickerSheet({
-    super.key,
-    required this.onCameraTap,
-    required this.onGalleryTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<AppColors>()!;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.primary,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: DefaultTextStyle(
-          style: GoogleFonts.raleway(color: colors.quaternary),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colors.quaternary.withAlpha(80),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Selecionar foto',
-                style: GoogleFonts.raleway(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _ImageOption(
-                    icon: Icons.camera_alt_outlined,
-                    label: 'Câmera',
-                    onTap: onCameraTap,
-                    backgroundColor: colors.secondary.withAlpha(50),
-                    iconColor: colors.secondary,
-                  ),
-                  _ImageOption(
-                    icon: Icons.photo_library_outlined,
-                    label: 'Galeria',
-                    onTap: onGalleryTap,
-                    backgroundColor: colors.tertiary.withAlpha(50),
-                    iconColor: colors.tertiary,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ImageOption extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final Color backgroundColor;
-  final Color iconColor;
-
-  const _ImageOption({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    required this.backgroundColor,
-    required this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, size: 32, color: iconColor),
-          ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 14)),
-        ],
-      ),
-    );
-  }
-}
-
 /// Submit FAB that delegates side-effects to the provider/controller.
 class _SubmitProfileFab extends StatelessWidget {
   const _SubmitProfileFab();
@@ -309,7 +215,7 @@ class _SubmitProfileFab extends StatelessWidget {
     return InterviewFab(
       nameButton: S.of(context).continueButton,
       onPressed: () async {
-        if (formProvider.getPhoto == null) {
+        if (formProvider.photo == null) {
           final shouldContinue = await showDialog(
             context: context,
             builder: (context) => OptionDialog(
@@ -319,6 +225,7 @@ class _SubmitProfileFab extends StatelessWidget {
             ),
           );
           if (shouldContinue == true) {
+            if (!context.mounted) return;
             await _submitAndNavigate(context, formProvider);
           }
         } else {

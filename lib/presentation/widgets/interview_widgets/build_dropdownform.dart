@@ -51,9 +51,6 @@ class _BuildDropdownformState extends State<BuildDropdownform> {
     final colors = Theme.of(context).extension<AppColors>()!;
 
     void onChanged(String? newValue) {
-      // O estado agora é gerenciado pelo pai, então não precisamos mais de setState aqui.
-      // Apenas notificamos o pai da mudança.
-
       if (widget.onChanged != null) {
         widget.onChanged!(newValue);
       }

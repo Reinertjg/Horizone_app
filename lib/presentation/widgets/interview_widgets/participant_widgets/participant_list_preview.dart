@@ -1,11 +1,9 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import '../../../state/participant_provider.dart';
 import '../../../theme_color/app_colors.dart';
-import 'modals/save_participant_modal.dart';
+import '../../bottom_sheet_widgets/save_participant_modal.dart';
 import 'options_participant_modal.dart';
 
 /// A widget that displays a list of participants.
@@ -40,7 +38,7 @@ class ParticipantListPreview extends StatelessWidget {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) =>
-                              OptionsParticipantModal(participant: participant,),
+                              OptionsParticipantModal(participant: participant),
                         );
                       },
                       child: Container(
@@ -51,14 +49,14 @@ class ParticipantListPreview extends StatelessWidget {
                           color: colors.quinary,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: colors.secondary.withOpacity(0.3),
+                            color: colors.secondary.withValues(alpha: 0.3),
                             width: 2,
                           ),
                         ),
                         child: ClipOval(
                           child: participant.photo == null
                               ? Image.asset(
-                                    'assets/images/user_default_photo.png',
+                                  'assets/images/user_default_photo.png',
                                   fit: BoxFit.cover,
                                 )
                               : Image.file(
@@ -89,6 +87,7 @@ class ParticipantListPreview extends StatelessWidget {
   }
 }
 
+/// A widget that adds a participant to the list.
 Widget addParticipantClipOval(BuildContext context) {
   final colors = Theme.of(context).extension<AppColors>()!;
   return Center(
@@ -120,8 +119,8 @@ Widget addParticipantClipOval(BuildContext context) {
                   ),
                 ),
                 child: ClipOval(
-                  child: HugeIcon(icon:
-                  HugeIcons.strokeRoundedUserAdd01,
+                  child: HugeIcon(
+                    icon: HugeIcons.strokeRoundedUserAdd01,
                     color: colors.secondary,
                   ),
                 ),

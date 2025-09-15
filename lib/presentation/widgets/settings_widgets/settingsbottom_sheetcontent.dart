@@ -7,7 +7,6 @@ import '../../../generated/l10n.dart';
 import '../../state/locale_provider.dart';
 import '../../state/theme_provider.dart';
 import '../../theme_color/app_colors.dart';
-import 'delete_accoun_tile.dart';
 
 /// A widget that displays the content of the settings bottom sheet.
 class SettingsBottomSheetContent extends StatelessWidget {
@@ -54,7 +53,7 @@ class SettingsBottomSheetContent extends StatelessWidget {
 /// A widget that displays a theme selection dialog.
 class _ThemeSettingsTile extends StatelessWidget {
   /// Creates a custom [_ThemeSettingsTile].
-  const _ThemeSettingsTile({super.key});
+  const _ThemeSettingsTile();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +81,7 @@ class _ThemeSettingsTile extends StatelessWidget {
 /// Light, dark, or system theme modes.
 class _ThemeSelectionDialog extends StatelessWidget {
   /// Creates a custom [_ThemeSelectionDialog] with the given parameter.
-  const _ThemeSelectionDialog({super.key});
+  const _ThemeSelectionDialog();
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +171,7 @@ class _ThemeSelectionDialog extends StatelessWidget {
 /// allow users to change the app's language.
 class _LanguageSettingsTile extends StatelessWidget {
   /// Creates a custom [_LanguageSettingsTile] with the given parameter.
-  const _LanguageSettingsTile({super.key});
+  const _LanguageSettingsTile();
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +200,7 @@ class _LanguageSettingsTile extends StatelessWidget {
 /// (English, Portuguese, Spanish),
 class _LanguageSelectionDialog extends StatelessWidget {
   /// Creates a custom [InterviewTextField] with the given parameter.
-  const _LanguageSelectionDialog({super.key});
+  const _LanguageSelectionDialog();
 
   @override
   Widget build(BuildContext context) {

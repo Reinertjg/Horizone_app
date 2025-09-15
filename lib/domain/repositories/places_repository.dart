@@ -1,12 +1,11 @@
 import '../entities/place_suggestion.dart';
 
-abstract class PlacesRepository {
-  /// Retorna sugestões para o texto [input].
-  /// Opcionalmente restringe por [regionCodes] (ex.: ['br']).
+/// A repository for fetching place-related information.
+class PlacesRepository {
+  /// Fetches a list of place suggestions based on the user's input.
   Future<List<PlaceSuggestion>> fetchSuggestions({
     required String input,
-    List<String> regionCodes,
+    List<String>? regionCodes,
     String? sessionToken,
-  });
+  }) => throw UnimplementedError();
 }
-

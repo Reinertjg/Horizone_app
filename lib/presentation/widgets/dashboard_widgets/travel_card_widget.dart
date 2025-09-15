@@ -7,7 +7,6 @@ import '../../../domain/entities/travel.dart';
 import '../../../util/date_utils.dart';
 import '../../../util/travel_status.dart';
 import '../../theme_color/app_colors.dart';
-import 'blinking_dot.dart';
 import 'status_chip.dart';
 
 /// Widget representing a travel card.
@@ -47,20 +46,31 @@ class TravelCardsWidget extends StatelessWidget {
           ),
         ),
 
-        /// Arrow to travel
-        _ArrowTravelButton(),
+        Positioned(
+          top: 15,
+          right: 15,
+          child:
+              /// Arrow to travel
+              _ArrowTravelButton(),
+        ),
 
-        /// Status of the travel
-        StatusChip(
-          status: getTravelStatus(
-            startDate: parseTravelDate(travel.startDate),
-            endDate: parseTravelDate(travel.endDate),
-          ),
+        ///
+        Positioned(
+          top: 18,
+          left: 15,
+          child:
+              /// Status of the travel
+              StatusChip(
+                status: getTravelStatus(
+                  startDate: parseTravelDate(travel.startDate),
+                  endDate: parseTravelDate(travel.endDate),
+                ),
+              ),
         ),
 
         /// Bottom container with travel info
         /// Title, destination, rating
-        _TravelInfo(travel.title, travel.destinationLabel, '3.7'),
+        _TravelInfo(travel.title, travel.destinationLabel, travel.rating),
       ],
     );
   }
@@ -116,28 +126,24 @@ class _ArrowTravelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    return Positioned(
-      top: 15,
-      right: 15,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // This will be the "inner" color of the square
-          Icon(
-            CupertinoIcons.square_fill,
-            color: colors.quaternary.withValues(alpha: 0.7),
-            // Color for the inside
-            size: 25,
-          ),
-          // This is the arrow on top
-          Icon(
-            CupertinoIcons.arrow_up_right,
-            color: colors.quinary,
-            // This will color the arrow and can be seen as the "border"
-            size: 20,
-          ),
-        ],
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // This will be the "inner" color of the square
+        Icon(
+          CupertinoIcons.square_fill,
+          color: colors.quaternary.withValues(alpha: 0.7),
+          // Color for the inside
+          size: 25,
+        ),
+        // This is the arrow on top
+        Icon(
+          CupertinoIcons.arrow_up_right,
+          color: colors.quinary,
+          // This will color the arrow and can be seen as the "border"
+          size: 20,
+        ),
+      ],
     );
   }
 }
@@ -147,7 +153,7 @@ class _TravelInfo extends StatelessWidget {
 
   final String title;
   final String destination;
-  final String rating;
+  final double? rating;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +182,7 @@ class _TravelInfo extends StatelessWidget {
               ),
 
               /// Rating stars
-              _RatingStars(rating: double.tryParse(rating) ?? 0.0),
+              _RatingStars(rating: rating ?? 0.0),
             ],
           ),
         ),
@@ -248,35 +254,38 @@ class _RatingStars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
-    return Row(
-      children: [
-        Row(
-          children: List.generate(5, (index) {
-            final isFullStar = index < rating.floor();
-            final isHalfStar =
-                index == rating.floor() && rating.remainder(1) >= 0.5;
+    // ignore: unnecessary_null_comparison
+    return rating == null
+        ? Row(
+            children: [
+              Row(
+                children: List.generate(5, (index) {
+                  final isFullStar = index < rating.floor();
+                  final isHalfStar =
+                      index == rating.floor() && rating.remainder(1) >= 0.5;
 
-            return Icon(
-              isFullStar
-                  ? Icons.star_rounded
-                  : (isHalfStar
-                        ? Icons.star_half_rounded
-                        : Icons.star_outline_rounded),
-              color: colors.tertiary,
-              size: 16,
-            );
-          }),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          '$rating',
-          style: GoogleFonts.nunito(
-            color: colors.quinary,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
+                  return Icon(
+                    isFullStar
+                        ? Icons.star_rounded
+                        : (isHalfStar
+                              ? Icons.star_half_rounded
+                              : Icons.star_outline_rounded),
+                    color: colors.tertiary,
+                    size: 16,
+                  );
+                }),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                '$rating',
+                style: GoogleFonts.nunito(
+                  color: colors.quinary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          )
+        : const SizedBox();
   }
 }

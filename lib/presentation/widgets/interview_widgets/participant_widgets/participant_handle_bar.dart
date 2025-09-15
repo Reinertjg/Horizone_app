@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../theme_color/app_colors.dart';
 
+/// A widget that represents a participant handle bar.
 class ParticipantHandleBar extends StatelessWidget {
+  /// Creates a [ParticipantHandleBar].
   const ParticipantHandleBar({super.key});
 
   @override
@@ -20,5 +22,4 @@ class ParticipantHandleBar extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import '../../../theme_color/app_colors.dart';
 
+/// A text field widget for travel stops with a collapsible description.
 class TravelStopsTextFieldBox extends StatefulWidget {
+  /// Creates a custom [TravelStopsTextFieldBox].
   const TravelStopsTextFieldBox({
     required this.nameButton,
     required this.hintText,
@@ -16,11 +17,22 @@ class TravelStopsTextFieldBox extends StatefulWidget {
     super.key,
   });
 
+  /// The text displayed above the text field.
   final String nameButton;
+
+  /// The hint text to display in the text field.
   final String hintText;
+
+  /// The icon to display inside the text field.
   final IconData icon;
+
+  /// The controller for the text field.
   final TextEditingController controller;
+
+  /// The validator function for the text field.
   final String? Function(String?)? validator;
+
+  /// The keyboard type for the text field.
   final TextInputType keyboardType;
 
   /// Additional text that will be displayed when the eye icon is clicked.

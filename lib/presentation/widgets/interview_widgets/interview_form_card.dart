@@ -1,17 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
-import '../../state/travel_provider.dart';
 import '../../state/stop_provider.dart';
+import '../../state/travel_provider.dart';
 import '../../theme_color/app_colors.dart';
 import 'build_dropdownform.dart';
+import 'cupertino_date_picker.dart';
 import 'interview_textfield.dart';
 import 'participant_widgets/participant_list_preview.dart';
-import 'cupertino_date_picker.dart';
 
 /// A form card widget that collects general information about a trip,
 /// including title, start and end dates, transportation, and experience type.
@@ -30,10 +29,24 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
     DateTime.now().day,
   );
 
+  DateTime _dateOnly(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month, dateTime.day);
+  }
+
+  DateTime _clampDate(DateTime value, DateTime min, DateTime max) {
+    if (value.isBefore(min)) return min;
+    if (value.isAfter(max)) return max;
+    return value;
+  }
+
   @override
   void initState() {
-    Provider.of<TravelProvider>(context, listen: false).startDateController.text =
-       DateFormat('dd/MM/yyyy').format(today);
+    Provider.of<TravelProvider>(
+      context,
+      listen: false,
+    ).startDateController.text = DateFormat(
+      'dd/MM/yyyy',
+    ).format(today);
     super.initState();
   }
 
@@ -42,6 +55,34 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
     final colors = Theme.of(context).extension<AppColors>()!;
     final interviewProvider = Provider.of<TravelProvider>(context);
     final stopsProvider = Provider.of<StopProvider>(context);
+
+    final tripStart = stopsProvider.tripStart;
+    final tripEnd = stopsProvider.tripEnd;
+
+    final today = _dateOnly(DateTime.now());
+    final startMin = today;
+
+    final computedStartMax = tripEnd != null
+        ? _dateOnly(tripEnd).subtract(const Duration(days: 1))
+        : DateTime(2100);
+
+    final startMax = computedStartMax.isBefore(startMin)
+        ? startMin
+        : computedStartMax;
+
+    final startInitialPreferred = _dateOnly(tripStart ?? today);
+    final startInitial = _clampDate(startInitialPreferred, startMin, startMax);
+
+    final computedEndMin = tripStart != null
+        ? _dateOnly(tripStart).add(const Duration(days: 1))
+        : today.add(const Duration(days: 1));
+    final endMax = DateTime(2100);
+    final endMin = computedEndMin.isAfter(endMax) ? endMax : computedEndMin;
+
+    final endInitialPreferred = _dateOnly(
+      tripEnd ?? tripStart?.add(const Duration(days: 1)) ?? endMin,
+    );
+    final endInitial = _clampDate(endInitialPreferred, endMin, endMax);
 
     return Card(
       elevation: 2,
@@ -76,11 +117,9 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                       icon: HugeIcons.strokeRoundedCalendarCheckIn01,
                       controller: interviewProvider.startDateController,
                       validator: interviewProvider.validateStartDate,
-                      maxDate:
-                          stopsProvider.tripEnd?.subtract(Duration(days: 1)) ??
-                          DateTime(2100),
-                      minDate: today,
-                      initialDate: stopsProvider.tripStart ?? today,
+                      minDate: startMin,
+                      maxDate: startMax,
+                      initialDate: startInitial,
                       onDateChanged: stopsProvider.setTripStart,
                     ),
                   ),
@@ -93,14 +132,9 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
                       icon: HugeIcons.strokeRoundedCalendarCheckOut01,
                       controller: interviewProvider.endDateController,
                       validator: interviewProvider.validateEndDate,
-                      maxDate: DateTime(2100),
-                      minDate:
-                          stopsProvider.tripStart?.add(Duration(days: 1)) ??
-                          today.add(Duration(days: 1)),
-                      initialDate:
-                          stopsProvider.tripEnd ??
-                          (stopsProvider.tripStart?.add(Duration(days: 1)) ??
-                              today.add(Duration(days: 1))),
+                      minDate: endMin,
+                      maxDate: endMax,
+                      initialDate: endInitial,
                       onDateChanged: stopsProvider.setTripEnd,
                     ),
                   ),

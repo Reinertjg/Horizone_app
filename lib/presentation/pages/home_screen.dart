@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
@@ -25,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List _screens = [
     {'screen': const DashboardScreen(), 'title': 'Screen A Title'},
     {'screen': const InterviewScreen(), 'title': 'Screen B Title'},
-    {'screen': const ProfileScreen(), 'title': 'Screen C Title'}
+    {'screen': const ProfileScreen(), 'title': 'Screen C Title'},
   ];
 
   void _selectScreen(int index) {
@@ -47,17 +46,26 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         items: [
           BottomNavigationBarItem(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedHome09, color: colors.secondary),
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedHome09,
+              color: colors.secondary,
+            ),
             label: S.of(context).home,
             backgroundColor: colors.primary,
           ),
           BottomNavigationBarItem(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedProfile, color: colors.secondary),
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedProfile,
+              color: colors.secondary,
+            ),
             backgroundColor: colors.primary,
             label: S.of(context).planning,
           ),
           BottomNavigationBarItem(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedUser, color: colors.secondary),
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedUser,
+              color: colors.secondary,
+            ),
             label: S.of(context).profile,
           ),
         ],

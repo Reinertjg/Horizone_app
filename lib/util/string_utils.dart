@@ -1,4 +1,3 @@
-
 // Returns the text before the first separator (comma, hyphen, or slash), if
 /// present.
 String beforeComma(String text) {

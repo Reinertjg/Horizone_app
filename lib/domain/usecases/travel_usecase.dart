@@ -1,11 +1,14 @@
+import 'package:intl/intl.dart';
+
 import '../entities/travel.dart';
 import '../repositories/travel_repository.dart';
-import 'package:intl/intl.dart';
 
 /// Use case class responsible for managing [Travel] operations
 class TravelUseCase {
+  /// The repository used to access travel data.
   final TravelRepository repository;
 
+  /// Creates a new instance of [TravelUseCase]
   TravelUseCase(this.repository);
 
   /// Inserts a new [Travel] into the repository.

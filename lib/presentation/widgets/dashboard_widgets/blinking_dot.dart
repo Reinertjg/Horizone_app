@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays a blinking dot with a given color.
 class BlinkingDot extends StatefulWidget {
+  /// Creates a blinking dot.
   const BlinkingDot({super.key, required this.color});
 
+  /// The color of the dot.
   final Color color;
 
   @override
@@ -39,12 +42,8 @@ class _BlinkingDotState extends State<BlinkingDot>
           color: widget.color,
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(
-              color: widget.color,
-              blurRadius: 10,
-              spreadRadius: 3,
-            ),
-          ]
+            BoxShadow(color: widget.color, blurRadius: 10, spreadRadius: 3),
+          ],
         ),
       ),
     );

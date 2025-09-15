@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -12,7 +11,9 @@ import '../../google_places_autocomplete_textfield.dart';
 import '../cupertino_date_picker.dart';
 import 'travelstops_textfield_box.dart';
 
+/// A card widget that represents a form for a single travel stop.
 class StopFormCard extends StatelessWidget {
+  /// Creates a custom [StopFormCard].
   const StopFormCard({
     super.key,
     required this.label,
@@ -23,8 +24,14 @@ class StopFormCard extends StatelessWidget {
 
   /// Header label (e.g., "Origin", "Stop 1", "Destination").
   final String label;
+
+  /// The order of the stop in the itinerary.
   final int order;
+
+  /// The index of the stop in the list of stops.
   final int index;
+
+  /// The [Stop] entity associated with this form card.
   final Stop stop;
 
   @override
@@ -111,7 +118,7 @@ class StopFormCard extends StatelessWidget {
                     validator: stopsProvider.validateStopStartDate,
                     maxDate: maxStart,
                     minDate: minStart,
-                    initialDate: initialStart,
+                    initialDate: initialStart ?? DateTime.now(),
                     onDateChanged: (value) =>
                         stopsProvider.setStopStartDate(stop.order, value),
                   ),
@@ -128,7 +135,7 @@ class StopFormCard extends StatelessWidget {
                     validator: stopsProvider.validateStopEndDate,
                     maxDate: maxEnd,
                     minDate: minEnd,
-                    initialDate: initialEnd,
+                    initialDate: initialEnd ?? DateTime.now(),
                     onDateChanged: (value) =>
                         stopsProvider.setStopEndDate(stop.order, value),
                   ),

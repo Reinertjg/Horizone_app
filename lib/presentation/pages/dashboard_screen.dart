@@ -1,25 +1,18 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:printing/printing.dart';
 
 import '../../domain/entities/profile.dart';
 import '../../domain/entities/travel.dart';
 import '../../generated/l10n.dart';
 
-import '../../pdf_test.dart';
-import '../../repositories/participant_repository_impl.dart';
 import '../../repositories/profile_repository_impl.dart';
-import '../../repositories/stop_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/dashboard_widgets/travel_card_widget.dart';
 import '../widgets/iconbutton_notifications.dart';
 import '../widgets/iconbutton_settings.dart';
-import '../widgets/dashboard_widgets/blinking_dot.dart';
+import '../widgets/show_dialog_image.dart';
 
 /// The main screen displayed after user login,
 /// showing a personalized welcome and main navigation options.
@@ -60,9 +53,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Loads all travels from the repository and updates the UI.
   Future<void> _uploadTravels() async {
-    final TravelsSearched = await repositoryTravel.getAllTravels();
+    final travelsSearched = await repositoryTravel.getAllTravels();
     setState(() {
-      travels = TravelsSearched;
+      travels = travelsSearched;
     });
   }
 
@@ -154,7 +147,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           final travel = reversedTravels[index];
                           return TravelCardsWidget(
                             onTap: () async {
-                              final result = await Navigator.pushNamed(
+                              await Navigator.pushNamed(
                                 context,
                                 '/travelDashboard',
                                 arguments: travel,
@@ -289,10 +282,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         const SizedBox(width: 12),
         IconButton(
-          onPressed: () async {
-            final bytes = await (await pdfTest()).readAsBytes();
-            await Printing.layoutPdf(onLayout: (_) async => bytes);
-          },
+          onPressed: () async {},
           icon: Icon(
             HugeIcons.strokeRoundedSettings05,
             color: colors.tertiary,
@@ -332,13 +322,19 @@ class _DashboardAppBar extends StatelessWidget {
                     ),
                     color: colors.secondary,
                   ),
-                  child: ClipOval(
-                    child: profile.photo == null
-                        ? Image.asset(
-                            'assets/images/user_default_photo.png',
-                            fit: BoxFit.cover,
-                          )
-                        :  Image.file(
+                  child: GestureDetector(
+                    onTap: () => showDialogImage(
+                      context,
+                      profile.photo!,
+                      MainAxisAlignment.center,
+                    ),
+                    child: ClipOval(
+                      child: profile.photo == null
+                          ? Image.asset(
+                              'assets/images/user_default_photo.png',
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
                               profile.photo!,
                               fit: BoxFit.cover,
                               width: 50,
@@ -354,19 +350,19 @@ class _DashboardAppBar extends StatelessWidget {
                                       switchOutCurve: Curves.easeIn,
                                       child: frame == null
                                           ? Center(
-                                        key: const ValueKey('loader'),
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                          AlwaysStoppedAnimation<
-                                              Color
-                                          >(colors.tertiary),
-                                          strokeWidth: 3.0,
-                                        ),
-                                      )
+                                              key: const ValueKey('loader'),
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(colors.tertiary),
+                                                strokeWidth: 3.0,
+                                              ),
+                                            )
                                           : KeyedSubtree(
-                                        key: const ValueKey('img'),
-                                        child: child,
-                                      ),
+                                              key: const ValueKey('img'),
+                                              child: child,
+                                            ),
                                     );
                                   },
                               errorBuilder: (context, error, stackTrace) {
@@ -376,6 +372,7 @@ class _DashboardAppBar extends StatelessWidget {
                                 );
                               },
                             ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),

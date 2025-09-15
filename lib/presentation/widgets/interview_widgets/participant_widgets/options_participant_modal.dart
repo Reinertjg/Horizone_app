@@ -7,7 +7,7 @@ import '../../../../domain/entities/participant.dart';
 import '../../../../generated/l10n.dart';
 import '../../../state/participant_provider.dart';
 import '../../../theme_color/app_colors.dart';
-import 'modals/update_participant_modal.dart';
+import '../../bottom_sheet_widgets/update_participant_modal.dart';
 
 /// A widget that displays a options of participants.
 ///
@@ -74,13 +74,8 @@ class OptionsParticipantModal extends StatelessWidget {
                   _ImageOption(
                     icon: CupertinoIcons.pencil_circle,
                     label: 'Editar',
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) =>
-                          UpdateParticipantModal(participant: participant),
-                    ),
+                    onTap: () =>
+                        showUpdateParticipantModal(context, participant),
                     backgroundColor: colors.tertiary.withAlpha(50),
                     iconColor: colors.tertiary,
                   ),

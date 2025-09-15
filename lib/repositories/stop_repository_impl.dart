@@ -1,4 +1,3 @@
-
 import 'package:sqflite/sqflite.dart';
 
 import '../database/horizone_database.dart';
@@ -6,6 +5,7 @@ import '../database/tables/stop_table.dart';
 import '../domain/entities/stop.dart';
 import '../domain/repositories/stop_repository.dart';
 
+/// Implementation of the [StopRepository] interface.
 class StopRepositoryImpl implements StopRepository {
   final _dbFuture = HorizoneDatabase().database;
 
@@ -30,13 +30,10 @@ class StopRepositoryImpl implements StopRepository {
   @override
   Future<void> deleteStop(int id) async {
     final db = await _dbFuture;
-    await db.delete(
-      'stops',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('stops', where: 'id = ?', whereArgs: [id]);
   }
 
+  @override
   Future<List<Stop>> getStopsByTravelId(int travelId) async {
     final db = await _dbFuture;
     final result = await db.query(
@@ -45,8 +42,5 @@ class StopRepositoryImpl implements StopRepository {
       whereArgs: [travelId],
     );
     return result.map(Stop.fromMap).toList();
-
   }
-
-
 }

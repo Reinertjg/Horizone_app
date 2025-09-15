@@ -37,7 +37,7 @@ class DeleteAccountTile extends StatelessWidget {
 /// That asks the user if they really want to delete their profile.
 class _ConfirmDeleteDialog extends StatelessWidget {
   /// Creates a custom [_ConfirmDeleteDialog].
-  const _ConfirmDeleteDialog({super.key});
+  const _ConfirmDeleteDialog();
 
   @override
   Widget build(BuildContext context) {

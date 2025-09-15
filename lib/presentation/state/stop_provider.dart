@@ -18,7 +18,7 @@ class StopProvider extends ChangeNotifier {
 
   final List<Stop> _stops = [];
 
-  DateTime? _tripStart = DateTime.now();
+  DateTime? _tripStart;
   DateTime? _tripEnd;
 
   /// Current list of travel stops.
@@ -33,36 +33,131 @@ class StopProvider extends ChangeNotifier {
   /// Planned end date of the trip.
   DateTime? get tripEnd => _tripEnd;
 
+  /// Reset the provider's state.
   void reset() {
     _stops.clear();
-    _tripStart = DateTime.now();
+    _tripStart = null;
     _tripEnd = null;
+    notifyListeners();
+  }
+
+  /// Clears all stop dates.
+  void clearAllStopsDates(DateTime dateStartTravel, DateTime dateEndTravel) {
+    for (var stopIndex = 0; stopIndex < _stops.length; stopIndex++) {
+      _stops[stopIndex] = _stops[stopIndex].copyWith(
+        startDate: dateStartTravel,
+        endDate: dateEndTravel,
+      );
+    }
     notifyListeners();
   }
 
   /// Converts the list of stops to a list of [Stop] entities.
   List<Stop> toEntity(int travelId) {
-    return _stops.map((stop) {
-      return stop.copyWith(travelId: travelId);
-    }).toList();
+    return _stops.map((stop) => stop.copyWith(travelId: travelId)).toList();
   }
 
-  /// Sets the trip start date.
+  /// Sets the trip start date and shifts/clamps existing stops accordingly.
   void setTripStart(DateTime date) {
+    final previousTripStart = _tripStart;
     _tripStart = _normalize(date);
+
+    // Ensure end is not before start.
     if (_tripEnd != null && _tripEnd!.isBefore(_tripStart!)) {
       _tripEnd = _tripStart;
     }
+
+    // If there was a previous start, shift all stops by the difference.
+    if (previousTripStart != null) {
+      final shiftSincePreviousStart = _tripStart!.difference(previousTripStart);
+      if (shiftSincePreviousStart.inMinutes != 0) {
+        _shiftStopsBy(shiftSincePreviousStart);
+      }
+    }
+
+    _clampAndChainStops();
     notifyListeners();
   }
 
-  /// Sets the trip end date.
+  /// Sets the trip end date and clamps existing stops to the new window.
   void setTripEnd(DateTime date) {
     _tripEnd = _normalize(date);
+
+    // Ensure start is not after end.
     if (_tripStart != null && _tripEnd!.isBefore(_tripStart!)) {
       _tripStart = _tripEnd;
     }
+
+    _clampAndChainStops();
     notifyListeners();
+  }
+
+  /// Shifts all stop dates (start/end) by a delta.
+  void _shiftStopsBy(Duration delta) {
+    if (delta.inMinutes == 0) return;
+
+    for (var stopIndex = 0; stopIndex < _stops.length; stopIndex++) {
+      final stop = _stops[stopIndex];
+
+      final shiftedStart = stop.startDate != null
+          ? _normalize(stop.startDate!.add(delta))
+          : null;
+      final shiftedEnd = stop.endDate != null
+          ? _normalize(stop.endDate!.add(delta))
+          : null;
+
+      _stops[stopIndex] = stop.copyWith(
+        startDate: shiftedStart,
+        endDate: shiftedEnd,
+      );
+    }
+  }
+
+  /// Fits all stops inside [tripStart, tripEnd], ensures start ≤ end,
+  /// and keeps sequence (each start ≥ previous end when both exist).
+  void _clampAndChainStops() {
+    var previousEndDate = _tripStart;
+
+    for (var stopIndex = 0; stopIndex < _stops.length; stopIndex++) {
+      final stop = _stops[stopIndex];
+      var startDate = stop.startDate;
+      var endDate = stop.endDate;
+
+      if (startDate != null) {
+        startDate = _clampToTripWindow(startDate);
+        if (previousEndDate != null && startDate.isBefore(previousEndDate)) {
+          startDate = previousEndDate;
+        }
+      }
+
+      if (endDate != null) {
+        endDate = _clampToTripWindow(endDate);
+      }
+
+      // Guarantee start ≤ end when both exist.
+      if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+        endDate = startDate;
+      }
+
+      _stops[stopIndex] = stop.copyWith(startDate: startDate, endDate: endDate);
+
+      // Chain: if this stop has an end, it becomes the new previousEndDate.
+      if (endDate != null) {
+        previousEndDate = endDate;
+      }
+    }
+  }
+
+  /// Clamp a DateTime to the trip window.
+  DateTime _clampToTripWindow(DateTime date) {
+    var clampedDate = date;
+    if (_tripStart != null && clampedDate.isBefore(_tripStart!)) {
+      clampedDate = _tripStart!;
+    }
+    if (_tripEnd != null && clampedDate.isAfter(_tripEnd!)) {
+      clampedDate = _tripEnd!;
+    }
+    return _normalize(clampedDate);
   }
 
   /// Adds a new stop at the end of the list with sequential order.
@@ -89,9 +184,10 @@ class StopProvider extends ChangeNotifier {
 
   /// Updates the coordinates and label of an existing stop.
   void updateStop(Stop stop, LatLng coords, String label) {
-    final index = _stops.indexOf(stop);
-    if (index == -1) return;
-    _stops[index] = _stops[index].copyWith(
+    final stopIndex = _stops.indexOf(stop);
+    if (stopIndex == -1) return;
+
+    _stops[stopIndex] = _stops[stopIndex].copyWith(
       label: label,
       place: PlacePoint(latitude: coords.latitude, longitude: coords.longitude),
     );
@@ -106,7 +202,7 @@ class StopProvider extends ChangeNotifier {
     return null;
   }
 
-  /// Validates the stop label input.
+  /// Validates the stop start date input.
   String? validateStopStartDate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Start date is required';
@@ -114,7 +210,7 @@ class StopProvider extends ChangeNotifier {
     return null;
   }
 
-  /// Validates the stop label input.
+  /// Validates the stop end date input.
   String? validateStopEndDate(String? value) {
     if (value == null || value.isEmpty) {
       return 'End date is required';
@@ -148,9 +244,9 @@ class StopProvider extends ChangeNotifier {
     if (!_isValid(origin) || !_isValid(destination)) return null;
 
     final waypoints = <LatLng>[];
-    for (final s in _stops) {
-      if (_isValid(s.place)) {
-        waypoints.add(LatLng(s.place.latitude, s.place.longitude));
+    for (final stop in _stops) {
+      if (_isValid(stop.place)) {
+        waypoints.add(LatLng(stop.place.latitude, stop.place.longitude));
       }
     }
 
@@ -166,103 +262,106 @@ class StopProvider extends ChangeNotifier {
   }
 
   /// Sets the start date of a stop, clamping it between valid boundaries.
-  void setStopStartDate(int order, DateTime value) {
-    final index = _indexByOrder(order);
-    if (index == -1) return;
+  void setStopStartDate(int order, DateTime newDate) {
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return;
 
-    final minD = minStartFor(order);
-    final maxD = maxStartFor(order);
-    final safe = _clamp(_normalize(value), minD, maxD);
+    final minStartAllowed = minStartFor(order);
+    final maxStartAllowed = maxStartFor(order);
+    final clampedStart = _clamp(
+      _normalize(newDate),
+      minStartAllowed,
+      maxStartAllowed,
+    );
 
-    _stops[index] = _stops[index].copyWith(startDate: safe);
+    _stops[stopIndex] = _stops[stopIndex].copyWith(startDate: clampedStart);
 
-    final end = _stops[index].endDate;
-    if (end != null && end.isBefore(safe)) {
-      _stops[index] = _stops[index].copyWith(endDate: safe);
+    final existingEndDate = _stops[stopIndex].endDate;
+    if (existingEndDate != null && existingEndDate.isBefore(clampedStart)) {
+      _stops[stopIndex] = _stops[stopIndex].copyWith(endDate: clampedStart);
     }
     notifyListeners();
   }
 
   /// Sets the end date of a stop, clamping it between valid boundaries.
-  void setStopEndDate(int order, DateTime value) {
-    final index = _indexByOrder(order);
-    if (index == -1) return;
+  void setStopEndDate(int order, DateTime newDate) {
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return;
 
-    final minD = minEndFor(order);
-    final maxD = maxEndFor(order);
-    final safe = _clamp(_normalize(value), minD, maxD);
+    final minEndAllowed = minEndFor(order);
+    final maxEndAllowed = maxEndFor(order);
+    final clampedEnd = _clamp(
+      _normalize(newDate),
+      minEndAllowed,
+      maxEndAllowed,
+    );
 
-    _stops[index] = _stops[index].copyWith(endDate: safe);
+    _stops[stopIndex] = _stops[stopIndex].copyWith(endDate: clampedEnd);
 
-    final start = _stops[index].startDate;
-    if (start != null && start.isAfter(safe)) {
-      _stops[index] = _stops[index].copyWith(startDate: safe);
+    final existingStartDate = _stops[stopIndex].startDate;
+    if (existingStartDate != null && existingStartDate.isAfter(clampedEnd)) {
+      _stops[stopIndex] = _stops[stopIndex].copyWith(startDate: clampedEnd);
     }
     notifyListeners();
   }
 
   /// Minimum valid start date for a stop with the given order.
   DateTime minStartFor(int order) {
-    final index = _indexByOrder(order);
-    if (index == -1) return _now();
-
-    if (index == 0) return _tripStart ?? _now();
-
-    final prevEnd = _stops[index - 1].endDate;
-    return _normalize(prevEnd ?? (_tripStart ?? _now()));
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == 0) return _tripStart ?? _now();
+    if (stopIndex > 0) {
+      return _stops[stopIndex - 1].endDate ?? _tripStart ?? _now();
+    }
+    return _tripStart ?? _now();
   }
 
   /// Maximum valid start date for a stop with the given order.
   DateTime maxStartFor(int order) {
-    final index = _indexByOrder(order);
-    if (index == -1) return DateTime(2100);
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return DateTime(2100);
 
-    if (index == _stops.length - 1) {
+    if (stopIndex == _stops.length - 1) {
       return _normalize(_tripEnd ?? DateTime(2100));
     }
 
-    final nextStart = _stops[index + 1].startDate;
+    final nextStart = _stops[stopIndex + 1].startDate;
     return _normalize(nextStart ?? (_tripEnd ?? DateTime(2100)));
   }
 
   /// Suggested initial start date for a stop with the given order.
-  DateTime initialStartFor(int order) {
-    final index = _indexByOrder(order);
-    if (index == -1) return _now();
-
-    final base = _normalize(_stops[index].startDate ?? minStartFor(order));
-    return _clamp(base, minStartFor(order), maxStartFor(order));
+  DateTime? initialStartFor(int order) {
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return null;
+    return _stops[stopIndex].startDate;
   }
 
   /// Minimum valid end date for a stop with the given order.
   DateTime minEndFor(int order) {
-    final index = _indexByOrder(order);
-    if (index == -1) return _now();
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return _now();
 
-    final start = _stops[index].startDate ?? minStartFor(order);
-    return _normalize(start);
+    final startOrMin = _stops[stopIndex].startDate ?? minStartFor(order);
+    return _normalize(startOrMin);
   }
 
   /// Maximum valid end date for a stop with the given order.
   DateTime maxEndFor(int order) {
-    final index = _indexByOrder(order);
-    if (index == -1) return DateTime(2100);
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return DateTime(2100);
 
-    if (index == _stops.length - 1) {
+    if (stopIndex == _stops.length - 1) {
       return _normalize(_tripEnd ?? DateTime(2100));
     }
 
-    final nextStart = _stops[index + 1].startDate;
+    final nextStart = _stops[stopIndex + 1].startDate;
     return _normalize(nextStart ?? (_tripEnd ?? DateTime(2100)));
   }
 
   /// Suggested initial end date for a stop with the given order.
-  DateTime initialEndFor(int order) {
-    final index = _indexByOrder(order);
-    if (index == -1) return _now();
-
-    final base = _normalize(_stops[index].endDate ?? minEndFor(order));
-    return _clamp(base, minEndFor(order), maxEndFor(order));
+  DateTime? initialEndFor(int order) {
+    final stopIndex = _indexByOrder(order);
+    if (stopIndex == -1) return null;
+    return _stops[stopIndex].endDate;
   }
 
   bool _isValid(PlacePoint? place) {
@@ -270,7 +369,7 @@ class StopProvider extends ChangeNotifier {
   }
 
   int _indexByOrder(int order) {
-    return _stops.indexWhere((s) => s.order == order);
+    return _stops.indexWhere((stop) => stop.order == order);
   }
 
   DateTime _normalize(DateTime date) {
@@ -302,4 +401,3 @@ class StopProvider extends ChangeNotifier {
     return DateFormat('dd/MM/yyyy').format(date);
   }
 }
-

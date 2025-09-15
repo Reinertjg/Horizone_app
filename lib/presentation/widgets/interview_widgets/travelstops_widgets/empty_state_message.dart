@@ -13,8 +13,10 @@ class EmptyStateMessage extends StatelessWidget {
 
   /// The icon to display.
   final IconData icon;
+
   /// The title to display.
   final String title;
+
   /// The subtitle to display.
   final String subtitle;
 

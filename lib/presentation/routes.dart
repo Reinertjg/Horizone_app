@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../domain/entities/profile.dart';
 import '../domain/entities/travel.dart';
 import 'pages/dashboard_screen.dart';
 import 'pages/getstarted_screen.dart';
@@ -28,7 +29,10 @@ abstract class AppRoutes {
     '/profileSetup': (context) => const ProfileSetUpScreen(),
 
     /// Second-time profile setup screen
-    '/profileSetupPhoto': (context) => const ProfileSetupPhotoScreen(),
+    '/profileSetupPhoto': (context) {
+      final profile = ModalRoute.of(context)!.settings.arguments as Profile;
+      return ProfileSetupPhotoScreen(profile: profile);
+    },
 
     /// Main screen add BottomNavigationBar
     '/homeScreen': (context) => const HomeScreen(),
@@ -42,7 +46,7 @@ abstract class AppRoutes {
     /// Screen for viewing trip stops
     '/googleMap': (context) => const TravelRoutePage(),
 
-    // AppRoutes.routes
+    /// Screen for viewing trip stops
     '/travelDashboard': (context) {
       final travel = ModalRoute.of(context)!.settings.arguments as Travel;
       return TravelDashboardScreen(travel: travel);

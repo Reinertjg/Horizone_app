@@ -19,7 +19,7 @@ enum DatePickerMode {
 /// Cupertino-style date picker popup
 class CupertinoDatePickerField extends StatefulWidget {
   /// Creates a [CupertinoDatePickerField] with the given parameters.
-  CupertinoDatePickerField({
+  const CupertinoDatePickerField({
     super.key,
     required this.controller,
     required this.label,
@@ -95,8 +95,8 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
         color: colors.primary,
         child: CupertinoTheme(
           data: CupertinoThemeData(
-            brightness: Provider.of<ThemeProvider>(context).themeMode ==
-                    ThemeMode.light
+            brightness:
+                Provider.of<ThemeProvider>(context).themeMode == ThemeMode.light
                 ? Brightness.light
                 : Brightness.dark,
           ),
@@ -122,9 +122,6 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
   }
 
   void _updateEffectiveInitialDate() {
-    // The initialDateTime of CupertinoDatePicker must be greater than or equal to the minimumDate.
-    // If the provided initialDate is before the minDate, adjust it to be the minDate
-    // to prevent an assertion failure.
     if (widget.initialDate.isBefore(widget.minDate)) {
       _effectiveInitialDate = widget.minDate;
     } else {

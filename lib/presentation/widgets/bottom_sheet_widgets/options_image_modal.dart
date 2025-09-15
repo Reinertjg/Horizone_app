@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 
-import '../../../theme_color/app_colors.dart';
+import '../../theme_color/app_colors.dart';
 
+/// A bottom sheet that presents options for picking an image.
 class ImagePickerSheet extends StatelessWidget {
-  final VoidCallback onCameraTap;
-  final VoidCallback onGalleryTap;
-
+  /// Creates an [ImagePickerSheet].
   const ImagePickerSheet({
     super.key,
+    required this.title,
     required this.onCameraTap,
     required this.onGalleryTap,
+    required this.onVisualizeTap,
   });
+
+  /// The title of the camera option.
+  final String title;
+
+  /// The callback that is executed when the camera option is tapped.
+  final VoidCallback onCameraTap;
+
+  /// The callback that is executed when the gallery option is tapped.
+  final VoidCallback onGalleryTap;
+
+  /// The callback that is executed when the visualize option is tapped.
+  final VoidCallback onVisualizeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -33,41 +47,45 @@ class ImagePickerSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: colors.quaternary.withAlpha(80),
+                  color: colors.quaternary.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               const SizedBox(height: 20),
               Text(
-                'Selecionar foto',
+                'Configurações',
                 style: GoogleFonts.raleway(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 20),
-
-              /// Image options
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _ImageOption(
-                    icon: Icons.camera_alt_outlined,
-                    label: 'Câmera',
+                    icon: HugeIcons.strokeRoundedCameraAdd03,
+                    label: 'title',
                     onTap: onCameraTap,
-                    backgroundColor: colors.secondary.withAlpha(50),
+                    backgroundColor: colors.secondary.withValues(alpha: 0.5),
                     iconColor: colors.secondary,
                   ),
                   _ImageOption(
-                    icon: Icons.photo_library_outlined,
+                    icon: HugeIcons.strokeRoundedVision,
+                    label: 'Visualizar',
+                    onTap: onVisualizeTap,
+                    backgroundColor: colors.secondary.withValues(alpha: 0.5),
+                    iconColor: colors.secondary,
+                  ),
+                  _ImageOption(
+                    icon: HugeIcons.strokeRoundedAlbum01,
                     label: 'Galeria',
                     onTap: onGalleryTap,
-                    backgroundColor: colors.tertiary.withAlpha(50),
+                    backgroundColor: colors.tertiary.withValues(alpha: 0.5),
                     iconColor: colors.tertiary,
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
             ],
           ),
@@ -78,12 +96,6 @@ class ImagePickerSheet extends StatelessWidget {
 }
 
 class _ImageOption extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final Color backgroundColor;
-  final Color iconColor;
-
   const _ImageOption({
     required this.icon,
     required this.label,
@@ -92,13 +104,16 @@ class _ImageOption extends StatelessWidget {
     required this.iconColor,
   });
 
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final Color backgroundColor;
+  final Color iconColor;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-        onTap();
-      },
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -109,7 +124,7 @@ class _ImageOption extends StatelessWidget {
             ),
             child: Icon(icon, size: 32, color: iconColor),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(label, style: const TextStyle(fontSize: 14)),
         ],
       ),

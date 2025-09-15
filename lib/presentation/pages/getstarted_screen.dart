@@ -17,10 +17,7 @@ class GetStartedScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          height: MediaQuery.of(context).size.height,
           child: Stack(
             children: [
               const _BackgroundImage(),
@@ -71,16 +68,15 @@ class _LanguageSelector extends StatelessWidget {
           value: locale,
           underline: SizedBox(),
           elevation: 2,
-          selectedItemBuilder: (_) =>
-              List.generate(3, (_) {
-                return Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    selectedLanguage,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }),
+          selectedItemBuilder: (_) => List.generate(3, (_) {
+            return Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                selectedLanguage,
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }),
           icon: Icon(Icons.arrow_drop_down, size: 22, color: Colors.white),
           style: TextStyle(color: Colors.white, fontSize: 16),
           dropdownColor: colors.secondary,
@@ -226,8 +222,8 @@ class _BottomCardWithAirplane extends StatelessWidget {
               left: MediaQuery.of(context).size.height * 0.10,
               child: Transform.rotate(
                 angle: 25.9, // 90 degrees in radians
-                child: HugeIcon(icon:
-                HugeIcons.strokeRoundedAirplane01,
+                child: HugeIcon(
+                  icon: HugeIcons.strokeRoundedAirplane01,
                   color: colors.primary,
                   size: 40,
                 ),

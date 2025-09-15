@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'generated/l10n.dart';
 import 'presentation/routes.dart';
-import 'presentation/state/travel_provider.dart';
+import 'presentation/state/experience_provider.dart';
 import 'presentation/state/locale_provider.dart';
 import 'presentation/state/participant_provider.dart';
 import 'presentation/state/profile_provider.dart';
-import 'presentation/state/theme_provider.dart';
 import 'presentation/state/stop_provider.dart';
+import 'presentation/state/theme_provider.dart';
+import 'presentation/state/travel_provider.dart';
 import 'presentation/theme_color/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
   await dotenv.load(fileName: '.env');
-    runApp(
+  runApp(
     MultiProvider(
       providers: [
         /// Provides the current app locale (e.g., 'pt' for Portuguese)
@@ -39,6 +42,7 @@ Future<void> main() async {
         /// Manages travel stop-related state and logic
         ChangeNotifierProvider(create: (_) => StopProvider()),
 
+        ChangeNotifierProvider(create: (_) => ExperienceProvider()),
       ],
 
       /// Root widget of the app

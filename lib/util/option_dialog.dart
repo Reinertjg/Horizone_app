@@ -7,10 +7,16 @@ import '../presentation/widgets/interview_widgets/interview_fab.dart';
 
 /// Dialog for selecting an option.
 class OptionDialog extends StatefulWidget {
+  /// The title of the dialog.
   final String title;
+
+  /// The message content of the dialog.
   final String message;
+
+  /// The text for the confirmation button.
   final String buttonText;
 
+  /// Creates an [OptionDialog].
   const OptionDialog({
     super.key,
     required this.title,
@@ -26,8 +32,6 @@ class _OptionDialogState extends State<OptionDialog>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {

@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DatePickerMode;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/l10n.dart';
+import '../../domain/entities/stop.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/usecases/participant_usecase.dart';
 import '../../domain/usecases/stop_usecase.dart';
@@ -23,7 +21,6 @@ import '../state/travel_provider.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/dashboard_widgets/travel_card_widget.dart';
 import '../widgets/iconbutton_settings.dart';
-import '../widgets/dashboard_widgets/blinking_dot.dart';
 import '../widgets/interview_widgets/interview_fab.dart';
 import '../widgets/interview_widgets/interview_form_card.dart';
 import '../widgets/interview_widgets/map_preview_card.dart';
@@ -101,7 +98,12 @@ class _InterviewScreenState extends State<InterviewScreen> {
                       DateFormat('dd/MM/yyyy').parse(travel.endDate),
                     );
 
-                    if (await isOverlapping) {
+                    final isOverlappingResult = await isOverlapping;
+
+                    // Avoid using BuildContext across async gaps.
+                    if (!context.mounted) return;
+
+                    if (isOverlappingResult) {
                       showAppSnackbar(
                         context: context,
                         snackbarMode: SnackbarMode.error,
@@ -124,6 +126,9 @@ class _InterviewScreenState extends State<InterviewScreen> {
                       // Save stops data
                       final stops = stopProvider.toEntity(travelId);
                       await StopUseCase(StopRepositoryImpl()).insert(stops);
+
+                      // Avoid using BuildContext across async gaps.
+                      if (!context.mounted) return;
 
                       showAppSnackbar(
                         context: context,
@@ -170,7 +175,7 @@ class _MiddleSection extends StatelessWidget {
 }
 
 class _InterviewAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _InterviewAppBar({super.key});
+  const _InterviewAppBar();
 
   @override
   Widget build(BuildContext context) {
@@ -341,16 +346,16 @@ class _TravelImageModalState extends State<_TravelImageModal> {
                   TravelCardsWidget(
                     travel: Travel(
                       image: travelProvider.getImage,
-                      title: travelProvider.getTitle ?? 'Example',
+                      title: travelProvider.getTitle,
                       startDate: '01/01/2026',
                       endDate: '02/01/2026',
                       meansOfTransportation: 'Car',
                       numberOfParticipants: 1,
                       experienceType: 'Solo',
                       numberOfStops: 1,
-                      originPlace: '',
+                      originPlace: PlacePoint(latitude: 0, longitude: 0),
                       originLabel: '',
-                      destinationPlace: '',
+                      destinationPlace: PlacePoint(latitude: 0, longitude: 0),
                       destinationLabel:
                           travelProvider.destinationLabel ?? 'Exemple',
                       status: 'in_progress',

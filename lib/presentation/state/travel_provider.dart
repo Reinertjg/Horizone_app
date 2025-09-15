@@ -5,8 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../api/place_details_api.dart';
-import '../../domain/entities/travel.dart';
 import '../../domain/entities/stop.dart';
+import '../../domain/entities/travel.dart';
 import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
 
 /// Provider class responsible for managing the form state and logic
@@ -24,76 +24,33 @@ class TravelProvider extends ChangeNotifier {
   // /// Controller for the number of participants input field.
   // final numberOfParticipantsController = 0;
 
-  int? _participants;
-  String? _meansOfTransportation;
-  String? _experienceType;
+  /// The number of participants.
+  int? participants;
+
+  /// The selected means of transportation.
+  String? meansOfTransportation;
+
+  /// The selected experience type.
+  String? experienceType;
   File? _image;
-  PlacePoint? _originPlace;
-  PlacePoint? _destinationPlace;
-  String? _originLabel;
-  String? _destinationLabel;
+
+  /// The selected Place (latitude and longitude).
+  PlacePoint? originPlace;
+
+  /// The selected Place (latitude and longitude).
+  PlacePoint? destinationPlace;
+
+  /// The selected Place Label (name).
+  String? originLabel;
+
+  /// The selected Place Label (name).
+  String? destinationLabel;
 
   /// Gets the trip title.
-  String? get getTitle => titleController.text.trim();
-
-  /// Gets the number of participants.
-  int? get participants => _participants;
-
-  /// Gets the selected means of transportation.
-  String? get meansOfTransportation => _meansOfTransportation;
-
-  /// Gets the selected experience type.
-  String? get experienceType => _experienceType;
-
-  /// Gets the selected Place (latitude and longitude).
-  PlacePoint? get originPlace => _originPlace;
-
-  /// Gets the selected Place (latitude and longitude).
-  PlacePoint? get destinationPlace => _destinationPlace;
-
-  /// Gets the selected Place Label (name).
-  String? get originLabel => _originLabel;
-
-  /// Gets the selected Place Label (name).
-  String? get destinationLabel => _destinationLabel;
+  String get getTitle => titleController.text.trim();
 
   /// Gets the selected image.
   File? get getImage => _image;
-
-  /// Sets the number of participants and notifies listeners.
-  set participants(int? value) {
-    _participants = value;
-  }
-
-  /// Sets the means of transportation and notifies listeners.
-  set meansOfTransportation(String? value) {
-    _meansOfTransportation = value;
-  }
-
-  /// Sets the experience type and notifies listeners.
-  set experienceType(String? value) {
-    _experienceType = value;
-  }
-
-  /// Sets the origin place and notifies listeners.
-  set originPlace(PlacePoint? value) {
-    _originPlace = value;
-  }
-
-  /// Sets the destination place and notifies listeners.
-  set destinationPlace(PlacePoint? value) {
-    _destinationPlace = value;
-  }
-
-  /// Sets the origin label and notifies listeners.
-  set originLabel(String? value) {
-    _originLabel = value;
-  }
-
-  /// Sets the destination label and notifies listeners.
-  set destinationLabel(String? value) {
-    _destinationLabel = value;
-  }
 
   /// Sets the image and notifies listeners.
   void setImage(File? value) {
@@ -115,9 +72,9 @@ class TravelProvider extends ChangeNotifier {
     titleController.clear();
     startDateController.clear();
     endDateController.clear();
-    _participants = null;
-    _meansOfTransportation = null;
-    _experienceType = null;
+    participants = null;
+    meansOfTransportation = null;
+    experienceType = null;
   }
 
   /// Converts the form data to a [Travel] entity.
@@ -127,19 +84,20 @@ class TravelProvider extends ChangeNotifier {
       title: titleController.text.trim(),
       startDate: startDateController.text.trim(),
       endDate: endDateController.text.trim(),
-      meansOfTransportation: _meansOfTransportation ?? '',
+      meansOfTransportation: meansOfTransportation ?? '',
       numberOfParticipants: participants,
-      experienceType: _experienceType ?? '',
+      experienceType: experienceType ?? '',
       numberOfStops: stops,
-      originPlace: _originPlace.toString(),
-      originLabel: _originLabel!,
-      destinationPlace: _destinationPlace.toString(),
-      destinationLabel: _destinationLabel!,
-      rating: 0.0,
+      originPlace: originPlace!,
+      originLabel: originLabel!,
+      destinationPlace: destinationPlace!,
+      destinationLabel: destinationLabel!,
+      rating: null,
       status: 'active',
     );
   }
 
+  /// Sets the number of participants and notifies listeners.
   Future<void> resolveAndSetOrigin({
     required String placeId,
     required String label,
@@ -153,6 +111,7 @@ class TravelProvider extends ChangeNotifier {
     );
   }
 
+  /// Sets the number of participants and notifies listeners.
   Future<void> resolveAndSetDestination({
     required String placeId,
     required String label,
@@ -175,6 +134,7 @@ class TravelProvider extends ChangeNotifier {
     return LatLngPoint(latitude: ll.latitude, longitude: ll.longitude);
   }
 
+  /// Validates the form data and returns a list of errors.
   bool validateOverlap(List<Travel> travels, DateTime start, DateTime end) {
     for (final t in travels) {
       final travelStartDate = DateTime.parse(t.startDate);
@@ -264,9 +224,14 @@ class TravelProvider extends ChangeNotifier {
   }
 }
 
+/// A class to represent a point with latitude and longitude.
 class LatLngPoint {
+  /// The latitude of the point.
   final double latitude;
+
+  /// The longitude of the point.
   final double longitude;
 
+  /// Creates a [LatLngPoint].
   LatLngPoint({required this.latitude, required this.longitude});
 }

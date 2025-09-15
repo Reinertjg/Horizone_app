@@ -10,6 +10,7 @@ import '../../repositories/profile_repository_impl.dart';
 import '../../util/show_app_snackbar.dart';
 import '../state/profile_provider.dart';
 import '../theme_color/app_colors.dart';
+import '../widgets/bottom_sheet_widgets/options_image_modal.dart';
 import '../widgets/iconbutton_settings.dart';
 import '../widgets/interview_widgets/build_dropdownform.dart';
 import '../widgets/interview_widgets/cupertino_date_picker.dart';
@@ -18,9 +19,12 @@ import '../widgets/interview_widgets/interview_textfield.dart';
 import '../widgets/interview_widgets/interview_textfield_box.dart';
 import '../widgets/interview_widgets/participant_widgets/participant_avatar_picker.dart';
 import '../widgets/section_title.dart';
+import '../widgets/show_dialog_image.dart';
 import 'getstarted_screen.dart';
 
+/// Screen for displaying and editing the user's profile.
 class ProfileScreen extends StatefulWidget {
+  /// Creates a custom [ProfileScreen].
   const ProfileScreen({super.key});
 
   @override
@@ -28,8 +32,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _useCase = ProfileUseCase(ProfileRepositoryImpl());
-
   bool _loading = true;
   bool _editing = false;
   Profile? _profile;
@@ -111,14 +113,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+/// The app bar for the profile screen.
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
+  /// Creates a [ProfileAppBar].
   const ProfileAppBar({
     super.key,
     required this.isEditing,
     required this.onToggleEditing,
   });
 
+  /// Whether the profile is currently being edited.
   final bool isEditing;
+
+  /// A callback to toggle the editing mode.
   final VoidCallback onToggleEditing;
 
   @override
@@ -129,7 +136,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       title: Text(
-        'Profile',
+        S.of(context).profile,
         style: GoogleFonts.nunito(
           fontSize: 26,
           fontWeight: FontWeight.bold,
@@ -184,7 +191,9 @@ class _IconbuttonEditProfile extends StatelessWidget {
   }
 }
 
+/// A widget to display the user's avatar.
 class AvatarProfile extends StatelessWidget {
+  /// Creates an [AvatarProfile] widget.
   const AvatarProfile({
     super.key,
     required this.profile,
@@ -192,8 +201,13 @@ class AvatarProfile extends StatelessWidget {
     required this.onImageUpdated,
   });
 
+  /// The user's profile data.
   final Profile profile;
+
+  /// Whether the profile is in editing mode.
   final bool isEditing;
+
+  /// A callback to update the user's image.
   final Future<void> Function() onImageUpdated;
 
   Future<void> _pickAndUploadImage(
@@ -222,39 +236,7 @@ class AvatarProfile extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!isEditing) {
-          await showDialog(
-            context: context,
-            builder: (context) => GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
-              child: Dialog(
-                backgroundColor: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 350,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colors.secondary,
-                        ),
-                        child: ClipOval(
-                          child: profile.photo == null
-                              ? Image.asset(
-                                  'assets/images/user_default_photo.png',
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.file(profile.photo!, fit: BoxFit.cover),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+          showDialogImage(context, profile.photo!, MainAxisAlignment.center);
           return;
         }
 
@@ -263,15 +245,18 @@ class AvatarProfile extends StatelessWidget {
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
           builder: (_) => ImagePickerSheet(
+            title: 'Configurações',
             onCameraTap: () async {
               Navigator.pop(context);
               await _pickAndUploadImage(context, OptionPhotoMode.cameraMode);
+            },
+            onVisualizeTap: () {
+              showDialogImage(context, profile.photo!, MainAxisAlignment.start);
             },
             onGalleryTap: () async {
               Navigator.pop(context);
               await _pickAndUploadImage(context, OptionPhotoMode.galleryMode);
             },
-            profile: profile,
           ),
         );
       },
@@ -295,24 +280,32 @@ class AvatarProfile extends StatelessWidget {
                       profile.photo!,
                       fit: BoxFit.cover,
                       gaplessPlayback: true,
-                      frameBuilder: (context, child, frame, wasSyncLoaded) {
-                        if (wasSyncLoaded) return child;
+                      frameBuilder: (context, child, frame, wasSync) {
+                        if (wasSync) return child;
                         return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
+                          duration: const Duration(milliseconds: 250),
+                          layoutBuilder: (currentChild, previousChildren) =>
+                              Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  ...previousChildren,
+                                  if (currentChild != null) currentChild,
+                                ],
+                              ),
                           child: frame == null
-                              ? Center(
-                            key: const ValueKey('loader'),
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(colors.tertiary),
-                              strokeWidth: 3.0,
-                            ),
-                          )
-                              : KeyedSubtree(
-                            key: const ValueKey('img'),
-                            child: child,
-                          ),
+                              ? SizedBox.expand(
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 28,
+                                      height: 28,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        color: colors.tertiary,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox.expand(child: child), // <- ocupa tudo
                         );
                       },
                       errorBuilder: (context, error, stackTrace) {
@@ -348,163 +341,9 @@ class AvatarProfile extends StatelessWidget {
   }
 }
 
-class ImagePickerSheet extends StatelessWidget {
-  const ImagePickerSheet({
-    super.key,
-    required this.onCameraTap,
-    required this.onGalleryTap,
-    required this.profile,
-  });
-
-  final VoidCallback onCameraTap;
-  final VoidCallback onGalleryTap;
-  final Profile profile;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<AppColors>()!;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.primary,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: DefaultTextStyle(
-          style: GoogleFonts.raleway(color: colors.quaternary),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colors.quaternary.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Configurações',
-                style: GoogleFonts.raleway(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _ImageOption(
-                    icon: HugeIcons.strokeRoundedCameraAdd03,
-                    label: 'Câmera',
-                    onTap: onCameraTap,
-                    backgroundColor: colors.secondary.withOpacity(0.5),
-                    iconColor: colors.secondary,
-                  ),
-                  _ImageOption(
-                    icon: HugeIcons.strokeRoundedVision,
-                    label: 'Visualizar',
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
-                          child: Dialog(
-                            backgroundColor: Colors.transparent,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12.0,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 350,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: colors.secondary,
-                                    ),
-                                    child: ClipOval(
-                                      child: profile.photo == null
-                                          ? Image.asset(
-                                              'assets/images/user_default_photo.png',
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.file(
-                                              profile.photo!,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    backgroundColor: colors.secondary.withOpacity(0.5),
-                    iconColor: colors.secondary,
-                  ),
-                  _ImageOption(
-                    icon: HugeIcons.strokeRoundedAlbum01,
-                    label: 'Galeria',
-                    onTap: onGalleryTap,
-                    backgroundColor: colors.tertiary.withOpacity(0.5),
-                    iconColor: colors.tertiary,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ImageOption extends StatelessWidget {
-  const _ImageOption({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    required this.backgroundColor,
-    required this.iconColor,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final Color backgroundColor;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, size: 32, color: iconColor),
-          ),
-          SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 14)),
-        ],
-      ),
-    );
-  }
-}
-
+/// A widget to display the user's name and biography.
 class ProfileHeader extends StatelessWidget {
+  /// Creates a [ProfileHeader] widget.
   const ProfileHeader({
     super.key,
     required this.profile,
@@ -512,8 +351,13 @@ class ProfileHeader extends StatelessWidget {
     required this.onProfileUpdated,
   });
 
+  /// The user's profile data.
   final Profile profile;
+
+  /// Whether the profile is in editing mode.
   final bool isEditing;
+
+  /// A callback to update the user's name and biography.
   final Future<void> Function() onProfileUpdated;
 
   @override
@@ -562,7 +406,7 @@ class ProfileHeader extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(
                     HugeIcons.strokeRoundedEdit03,
-                    color: colors.quaternary.withOpacity(0.5),
+                    color: colors.quaternary.withValues(alpha: 0.5),
                     size: 20,
                   ),
                 ),
@@ -610,7 +454,7 @@ class ProfileHeader extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Icon(
                       HugeIcons.strokeRoundedEdit03,
-                      color: colors.quaternary.withOpacity(0.5),
+                      color: colors.quaternary.withValues(alpha: 0.5),
                       size: 20,
                     ),
                   ),
@@ -623,7 +467,9 @@ class ProfileHeader extends StatelessWidget {
   }
 }
 
+/// A widget to display general information about the user.
 class ProfileInfo extends StatelessWidget {
+  /// Creates a [ProfileInfo] widget.
   const ProfileInfo({
     super.key,
     required this.profile,
@@ -631,8 +477,13 @@ class ProfileInfo extends StatelessWidget {
     required this.onProfileUpdated,
   });
 
+  /// The user's profile data.
   final Profile profile;
+
+  /// Whether the profile is in editing mode.
   final bool isEditing;
+
+  /// A callback to update the user's information.
   final Future<void> Function() onProfileUpdated;
 
   @override
@@ -714,7 +565,9 @@ class ProfileInfo extends StatelessWidget {
   }
 }
 
+/// A field to display a piece of information, with an option to edit it.
 class InfoField extends StatelessWidget {
+  /// Creates an [InfoField] widget.
   const InfoField({
     super.key,
     required this.icon,
@@ -725,11 +578,22 @@ class InfoField extends StatelessWidget {
     required this.onProfileUpdated,
   });
 
+  /// The icon to display next to the information.
   final IconData icon;
+
+  /// The label for the information.
   final String label;
+
+  /// The information to display.
   final String info;
+
+  /// Whether the field is in editing mode.
   final bool isEditing;
+
+  /// The widget to display in the dialog when editing.
   final Widget field;
+
+  /// A callback to update the information.
   final Future<void> Function() onProfileUpdated;
 
   @override
@@ -761,7 +625,7 @@ class InfoField extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: 12,
-                    color: colors.quaternary.withOpacity(0.5),
+                    color: colors.quaternary.withValues(alpha: 0.5),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -782,7 +646,7 @@ class InfoField extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: Icon(
                 HugeIcons.strokeRoundedEdit03,
-                color: colors.quaternary.withOpacity(0.5),
+                color: colors.quaternary.withValues(alpha: 0.5),
                 size: 20,
               ),
             ),
@@ -794,6 +658,7 @@ class InfoField extends StatelessWidget {
 
 /// A widget that displays a red "Delete Account" text button.
 class DeleteAccountTile extends StatelessWidget {
+  /// Creates a [DeleteAccountTile] widget.
   const DeleteAccountTile({super.key});
 
   @override
@@ -814,7 +679,7 @@ class DeleteAccountTile extends StatelessWidget {
 }
 
 class _ConfirmDeleteDialog extends StatelessWidget {
-  const _ConfirmDeleteDialog({super.key});
+  const _ConfirmDeleteDialog();
 
   @override
   Widget build(BuildContext context) {
@@ -861,11 +726,19 @@ class _ConfirmDeleteDialog extends StatelessWidget {
 
 /// Dialog for selecting an option.
 class OptionDialog extends StatefulWidget {
+  /// The title of the dialog.
   final String title;
+
+  /// The text for the confirmation button.
   final String buttonText;
+
+  /// The form field widget to be displayed in the dialog.
   final Widget field;
+
+  /// Callback function to be executed when the profile is updated.
   final Future<void> Function() onProfileUpdated;
 
+  /// Creates an [OptionDialog].
   const OptionDialog({
     super.key,
     required this.title,
@@ -931,6 +804,7 @@ class _OptionDialogState extends State<OptionDialog>
                   onPressed: () async {
                     Navigator.of(context).pop(false);
                     await widget.onProfileUpdated();
+                    if (!context.mounted) return;
                     showAppSnackbar(
                       context: context,
                       snackbarMode: SnackbarMode.info,

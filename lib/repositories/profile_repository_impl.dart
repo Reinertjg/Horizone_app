@@ -17,7 +17,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<void> updateProfile(Profile profile) async {
-    print('-------------oopa-----------------');
     final db = await _dbFuture;
     final map = profile.toMap();
     map.remove(ProfileTable.pathPhoto);

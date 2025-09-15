@@ -1,7 +1,7 @@
 /// Contains constants and SQL statement related to the `stops` table schema.
 abstract class StopTable {
   /// Private constructor to prevent instantiation.
-  static const tableName = 'stop';
+  static const tableName = 'stops';
 
   /// Primary key (auto-incremented integer)
   static const String stopId = 'id';

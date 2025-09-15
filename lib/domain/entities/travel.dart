@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'stop.dart';
+
 /// A class representing a trip.
 class Travel {
   /// The unique identifier of the trip.
@@ -30,13 +32,13 @@ class Travel {
   final int numberOfStops;
 
   /// The Origin Place the Trip
-  final String originPlace;
+  final PlacePoint originPlace;
 
   /// The Origin Label the Trip
   final String originLabel;
 
   /// The Destination Place the Trip
-  final String destinationPlace;
+  final PlacePoint destinationPlace;
 
   /// The Destination Label the Trip
   final String destinationLabel;
@@ -44,8 +46,8 @@ class Travel {
   /// The rating of the trip.
   final double? rating;
 
-  /// The status of the trip (e.g., in progress, completed).
-  String status = 'in progress';
+  /// The status of the trip (e.g., 'active', 'inactive').
+  String status = 'active';
 
   /// Constructs a new [Travel] object.
   Travel({
@@ -80,8 +82,8 @@ class Travel {
       'numberOfStops': numberOfStops,
       'originLabel': originLabel,
       'destinationLabel': destinationLabel,
-      'originPlace': originPlace,
-      'destinationPlace': destinationPlace,
+      'originPlace': originPlace.toString(),
+      'destinationPlace': destinationPlace.toString(),
       'rating': rating,
       'status': status,
     };
@@ -100,10 +102,10 @@ class Travel {
       numberOfParticipants: map['numberOfParticipants'],
       experienceType: map['experienceType'],
       numberOfStops: map['numberOfStops'],
-      originPlace: map['originPlace'],
       originLabel: map['originLabel'],
-      destinationPlace: map['destinationPlace'],
       destinationLabel: map['destinationLabel'],
+      originPlace: PlacePoint.fromString(map['originPlace']),
+      destinationPlace: PlacePoint.fromString(map['destinationPlace']),
       rating: map['rating'],
       status: map['status'],
     );

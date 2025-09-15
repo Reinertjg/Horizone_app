@@ -4,7 +4,6 @@ import '../entities/profile.dart';
 
 /// Abstract repository that defines the contract for profile data operations.
 abstract class ProfileRepository {
-
   /// Inserts a [Profile] into the data source.
   Future<void> insertProfile(Profile profile);
 

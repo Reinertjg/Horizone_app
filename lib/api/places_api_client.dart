@@ -1,12 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+/// A client for the Horizone places API.
 class PlacesApiClient {
+  /// The base URL for the API.
   final String baseUrl;
   final http.Client _client;
-  PlacesApiClient({required this.baseUrl, http.Client? client})
-      : _client = client ?? http.Client();
 
+  /// Creates a new [PlacesApiClient].
+  PlacesApiClient({required this.baseUrl, http.Client? client})
+    : _client = client ?? http.Client();
+
+  /// Fetches autocomplete suggestions for a given [input].
   Future<List<Map<String, dynamic>>> autocomplete({
     required String input,
     String? sessionToken,
@@ -33,5 +38,3 @@ class PlacesApiClient {
     return (data['suggestions'] as List? ?? []).cast<Map<String, dynamic>>();
   }
 }
-
-

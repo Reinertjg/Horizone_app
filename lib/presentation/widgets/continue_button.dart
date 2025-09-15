@@ -23,8 +23,10 @@ class ContinueButton extends StatelessWidget {
 
   /// Text to display on the button.
   final String title;
+
   /// Route to navigate to after successful validation and saving.
   final String pathRoute;
+
   /// Key to validate the associated form.
   final GlobalKey<FormState> formKey;
 
