@@ -37,4 +37,14 @@ class ExperienceRepositoryImpl implements ExperienceRepository {
           return result.map(Experience.fromMap).toList();
         });
   }
+
+  @override
+  Future<List<Experience>> getAllExperiences() async {
+    final db = await _dbFuture;
+    return db
+        .query(
+          ExperienceTable.tableName,
+        )
+        .then((result) => result.map(Experience.fromMap).toList());
+  }
 }

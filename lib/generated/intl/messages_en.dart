@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Biography must be at least 10 characters long.",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "completed": MessageLookupByLibrary.simpleMessage("Completed"),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continue"),
     "darkTheme": MessageLookupByLibrary.simpleMessage("Dark Theme"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
@@ -56,6 +57,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailRequired": MessageLookupByLibrary.simpleMessage("Email is required."),
     "endDate": MessageLookupByLibrary.simpleMessage("End Date"),
+    "exploreAmazingDestinations": MessageLookupByLibrary.simpleMessage(
+      "Explore Amazing Destinations",
+    ),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "Gender is required.",
@@ -67,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ex: Silva Family Trip 2025",
     ),
     "home": MessageLookupByLibrary.simpleMessage("Home"),
+    "inProgress": MessageLookupByLibrary.simpleMessage("In Progress"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Tell us who you are and we\'ll take you where you want to be",
     ),
@@ -85,6 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Name must be at least 3 characters long.",
     ),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
+    "noTravelsHere": MessageLookupByLibrary.simpleMessage("No travels here"),
     "participants": MessageLookupByLibrary.simpleMessage("Participants"),
     "planning": MessageLookupByLibrary.simpleMessage("Planning"),
     "planningTravel": MessageLookupByLibrary.simpleMessage("Planning a Travel"),
@@ -92,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "Ready to explore beyond boundaries?",
     ),
+    "scheduled": MessageLookupByLibrary.simpleMessage("Scheduled"),
     "selectLanguage": MessageLookupByLibrary.simpleMessage("Select Language"),
     "selectTheme": MessageLookupByLibrary.simpleMessage("Select Theme"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
@@ -108,5 +115,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "welcome": MessageLookupByLibrary.simpleMessage("Hi"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Who you are"),
+    "yourTravels": MessageLookupByLibrary.simpleMessage("Your Travels"),
   };
 }

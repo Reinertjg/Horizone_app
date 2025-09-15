@@ -305,7 +305,7 @@ class AvatarProfile extends StatelessWidget {
                                     ),
                                   ),
                                 )
-                              : SizedBox.expand(child: child), // <- ocupa tudo
+                              : SizedBox.expand(child: child),
                         );
                       },
                       errorBuilder: (context, error, stackTrace) {

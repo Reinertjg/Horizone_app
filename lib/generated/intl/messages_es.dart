@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "La biografía debe tener al menos 10 caracteres.",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
+    "completed": MessageLookupByLibrary.simpleMessage("Completado"),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continuar"),
     "darkTheme": MessageLookupByLibrary.simpleMessage("Tema Oscuro"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Fecha de nacimiento"),
@@ -58,6 +59,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "El correo electrónico es obligatorio.",
     ),
     "endDate": MessageLookupByLibrary.simpleMessage("Fecha de Finalización"),
+    "exploreAmazingDestinations": MessageLookupByLibrary.simpleMessage(
+      "Explora destinos increíbles",
+    ),
     "gender": MessageLookupByLibrary.simpleMessage("Género"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "El género es obligatorio.",
@@ -66,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Información General",
     ),
     "home": MessageLookupByLibrary.simpleMessage("Inicio"),
+    "inProgress": MessageLookupByLibrary.simpleMessage("En Progreso"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Cuéntanos quién eres y te llevaremos a donde quieras estar",
     ),
@@ -88,6 +93,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORA NUEVOS HORIZONTES",
     ),
+    "noTravelsHere": MessageLookupByLibrary.simpleMessage(
+      "Sin viajes por aquí",
+    ),
     "participants": MessageLookupByLibrary.simpleMessage("Participantes"),
     "planning": MessageLookupByLibrary.simpleMessage("Planificación"),
     "planningTravel": MessageLookupByLibrary.simpleMessage(
@@ -97,6 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "¿Listo para explorar más allá de los límites?",
     ),
+    "scheduled": MessageLookupByLibrary.simpleMessage("Agendado"),
     "selectLanguage": MessageLookupByLibrary.simpleMessage(
       "Selecciona el Idioma",
     ),
@@ -115,5 +124,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "welcome": MessageLookupByLibrary.simpleMessage("Hola"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Quién eres"),
+    "yourTravels": MessageLookupByLibrary.simpleMessage("Tus Viajes"),
   };
 }

@@ -48,5 +48,11 @@
   "meansOfTransport": "Means of Transport",
   "participants": "Participants",
   "add": "Add",
-  "typeAndExperience": "Type and Experience"
+  "typeAndExperience": "Type and Experience",
+  "exploreAmazingDestinations": "Explore Amazing Destinations",
+  "yourTravels": "Your Travels",
+  "noTravelsHere": "No travels here",
+  "inProgress": "In Progress",
+  "scheduled": "Scheduled",
+  "completed": "Completed"
 }

@@ -10,4 +10,7 @@ abstract class ExperienceRepository {
 
   /// Retrieves a list of [Experience]s associated with a given [stopId].
   Future<List<Experience>> getExperiencesByStopId(int stopId);
+
+  /// Retrieves a list of all [Experience]s in the repository.
+  Future<List<Experience>> getAllExperiences();
 }

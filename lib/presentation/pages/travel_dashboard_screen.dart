@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 
+import '../../domain/entities/experience.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/stop.dart';
 import '../../domain/entities/travel.dart';
@@ -35,10 +36,12 @@ class TravelDashboardScreen extends StatefulWidget {
 }
 
 class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
-  final repositoryStop = StopRepositoryImpl();
   final repositoryParticipant = ParticipantRepositoryImpl();
+  final repositoryStop = StopRepositoryImpl();
+  final repositoryExperience = ExperienceRepositoryImpl();
   List<Participant> participants = [];
   List<Stop> stops = [];
+  List<Experience> experiences = [];
   String currentLocation = '';
   String? currentLocationDate;
 
@@ -54,16 +57,6 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
     }
 
     return false;
-  }
-
-  /// Returns true if the travel is completed, false otherwise.
-  bool _isTravelCompleted() {
-    final status = getTravelStatus(
-      startDate: parseTravelDate(widget.travel.startDate),
-      endDate: parseTravelDate(widget.travel.endDate),
-    );
-
-    return status == TravelStatus.completed;
   }
 
   /// Returns the color based on the status of the stop.
@@ -90,6 +83,17 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
       setState(() {
         stops = searched;
         _determineCurrentLocation();
+      });
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<void> _uploadExperiences() async {
+    try {
+      final searched = await repositoryExperience.getAllExperiences();
+      setState(() {
+        experiences = searched;
       });
     } catch (e) {
       return Future.error(e);
@@ -139,6 +143,7 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
     super.initState();
     _uploadParticipants();
     _uploadStops();
+    _uploadExperiences();
   }
 
   @override
@@ -164,6 +169,10 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
                 endDate: parseTravelDate(widget.travel.endDate),
               ),
             ),
+
+            if (participants.isNotEmpty)
+              _ParticipantsList(participants: participants),
+
             if (_isTravelOngoing())
               _CurrentLocationCard(
                 currentLocation: currentLocation,
@@ -171,12 +180,13 @@ class _TravelDashboardScreenState extends State<TravelDashboardScreen> {
               ),
             _TravelTimeline(travel: widget.travel, stops: stops),
             const SizedBox(height: 20),
-            if (_isTravelCompleted())
-              _BottomButtons(
-                travel: widget.travel,
-                participants: participants,
-                stops: stops,
-              ),
+            _BottomButtons(
+              travel: widget.travel,
+              participants: participants,
+              stops: stops,
+              experiences: experiences,
+              onUploadExperience: _uploadExperiences,
+            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -859,20 +869,24 @@ class _StopCardState extends State<_StopCard> {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
-                    onTap: () async {
-                      final saved = await showExperienceStopBottomSheet(
-                        context,
-                        widget.stop.id!,
-                      );
-                      if (saved == true) {
-                        await _checkHasReview();
-                      }
-                    },
+                    onTap: _hasReview
+                        ? null
+                        : () async {
+                            final saved = await showExperienceStopBottomSheet(
+                              context,
+                              widget.stop.id!,
+                            );
+                            if (saved == true) {
+                              await _checkHasReview();
+                            }
+                          },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          HugeIcons.strokeRoundedTicketStar,
+                          _hasReview
+                              ? HugeIcons.strokeRoundedTick02
+                              : HugeIcons.strokeRoundedTicketStar,
                           size: 24,
                           color: btnIconColor,
                         ),
@@ -906,25 +920,84 @@ class _BottomButtons extends StatelessWidget {
     required this.travel,
     required this.stops,
     required this.participants,
+    required this.experiences,
+    required this.onUploadExperience,
   });
 
   final Travel travel;
   final List<Participant> participants;
   final List<Stop> stops;
+  final List<Experience> experiences;
+  final Future<void> Function() onUploadExperience;
 
   @override
   Widget build(BuildContext context) {
+    final isTravelCompleted =
+        getTravelStatus(
+          startDate: parseTravelDate(travel.startDate),
+          endDate: parseTravelDate(travel.endDate),
+        ) ==
+        TravelStatus.completed;
+    final allStopsReviewed = experiences.length >= stops.length;
+    final canGeneratePdf = isTravelCompleted && allStopsReviewed;
+
     return InterviewFab(
       nameButton: 'Gerar PDF do Roteiro',
-      onPressed: () async {
-        final bytes = await generateTripCoverPdf(
-          travel: travel,
-          participants: participants,
-          stops: stops,
-          mapsApiKey: dotenv.env['MAPS_API_KEY'] ?? '',
-        );
-        await Printing.layoutPdf(onLayout: (_) async => bytes);
-      },
+      onPressed: canGeneratePdf
+          ? () {
+              showDialog<void>(
+                context: context,
+                barrierDismissible: false,
+                builder: (dialogContext) {
+                  return PopScope(
+                    canPop: false,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Gerando o PDF.',
+                            style: GoogleFonts.raleway(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+
+              () async {
+                try {
+                  await onUploadExperience();
+                  final bytes = await generateTripCoverPdf(
+                    travel: travel,
+                    participants: participants,
+                    stops: stops,
+                    experiences: experiences,
+                    mapsApiKey: dotenv.env['MAPS_API_KEY'] ?? '',
+                  );
+
+                  if (context.mounted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  }
+                  await Printing.layoutPdf(onLayout: (_) async => bytes);
+                } catch (e) {
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                }
+              }();
+            }
+          : null,
     );
   }
 }
@@ -986,5 +1059,79 @@ IconData _getStatusIcon(StopStatus status) {
       return HugeIcons.strokeRoundedTick02;
     case StopStatus.upcoming:
       return HugeIcons.strokeRoundedCalendar03;
+  }
+}
+
+class _ParticipantsList extends StatelessWidget {
+  const _ParticipantsList({required this.participants});
+
+  final List<Participant> participants;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return SizedBox(
+      height: 80,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        scrollDirection: Axis.horizontal,
+        itemCount: participants.length,
+        itemBuilder: (context, index) {
+          final participant = participants[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 55,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: colors.quinary,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: colors.secondary.withValues(alpha: 0.3),
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: participant.photo == null
+                        ? Image.asset(
+                            'assets/images/user_default_photo.png',
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            participant.photo!,
+                            fit: BoxFit.cover,
+                            frameBuilder: (context, child, frame, wasSync) {
+                              if (wasSync) return child;
+                              return AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 250),
+                                child: frame == null
+                                    ? const Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 3,
+                                        ),
+                                      )
+                                    : child,
+                              );
+                            },
+                          ),
+                  ),
+                ),
+                SizedBox(
+                  width: 65,
+                  child: Text(
+                    participant.name,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

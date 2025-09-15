@@ -28,6 +28,10 @@ class ExperienceUseCase {
   Future<List<Experience>> getExperiencesByStopId(int stopId) =>
       repository.getExperiencesByStopId(stopId);
 
+  /// Retrieves a list of all experiences in the repository.
+  Future<List<Experience>> getAllExperiences() =>
+      repository.getAllExperiences();
+
   /// Validation
   void _validateExperience(Experience experience) {
     var photos = <File?>[

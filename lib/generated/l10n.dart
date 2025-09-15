@@ -443,6 +443,51 @@ class S {
       args: [],
     );
   }
+
+  /// `Explore Amazing Destinations`
+  String get exploreAmazingDestinations {
+    return Intl.message(
+      'Explore Amazing Destinations',
+      name: 'exploreAmazingDestinations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Travels`
+  String get yourTravels {
+    return Intl.message(
+      'Your Travels',
+      name: 'yourTravels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No travels here`
+  String get noTravelsHere {
+    return Intl.message(
+      'No travels here',
+      name: 'noTravelsHere',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In Progress`
+  String get inProgress {
+    return Intl.message('In Progress', name: 'inProgress', desc: '', args: []);
+  }
+
+  /// `Scheduled`
+  String get scheduled {
+    return Intl.message('Scheduled', name: 'scheduled', desc: '', args: []);
+  }
+
+  /// `Completed`
+  String get completed {
+    return Intl.message('Completed', name: 'completed', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -458,10 +503,8 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
 
   @override
   bool isSupported(Locale locale) => _isSupported(locale);
-
   @override
   Future<S> load(Locale locale) => S.load(locale);
-
   @override
   bool shouldReload(AppLocalizationDelegate old) => false;
 

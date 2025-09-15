@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdf;
 
+import '../../domain/entities/experience.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/stop.dart';
 import '../../domain/entities/travel.dart';
@@ -98,6 +99,7 @@ Future<pdf.ImageProvider?> _fetchGoogleStaticMapFromTravel({
 
     var url =
         'https://maps.googleapis.com/maps/api/staticmap?${params.join('&')}';
+    print(url);
 
     final resp = await http.get(Uri.parse(url));
 
@@ -137,14 +139,156 @@ Future<pdf.ImageProvider?> _fetchGoogleStaticMapFromTravel({
   }
 }
 
+Future<pdf.ImageProvider?> _memoryImageFromFile(File? file) async {
+  if (file == null) return null;
+  try {
+    final bytes = await file.readAsBytes();
+    if (bytes.isEmpty) return null;
+    return pdf.MemoryImage(bytes);
+  } catch (_) {
+    return null;
+  }
+}
+
+
+Future<void> _addStopPages({
+  required pdf.Document doc,
+  required List<Stop> stops,
+  required List<Experience> experiences,
+}) async {
+  final ordered = [...stops]..sort((a, b) => a.order.compareTo(b.order));
+  final dateFormat = DateFormat('dd MMM yyyy', 'pt_BR');
+
+  for (final stop in ordered) {
+    final stopExperiences = experiences.where((exp) => exp.stopId == stop.id).toList();
+
+    // ✅ Pré-carrega as fotos de TODAS as experiências desta parada
+    final expViews = <pdf.Widget>[];
+    for (final exp in stopExperiences) {
+      final imgs = <pdf.ImageProvider>[];
+      for (final f in [exp.photo1, exp.photo2, exp.photo3]) {
+        final prov = await _memoryImageFromFile(f); // ← File -> MemoryImage
+        if (prov != null) imgs.add(prov);
+      }
+
+      expViews.add(
+        pdf.Container(
+          margin: const pdf.EdgeInsets.only(bottom: 8),
+          padding: const pdf.EdgeInsets.all(8),
+          decoration: pdf.BoxDecoration(
+            border: pdf.Border.all(color: PdfColors.blueGrey),
+            borderRadius: pdf.BorderRadius.circular(5),
+          ),
+          child: pdf.Column(
+            crossAxisAlignment: pdf.CrossAxisAlignment.start,
+            children: [
+              pdf.Text('Relato:', style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold)),
+              pdf.Text(exp.description),
+              if (imgs.isNotEmpty) ...[
+                pdf.SizedBox(height: 8),
+                pdf.Text('Fotos:', style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold)),
+                pdf.SizedBox(height: 4),
+                pdf.Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: imgs
+                      .map((p) => pdf.Image(p, width: 100, height: 100, fit: pdf.BoxFit.cover))
+                      .toList(),
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
+    }
+
+    // 🔒 Agora montamos a página — sem async dentro do build
+    doc.addPage(
+      pdf.Page(
+        pageFormat: PdfPageFormat.a5,
+        margin: const pdf.EdgeInsets.fromLTRB(24, 32, 24, 32),
+        build: (_) {
+          return pdf.Column(
+            crossAxisAlignment: pdf.CrossAxisAlignment.start,
+            children: [
+              pdf.Text(
+                'Parada ${stop.order}: ${stop.label}',
+                style: pdf.TextStyle(
+                  fontSize: 20, fontWeight: pdf.FontWeight.bold, color: PdfColors.blue,
+                ),
+              ),
+              pdf.SizedBox(height: 8),
+              pdf.Text(
+                'Coordenadas: ${stop.place.latitude.toStringAsFixed(5)}, '
+                    '${stop.place.longitude.toStringAsFixed(5)}',
+                style: const pdf.TextStyle(fontSize: 12),
+              ),
+              if (stop.startDate != null && stop.endDate != null) ...[
+                pdf.SizedBox(height: 12),
+                pdf.Container(
+                  padding: const pdf.EdgeInsets.all(12),
+                  decoration: pdf.BoxDecoration(
+                    gradient: pdf.LinearGradient(
+                      begin: pdf.Alignment.topCenter,
+                      end: pdf.Alignment.bottomCenter,
+                      colors: [PdfColors.lightBlue, PdfColors.blue],
+                    ),
+                    borderRadius: pdf.BorderRadius.circular(10),
+                  ),
+                  child: pdf.Column(
+                    crossAxisAlignment: pdf.CrossAxisAlignment.start,
+                    children: [
+                      pdf.Text(
+                        'Informações da Parada',
+                        style: pdf.TextStyle(
+                          fontSize: 14, fontWeight: pdf.FontWeight.bold, color: PdfColors.white,
+                        ),
+                      ),
+                      pdf.SizedBox(height: 6),
+                      pdf.Text(
+                        'Nome: ${stop.label}\n'
+                            'Período: ${dateFormat.format(stop.startDate!)} - '
+                            '${dateFormat.format(stop.endDate!)}',
+                        style: pdf.TextStyle(fontSize: 12, color: PdfColors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              pdf.SizedBox(height: 12),
+              pdf.Text(
+                'Experiências da Parada',
+                style: pdf.TextStyle(
+                  fontSize: 16, fontWeight: pdf.FontWeight.bold, color: PdfColors.blue,
+                ),
+              ),
+              pdf.SizedBox(height: 8),
+              ...expViews, // ← usa as views com imagens já carregadas
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+
 /// Generates a PDF cover for a trip.
 Future<Uint8List> generateTripCoverPdf({
   required Travel travel,
   required List<Participant> participants,
   required List<Stop> stops,
+  required List<Experience> experiences,
   required String mapsApiKey,
 }) async {
   final doc = pdf.Document();
+
+  // Pre-load assets to avoid using await inside build callbacks
+  final logoHorizoneImage = pdf.MemoryImage(
+    (await rootBundle.load('assets/images/logo_horizone.png'))
+        .buffer
+        .asUint8List(),
+  );
 
   final image = pdf.MemoryImage(
     (await rootBundle.load(
@@ -399,7 +543,7 @@ Future<Uint8List> generateTripCoverPdf({
       stops: stops,
       width: 900,
       height: 600,
-      debugDumpFile: true,
+      debugDumpFile: false,
     );
 
     doc.addPage(
@@ -522,6 +666,8 @@ Future<Uint8List> generateTripCoverPdf({
     );
   }
 
+  await _addStopPages(doc: doc, stops: stops, experiences: experiences);
+
   const closingMessage =
       'UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS.\n'
       'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
@@ -538,12 +684,22 @@ Future<Uint8List> generateTripCoverPdf({
           mainAxisAlignment: pdf.MainAxisAlignment.center,
           crossAxisAlignment: pdf.CrossAxisAlignment.center,
           children: [
+            pdf.Container(
+              padding: const pdf.EdgeInsets.all(16),
+              decoration: pdf.BoxDecoration(
+                color: PdfColors.blue,
+                borderRadius: pdf.BorderRadius.circular(15),
+              ),
+              child: pdf.Image(logoHorizoneImage,
+                width: 250,
+              ),
+            ),
             pdf.SizedBox(height: 20),
             pdf.Text(
               closingMessage,
               textAlign: pdf.TextAlign.center,
               style: pdf.TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontStyle: pdf.FontStyle.italic,
                 color: PdfColors.blueGrey800,
                 lineSpacing: 2,

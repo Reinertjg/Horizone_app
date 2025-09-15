@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "A biografia deve ter pelo menos 10 caracteres.",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
+    "completed": MessageLookupByLibrary.simpleMessage("Concluído"),
     "continueButton": MessageLookupByLibrary.simpleMessage("Continuar"),
     "darkTheme": MessageLookupByLibrary.simpleMessage("Tema Escuro"),
     "dateOfBirth": MessageLookupByLibrary.simpleMessage("Data de nascimento"),
@@ -56,6 +57,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "O email é obrigatório.",
     ),
     "endDate": MessageLookupByLibrary.simpleMessage("Data de Término"),
+    "exploreAmazingDestinations": MessageLookupByLibrary.simpleMessage(
+      "Explore destinos incríveis",
+    ),
     "gender": MessageLookupByLibrary.simpleMessage("Gênero"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "O gênero é obrigatório.",
@@ -64,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Informações Gerais",
     ),
     "home": MessageLookupByLibrary.simpleMessage("Início"),
+    "inProgress": MessageLookupByLibrary.simpleMessage("Em Andamento"),
     "introMessage": MessageLookupByLibrary.simpleMessage(
       "Diga quem você é e nós levaremos você onde quiser estar",
     ),
@@ -86,6 +91,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORE NOVOS HORIZONTES",
     ),
+    "noTravelsHere": MessageLookupByLibrary.simpleMessage(
+      "Sem viagens por aqui",
+    ),
     "participants": MessageLookupByLibrary.simpleMessage("Participantes"),
     "planning": MessageLookupByLibrary.simpleMessage("Planejamento"),
     "planningTravel": MessageLookupByLibrary.simpleMessage(
@@ -95,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "Pronto para explorar além dos limites?",
     ),
+    "scheduled": MessageLookupByLibrary.simpleMessage("Agendado"),
     "selectLanguage": MessageLookupByLibrary.simpleMessage(
       "Selecione o Idioma",
     ),
@@ -113,5 +122,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "welcome": MessageLookupByLibrary.simpleMessage("Olá"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Quem é você"),
+    "yourTravels": MessageLookupByLibrary.simpleMessage("Seus Viagens"),
   };
 }

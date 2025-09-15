@@ -8,6 +8,8 @@ import '../../generated/l10n.dart';
 
 import '../../repositories/profile_repository_impl.dart';
 import '../../repositories/travel_repository_impl.dart';
+import '../../util/date_utils.dart';
+import '../../util/travel_status.dart';
 import '../theme_color/app_colors.dart';
 import '../widgets/dashboard_widgets/travel_card_widget.dart';
 import '../widgets/iconbutton_notifications.dart';
@@ -59,14 +61,72 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  final List<String> travelDestinations = [
-    'Rio',
-    'Caribe',
-    'Dubai',
-    'Ilhas Malvinas',
-    'Bali',
-    'Paris',
-  ];
+  TravelStatus _statusOf(Travel t) => getTravelStatus(
+    startDate: parseTravelDate(t.startDate),
+    endDate:   parseTravelDate(t.endDate),
+  );
+
+  List<Travel> _by(TravelStatus s) =>
+      travels.where((t) => _statusOf(t) == s).toList().reversed.toList();
+
+  Widget _buildStatusSection(String title, List<Travel> items) {
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+          child: Text(
+            title,
+            style: GoogleFonts.raleway(
+              color: colors.quaternary,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: items.isEmpty
+              ? Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(HugeIcons.strokeRoundedAirplaneModeOff, size: 20, color: Colors.grey),
+                const SizedBox(width: 8),
+                Text(
+                  'Sem viagens aqui',
+                  style: GoogleFonts.raleway(
+                    color: colors.quaternary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          )
+              : ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: items.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final travel = items[index];
+              return TravelCardsWidget(
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    '/travelDashboard',
+                    arguments: travel,
+                  );
+                },
+                travel: travel,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,109 +175,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               travels.isEmpty
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 65.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Icon(
-                              HugeIcons.strokeRoundedAirplaneModeOff,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                            Text(
-                              'No travels found.',
-                              style: GoogleFonts.raleway(
-                                color: colors.quaternary,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
+                padding: const EdgeInsets.symmetric(vertical: 65.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Icon(HugeIcons.strokeRoundedAirplaneModeOff, size: 50, color: Colors.grey),
+                      Text(
+                        'No travels found.',
+                        style: GoogleFonts.raleway(
+                          color: colors.quaternary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    )
-                  : SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: travels.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final reversedTravels = travels.reversed.toList();
-                          final travel = reversedTravels[index];
-                          return TravelCardsWidget(
-                            onTap: () async {
-                              await Navigator.pushNamed(
-                                context,
-                                '/travelDashboard',
-                                arguments: travel,
-                              );
-                            },
-                            travel: travel,
-                          );
-                        },
-                      ),
-                    ),
-
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 20.0,
-                  right: 20.0,
-                  left: 20.0,
-                  bottom: 8.0,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Where would you like to visit?',
-                    style: GoogleFonts.raleway(
-                      color: colors.quaternary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 100,
-                width: double.infinity,
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        SizedBox(
-                          width: 75,
-                          height: 75,
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Card(
-                              elevation: 2,
-                              clipBehavior: Clip.antiAlias,
-                              shape: CircleBorder(),
-                              color: colors.quinary,
-                              child: Image.asset(
-                                'assets/images/travel_image0${index + 1}.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        Text(
-                          travelDestinations[index],
-                          style: GoogleFonts.raleway(
-                            color: colors.quaternary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+              )
+                  : Column(
+                children: [
+                  _buildStatusSection('Em andamento', _by(TravelStatus.inProgress)),
+                  const SizedBox(height: 8),
+                  _buildStatusSection('Agendadas', _by(TravelStatus.scheduled)),
+                  const SizedBox(height: 8),
+                  _buildStatusSection('Concluídas', _by(TravelStatus.completed)),
+                ],
               ),
             ],
           ),
