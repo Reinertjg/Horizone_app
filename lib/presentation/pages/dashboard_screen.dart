@@ -94,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Icon(HugeIcons.strokeRoundedAirplaneModeOff, size: 20, color: Colors.grey),
                 const SizedBox(width: 8),
                 Text(
-                  'Sem viagens aqui',
+                  S.of(context).noTravelsHere,
                   style: GoogleFonts.raleway(
                     color: colors.quaternary,
                     fontSize: 14,
@@ -160,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           _buildSearchTravel(),
                           const SizedBox(height: 32),
                           Text(
-                            'Your Travels',
+                            S.of(context).yourTravels,
                             style: GoogleFonts.raleway(
                               color: colors.quaternary,
                               fontSize: 18,
@@ -181,7 +181,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Icon(HugeIcons.strokeRoundedAirplaneModeOff, size: 50, color: Colors.grey),
                       Text(
-                        'No travels found.',
+                        S.of(context).noTravelsFound,
                         style: GoogleFonts.raleway(
                           color: colors.quaternary,
                           fontSize: 18,
@@ -194,11 +194,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               )
                   : Column(
                 children: [
-                  _buildStatusSection('Em andamento', _by(TravelStatus.inProgress)),
+                  _buildStatusSection(S.of(context).inProgress, _by(TravelStatus.inProgress)),
                   const SizedBox(height: 8),
-                  _buildStatusSection('Agendadas', _by(TravelStatus.scheduled)),
+                  _buildStatusSection(S.of(context).scheduled, _by(TravelStatus.scheduled)),
                   const SizedBox(height: 8),
-                  _buildStatusSection('Concluídas', _by(TravelStatus.completed)),
+                  _buildStatusSection(S.of(context).completed, _by(TravelStatus.completed)),
                 ],
               ),
             ],
@@ -218,9 +218,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           fontWeight: FontWeight.w600,
         ),
         children: [
-          TextSpan(text: 'Explore Amazing'),
+          TextSpan(text: S.of(context).exploreAmazing),
           TextSpan(
-            text: '\nDestinations!',
+            text: '\n${S.of(context).destinations}!',
             style: GoogleFonts.nunito(color: colors.tertiary),
           ),
         ],
@@ -240,7 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               contentPadding: EdgeInsets.zero,
               border: InputBorder.none,
               hint: Text(
-                'Search',
+                S.of(context).search,
                 style: TextStyle(
                   color: colors.secondary.withValues(alpha: 0.3),
                   fontSize: 16,

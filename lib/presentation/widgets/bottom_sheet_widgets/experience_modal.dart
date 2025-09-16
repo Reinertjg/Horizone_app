@@ -190,6 +190,8 @@ class _ExperienceStopContentState extends State<ExperienceStopContent> {
                       experienceProvider.toEntity(widget.stopId),
                     );
 
+                    experienceProvider.clean();
+
                     if (!context.mounted) return;
                     Navigator.pop(context, true);
                   },

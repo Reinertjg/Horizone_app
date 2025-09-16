@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import '../../../../generated/l10n.dart';
 import '../../../state/participant_provider.dart';
 import '../../../theme_color/app_colors.dart';
 import '../../bottom_sheet_widgets/save_participant_modal.dart';
@@ -126,7 +127,7 @@ Widget addParticipantClipOval(BuildContext context) {
                 ),
               ),
             ),
-            Text('Adicionar', style: TextStyle(color: colors.quaternary)),
+            Text(S.of(context).add, style: TextStyle(color: colors.quaternary)),
           ],
         ),
       ],

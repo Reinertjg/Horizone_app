@@ -504,7 +504,7 @@ class ProfileInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SectionTitle(
-            title: 'Informações Gerais',
+            title: S.of(context).generalInformation,
             icon: HugeIcons.strokeRoundedInformationCircle,
           ),
           const SizedBox(height: 12),

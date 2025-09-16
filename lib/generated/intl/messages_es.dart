@@ -52,6 +52,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteMessage": MessageLookupByLibrary.simpleMessage(
       "Todos los datos serán eliminados de forma permanente.",
     ),
+    "destinationLocation": MessageLookupByLibrary.simpleMessage(
+      "Ubicación de destino",
+    ),
+    "destinations": MessageLookupByLibrary.simpleMessage("Increíbles"),
     "emailInvalid": MessageLookupByLibrary.simpleMessage(
       "Dirección de correo electrónico inválida.",
     ),
@@ -59,15 +63,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "El correo electrónico es obligatorio.",
     ),
     "endDate": MessageLookupByLibrary.simpleMessage("Fecha de Finalización"),
-    "exploreAmazingDestinations": MessageLookupByLibrary.simpleMessage(
-      "Explora destinos increíbles",
-    ),
+    "exploreAmazing": MessageLookupByLibrary.simpleMessage("Explora destinos"),
     "gender": MessageLookupByLibrary.simpleMessage("Género"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "El género es obligatorio.",
     ),
     "generalInformation": MessageLookupByLibrary.simpleMessage(
       "Información General",
+    ),
+    "hintTitleTrip": MessageLookupByLibrary.simpleMessage(
+      "Ej.: Viaje de la Familia Silva 2024",
     ),
     "home": MessageLookupByLibrary.simpleMessage("Inicio"),
     "inProgress": MessageLookupByLibrary.simpleMessage("En Progreso"),
@@ -93,8 +98,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "newHorizons": MessageLookupByLibrary.simpleMessage(
       "EXPLORA NUEVOS HORIZONTES",
     ),
+    "noTravelsFound": MessageLookupByLibrary.simpleMessage(
+      "No se encontraron viajes",
+    ),
     "noTravelsHere": MessageLookupByLibrary.simpleMessage(
       "Sin viajes por aquí",
+    ),
+    "originLocation": MessageLookupByLibrary.simpleMessage(
+      "Ubicación de origen",
     ),
     "participants": MessageLookupByLibrary.simpleMessage("Participantes"),
     "planning": MessageLookupByLibrary.simpleMessage("Planificación"),
@@ -105,7 +116,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "¿Listo para explorar más allá de los límites?",
     ),
+    "route": MessageLookupByLibrary.simpleMessage("Ruta"),
     "scheduled": MessageLookupByLibrary.simpleMessage("Agendado"),
+    "search": MessageLookupByLibrary.simpleMessage("Buscar"),
+    "select": MessageLookupByLibrary.simpleMessage("Seleccionar"),
     "selectLanguage": MessageLookupByLibrary.simpleMessage(
       "Selecciona el Idioma",
     ),

@@ -846,6 +846,7 @@ class _StopCardState extends State<_StopCard> {
                         fontSize: 14,
                         color: Colors.grey[600],
                         height: 1.4,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                 ],
@@ -915,7 +916,7 @@ class _StopCardState extends State<_StopCard> {
   }
 }
 
-class _BottomButtons extends StatelessWidget {
+class _BottomButtons extends StatefulWidget {
   const _BottomButtons({
     required this.travel,
     required this.stops,
@@ -931,73 +932,97 @@ class _BottomButtons extends StatelessWidget {
   final Future<void> Function() onUploadExperience;
 
   @override
+  State<_BottomButtons> createState() => _BottomButtonsState();
+}
+
+class _BottomButtonsState extends State<_BottomButtons> {
+
+  @override
   Widget build(BuildContext context) {
-    final isTravelCompleted =
-        getTravelStatus(
-          startDate: parseTravelDate(travel.startDate),
-          endDate: parseTravelDate(travel.endDate),
-        ) ==
-        TravelStatus.completed;
-    final allStopsReviewed = experiences.length >= stops.length;
-    final canGeneratePdf = isTravelCompleted && allStopsReviewed;
+    // All stops that can be reviewed are those that have already happened or are
+    // currently happening
+    final reviewableStops = widget.stops.where((stop) {
+      final status = _getStopStatus(stop);
+      return status == StopStatus.past || status == StopStatus.current;
+    }).toList();
 
-    return InterviewFab(
-      nameButton: 'Gerar PDF do Roteiro',
-      onPressed: canGeneratePdf
-          ? () {
-              showDialog<void>(
-                context: context,
-                barrierDismissible: false,
-                builder: (dialogContext) {
-                  return PopScope(
-                    canPop: false,
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Gerando o PDF.',
-                            style: GoogleFonts.raleway(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+    // Get the IDs of the stops for the current travel as a Set for efficient lookups.
+    final stopIds = widget.stops.map((s) => s.id).toSet();
+
+    // Filter experiences to only include those related to the current travel's stops.
+    final travelExperiencesCount =
+        widget.experiences.where((exp) => stopIds.contains(exp.stopId)).length;
+
+    // All reviewable stops must have a corresponding experience.
+    final allStopsReviewed =
+        travelExperiencesCount >= reviewableStops.length;
+
+
+    final canGeneratePdf = allStopsReviewed && reviewableStops.isNotEmpty;
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (child, animation) {
+        return ScaleTransition(scale: animation, child: child);
+      },
+      child: InterviewFab(
+        key: ValueKey(canGeneratePdf),
+        nameButton: 'Gerar PDF do Roteiro',
+        onPressed: canGeneratePdf
+            ? () {
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (dialogContext) {
+                    return PopScope(
+                      canPop: false,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Gerando o PDF.',
+                              style: GoogleFonts.raleway(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 3,
-                          ),
-                        ],
+                            const SizedBox(height: 16),
+                            const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
+                    );
+                  },
+                );
 
-              () async {
-                try {
-                  await onUploadExperience();
-                  final bytes = await generateTripCoverPdf(
-                    travel: travel,
-                    participants: participants,
-                    stops: stops,
-                    experiences: experiences,
-                    mapsApiKey: dotenv.env['MAPS_API_KEY'] ?? '',
-                  );
+                () async {
+                  try {
+                    await widget.onUploadExperience();
+                    final bytes = await generateTripCoverPdf(
+                      travel: widget.travel,
+                      participants: widget.participants,
+                      stops: widget.stops,
+                      experiences: widget.experiences,
+                      mapsApiKey: dotenv.env['MAPS_API_KEY'] ?? '',
+                    );
 
-                  if (context.mounted) {
-                    Navigator.of(context, rootNavigator: true).pop();
+                    if (context.mounted) {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    }
+                    await Printing.layoutPdf(onLayout: (_) async => bytes);
+                  } catch (e) {
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
                   }
-                  await Printing.layoutPdf(onLayout: (_) async => bytes);
-                } catch (e) {
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                }
-              }();
-            }
-          : null,
+                }();
+              }
+            : null,
+      ),
     );
   }
 }

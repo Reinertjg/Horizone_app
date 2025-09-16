@@ -52,14 +52,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteMessage": MessageLookupByLibrary.simpleMessage(
       "All data will be permanently deleted.",
     ),
+    "destinationLocation": MessageLookupByLibrary.simpleMessage(
+      "Destination Location",
+    ),
+    "destinations": MessageLookupByLibrary.simpleMessage(" Destinations"),
     "emailInvalid": MessageLookupByLibrary.simpleMessage(
       "Invalid email address.",
     ),
     "emailRequired": MessageLookupByLibrary.simpleMessage("Email is required."),
     "endDate": MessageLookupByLibrary.simpleMessage("End Date"),
-    "exploreAmazingDestinations": MessageLookupByLibrary.simpleMessage(
-      "Explore Amazing Destinations",
-    ),
+    "exploreAmazing": MessageLookupByLibrary.simpleMessage("Explore Amazing"),
     "gender": MessageLookupByLibrary.simpleMessage("Gender"),
     "genderRequired": MessageLookupByLibrary.simpleMessage(
       "Gender is required.",
@@ -90,7 +92,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Name must be at least 3 characters long.",
     ),
     "newHorizons": MessageLookupByLibrary.simpleMessage("EXPLORE NEW HORIZONS"),
+    "noTravelsFound": MessageLookupByLibrary.simpleMessage("No travels found"),
     "noTravelsHere": MessageLookupByLibrary.simpleMessage("No travels here"),
+    "originLocation": MessageLookupByLibrary.simpleMessage("Origin Location"),
     "participants": MessageLookupByLibrary.simpleMessage("Participants"),
     "planning": MessageLookupByLibrary.simpleMessage("Planning"),
     "planningTravel": MessageLookupByLibrary.simpleMessage("Planning a Travel"),
@@ -98,7 +102,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "readyExplore": MessageLookupByLibrary.simpleMessage(
       "Ready to explore beyond boundaries?",
     ),
+    "route": MessageLookupByLibrary.simpleMessage("Route"),
     "scheduled": MessageLookupByLibrary.simpleMessage("Scheduled"),
+    "search": MessageLookupByLibrary.simpleMessage("Search"),
+    "select": MessageLookupByLibrary.simpleMessage("Select"),
     "selectLanguage": MessageLookupByLibrary.simpleMessage("Select Language"),
     "selectTheme": MessageLookupByLibrary.simpleMessage("Select Theme"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),

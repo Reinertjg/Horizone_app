@@ -61,17 +61,20 @@ class _InterviewScreenState extends State<InterviewScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SectionTitle(
-                title: 'Informações Gerais',
+                title: S.of(context).generalInformation,
                 icon: HugeIcons.strokeRoundedInformationCircle,
               ),
               SizedBox(height: 12),
               InterviewFormCard(),
               const SizedBox(height: 36),
-              SectionTitle(title: 'Rota', icon: HugeIcons.strokeRoundedRoute02),
+              SectionTitle(
+                title: S.of(context).route,
+                icon: HugeIcons.strokeRoundedRoute02,
+              ),
               const SizedBox(height: 16),
               TravelRouteCard(
-                labelStart: 'Local Origem',
-                labelEnd: 'Local Destino',
+                labelStart: S.of(context).originLocation,
+                labelEnd: S.of(context).destinationLocation,
               ),
               const SizedBox(height: 16),
               MapPreviewCard(),

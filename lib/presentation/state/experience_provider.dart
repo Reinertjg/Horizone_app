@@ -39,6 +39,12 @@ class ExperienceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clean() {
+    descriptionController.clear();
+    _images.clear();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     descriptionController.dispose();

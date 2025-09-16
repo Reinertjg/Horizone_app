@@ -444,11 +444,21 @@ class S {
     );
   }
 
-  /// `Explore Amazing Destinations`
-  String get exploreAmazingDestinations {
+  /// `Explore Amazing`
+  String get exploreAmazing {
     return Intl.message(
-      'Explore Amazing Destinations',
-      name: 'exploreAmazingDestinations',
+      'Explore Amazing',
+      name: 'exploreAmazing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` Destinations`
+  String get destinations {
+    return Intl.message(
+      ' Destinations',
+      name: 'destinations',
       desc: '',
       args: [],
     );
@@ -474,6 +484,16 @@ class S {
     );
   }
 
+  /// `No travels found`
+  String get noTravelsFound {
+    return Intl.message(
+      'No travels found',
+      name: 'noTravelsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `In Progress`
   String get inProgress {
     return Intl.message('In Progress', name: 'inProgress', desc: '', args: []);
@@ -487,6 +507,41 @@ class S {
   /// `Completed`
   String get completed {
     return Intl.message('Completed', name: 'completed', desc: '', args: []);
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message('Search', name: 'search', desc: '', args: []);
+  }
+
+  /// `Route`
+  String get route {
+    return Intl.message('Route', name: 'route', desc: '', args: []);
+  }
+
+  /// `Destination Location`
+  String get destinationLocation {
+    return Intl.message(
+      'Destination Location',
+      name: 'destinationLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Origin Location`
+  String get originLocation {
+    return Intl.message(
+      'Origin Location',
+      name: 'originLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get select {
+    return Intl.message('Select', name: 'select', desc: '', args: []);
   }
 }
 

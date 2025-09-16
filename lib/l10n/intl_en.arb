@@ -49,10 +49,17 @@
   "participants": "Participants",
   "add": "Add",
   "typeAndExperience": "Type and Experience",
-  "exploreAmazingDestinations": "Explore Amazing Destinations",
+  "exploreAmazing": "Explore Amazing",
+  "destinations": " Destinations",
   "yourTravels": "Your Travels",
   "noTravelsHere": "No travels here",
+  "noTravelsFound": "No travels found",
   "inProgress": "In Progress",
   "scheduled": "Scheduled",
-  "completed": "Completed"
+  "completed": "Completed",
+  "search": "Search",
+  "route": "Route",
+  "destinationLocation": "Destination Location",
+  "originLocation": "Origin Location",
+  "select": "Select"
 }

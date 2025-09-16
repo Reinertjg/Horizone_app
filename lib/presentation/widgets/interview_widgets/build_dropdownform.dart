@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../generated/l10n.dart';
 import '../../theme_color/app_colors.dart';
 
 /// A customizable dropdown form field widget.
@@ -82,7 +83,7 @@ class _BuildDropdownformState extends State<BuildDropdownform> {
           onChanged: onChanged,
           validator: widget.validator,
           hint: Text(
-            'Selecione',
+            S.of(context).select,
             style: TextStyle(color: colors.secondary.withValues(alpha: 0.3)),
           ),
           decoration: InputDecoration(

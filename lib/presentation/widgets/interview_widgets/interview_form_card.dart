@@ -101,7 +101,7 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
               /// Text field for entering the title of the trip.
               InterviewTextField(
                 nameButton: S.of(context).tripTitle,
-                hintText: 'Ex: Viagem da Família Silva 2024',
+                hintText: S.of(context).hintTitleTrip,
                 icon: HugeIcons.strokeRoundedTextCircle,
                 controller: interviewProvider.titleController,
                 validator: interviewProvider.validateTitle,

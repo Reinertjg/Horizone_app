@@ -49,28 +49,12 @@ class IntermediateStopsSection extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final travelStop = stops[index];
 
-                    return AnimatedContainer(
+                    return StopFormCard(
                       key: ValueKey(travelStop),
-                      duration: Duration(milliseconds: 300 + (index * 50)),
-                      curve: Curves.easeOutCubic,
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0, end: 1),
-                        duration: Duration(milliseconds: 400 + (index * 100)),
-                        curve: Curves.easeOutBack,
-                        builder: (context, value, child) => Transform.scale(
-                          scale: value,
-                          child: Opacity(
-                            opacity: value.clamp(0.0, 1.0),
-                            child: child,
-                          ),
-                        ),
-                        child: StopFormCard(
-                          stop: travelStop,
-                          label: 'Parada ${index + 1}',
-                          order: travelStop.order,
-                          index: index,
-                        ),
-                      ),
+                      stop: travelStop,
+                      label: 'Parada ${index + 1}',
+                      order: travelStop.order,
+                      index: index,
                     );
                   },
                 ),

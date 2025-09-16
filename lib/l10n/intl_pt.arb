@@ -42,16 +42,25 @@
   "emailInvalid": "Endereço de email inválido.",
   "generalInformation": "Informações Gerais",
   "tripTitle": "Título da Viagem",
+  "hintTitleTrip": "Ex: Viagem da Família Silva 2024",
   "startDate": "Data de Início",
   "endDate": "Data de Término",
   "meansOfTransport": "Meio de Transporte",
   "participants": "Participantes",
   "add": "Adicionar",
   "typeAndExperience": "Tipo e Experiência",
-  "exploreAmazingDestinations": "Explore destinos incríveis",
+  "exploreAmazing": "Explore destinos",
+  "destinations": "Incríveis",
   "yourTravels": "Seus Viagens",
   "noTravelsHere": "Sem viagens por aqui",
+  "noTravelsFound": "Nenhuma viagem encontrada",
   "inProgress": "Em Andamento",
   "scheduled": "Agendado",
-  "completed": "Concluído"
+  "completed": "Concluído",
+  "search": "Pesquisar",
+  "route": "Rota",
+  "destinationLocation": "Local Destino",
+  "originLocation": "Local Origem",
+  "select": "Selecionar"
+
 }
