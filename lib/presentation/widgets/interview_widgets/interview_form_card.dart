@@ -41,12 +41,16 @@ class _InterviewFormCardState extends State<InterviewFormCard> {
 
   @override
   void initState() {
-    Provider.of<TravelProvider>(
-      context,
-      listen: false,
-    ).startDateController.text = DateFormat(
+    final travelProvider = Provider.of<TravelProvider>(context, listen: false);
+
+    travelProvider.startDateController.text = DateFormat(
       'dd/MM/yyyy',
     ).format(today);
+
+    travelProvider.endDateController.text = DateFormat(
+      'dd/MM/yyyy',
+    ).format(today.add(Duration(days: 1)));
+
     super.initState();
   }
 

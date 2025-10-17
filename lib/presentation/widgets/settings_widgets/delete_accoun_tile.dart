@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../domain/usecases/profile_usecase.dart';
 import '../../../generated/l10n.dart';
 import '../../../repositories/profile_repository_impl.dart';
 import '../../pages/getstarted_screen.dart';
+import '../../state/profile_provider.dart';
 import '../../theme_color/app_colors.dart';
 
 /// A widget that displays a red "Delete Account" text button.
@@ -42,6 +44,8 @@ class _ConfirmDeleteDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
+    final profileProvider = context.watch<ProfileProvider>();
+
     return AlertDialog(
       backgroundColor: colors.primary,
       title: Text(S.of(context).deleteAccountAsk),
@@ -60,6 +64,9 @@ class _ConfirmDeleteDialog extends StatelessWidget {
             final useCase = ProfileUseCase(repository);
 
             await useCase.delete();
+
+            profileProvider.clearAll();
+
             if (!context.mounted) return;
             await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => GetStartedScreen()),

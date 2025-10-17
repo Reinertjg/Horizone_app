@@ -57,6 +57,7 @@ class ProfileProvider extends ChangeNotifier {
       final file = File(pickedFile.path);
       setSelectedImage(file);
     }
+    notifyListeners();
   }
 
   /// Updates the profile picture based on the provided [mode] and [id].
@@ -104,15 +105,25 @@ class ProfileProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  @override
+  void clearAll() {
+    nameController.clear();
+    bioController.clear();
+    dateOfBirthController.clear();
+    gender = null;
+    jobTitleController.clear();
+    photo = null;
+  }
+
   /// Converts the form data into a [Profile] entity.
   Profile toEntity() {
     return Profile(
       id: 1,
-      name: nameController.text.trim(),
-      biography: bioController.text.trim(),
-      birthDate: dateOfBirthController.text.trim(),
+      name: nameController.text.replaceAll(RegExp(r'\s+'), ' ').trim(),
+      biography: bioController.text.replaceAll(RegExp(r'\s+'), ' ').trim(),
+      birthDate: dateOfBirthController.text,
       gender: gender ?? '',
-      jobTitle: jobTitleController.text.trim(),
+      jobTitle: jobTitleController.text.replaceAll(RegExp(r'\s+'), ' ').trim(),
       photo: photo,
     );
   }
@@ -135,10 +146,13 @@ class ProfileProvider extends ChangeNotifier {
   /// Checks if the [Profile.name] matches the required rules:
   /// cannot be empty / min length of 3 chars
   String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
+    // replace all occurrences of whitespace characters with an empty string.
+    // "HelloWorldFlutter".
+    var valueReplace = value!.replaceAll(RegExp(r'\s+'), '');
+    if (valueReplace.isEmpty) {
       return S.current.nameRequired;
     }
-    if (value.length < 3) {
+    if (valueReplace.length < 3) {
       return S.current.nameTooShort;
     }
     return null;
@@ -147,10 +161,11 @@ class ProfileProvider extends ChangeNotifier {
   /// Checks if the [Profile.biography] matches the required rules:
   /// cannot be empty / min length of 10 chars
   String? validateBio(String? value) {
-    if (value == null || value.isEmpty) {
+    var valueReplace = value!.replaceAll(RegExp(r'\s+'), '');
+    if (valueReplace.isEmpty) {
       return S.current.bioRequired;
     }
-    if (value.length < 10) {
+    if (valueReplace.length < 10) {
       return S.current.bioTooShort;
     }
     return null;
@@ -177,8 +192,13 @@ class ProfileProvider extends ChangeNotifier {
   /// Checks if the [Profile.jobTitle] matches the required rules:
   /// cannot be empty
   String? validateJobTitle(String? value) {
-    if (value == null || value.isEmpty) {
+    var valueReplace = value!.replaceAll(RegExp(r'\s+'), '');
+
+    if (valueReplace.isEmpty) {
       return S.current.jobTitleRequired;
+    }
+    if (valueReplace.length < 3) {
+      return 'O cargo deve ter pelo menos 3 caracteres.';
     }
     return null;
   }

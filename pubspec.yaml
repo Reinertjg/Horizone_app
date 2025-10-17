@@ -52,6 +52,7 @@ dependencies:
   country_flags: ^3.3.0
   pdf: ^3.11.3
   printing: ^5.14.2
+  lottie: ^3.3.2
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -71,6 +72,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/animations/
     - .env
 
   fonts:

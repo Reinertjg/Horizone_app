@@ -134,6 +134,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "welcome": MessageLookupByLibrary.simpleMessage("Olá"),
     "whoYouAre": MessageLookupByLibrary.simpleMessage("Quem é você"),
-    "yourTravels": MessageLookupByLibrary.simpleMessage("Seus Viagens"),
+    "yourTravels": MessageLookupByLibrary.simpleMessage("Suas Viagens"),
   };
 }

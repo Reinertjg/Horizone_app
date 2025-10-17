@@ -175,6 +175,7 @@ class _ProfileForm extends StatelessWidget {
 
     return Form(
       key: formKey,
+      autovalidateMode: AutovalidateMode.onUnfocus,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

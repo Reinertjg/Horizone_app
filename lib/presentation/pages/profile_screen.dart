@@ -236,7 +236,7 @@ class AvatarProfile extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!isEditing) {
-          showDialogImage(context, profile.photo!, MainAxisAlignment.center);
+          showDialogImage(context, profile.photo, MainAxisAlignment.center);
           return;
         }
 
@@ -251,7 +251,7 @@ class AvatarProfile extends StatelessWidget {
               await _pickAndUploadImage(context, OptionPhotoMode.cameraMode);
             },
             onVisualizeTap: () {
-              showDialogImage(context, profile.photo!, MainAxisAlignment.start);
+              showDialogImage(context, profile.photo, MainAxisAlignment.start);
             },
             onGalleryTap: () async {
               Navigator.pop(context);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../domain/entities/profile.dart';
 import '../../domain/entities/travel.dart';
@@ -63,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   TravelStatus _statusOf(Travel t) => getTravelStatus(
     startDate: parseTravelDate(t.startDate),
-    endDate:   parseTravelDate(t.endDate),
+    endDate: parseTravelDate(t.endDate),
   );
 
   List<Travel> _by(TravelStatus s) =>
@@ -78,55 +79,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
           child: Text(
             title,
-            style: GoogleFonts.raleway(
-              color: colors.quaternary,
-              fontSize: 16,
-            ),
+            style: GoogleFonts.raleway(color: colors.quaternary, fontSize: 16),
           ),
         ),
         SizedBox(
           height: 200,
           child: items.isEmpty
               ? Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(HugeIcons.strokeRoundedAirplaneModeOff, size: 20, color: Colors.grey),
-                const SizedBox(width: 8),
-                Text(
-                  S.of(context).noTravelsHere,
-                  style: GoogleFonts.raleway(
-                    color: colors.quaternary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        HugeIcons.strokeRoundedAirplaneModeOff,
+                        size: 20,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        S.of(context).noTravelsHere,
+                        style: GoogleFonts.raleway(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )
+                )
               : ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: items.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final travel = items[index];
-              return TravelCardsWidget(
-                onTap: () async {
-                  await Navigator.pushNamed(
-                    context,
-                    '/travelDashboard',
-                    arguments: travel,
-                  );
-                },
-                travel: travel,
-              );
-            },
-          ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: items.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final travel = items[index];
+                    return TravelCardsWidget(
+                      onTap: () async {
+                        await Navigator.pushNamed(
+                          context,
+                          '/travelDashboard',
+                          arguments: travel,
+                        );
+                      },
+                      travel: travel,
+                    );
+                  },
+                ),
         ),
       ],
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -174,33 +174,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               travels.isEmpty
-                  ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 65.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Icon(HugeIcons.strokeRoundedAirplaneModeOff, size: 50, color: Colors.grey),
-                      Text(
-                        S.of(context).noTravelsFound,
-                        style: GoogleFonts.raleway(
-                          color: colors.quaternary,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                  ? Center(
+                    child: Column(
+                      children: [
+                        Lottie.asset(
+                          'assets/animations/paper_airplane.json',
+                          height: 150,
+                          width: 150
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+                        Text(
+                          S.of(context).noTravelsFound,
+                          style: GoogleFonts.raleway(
+                            color: colors.quaternary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                   : Column(
-                children: [
-                  _buildStatusSection(S.of(context).inProgress, _by(TravelStatus.inProgress)),
-                  const SizedBox(height: 8),
-                  _buildStatusSection(S.of(context).scheduled, _by(TravelStatus.scheduled)),
-                  const SizedBox(height: 8),
-                  _buildStatusSection(S.of(context).completed, _by(TravelStatus.completed)),
-                ],
-              ),
+                      children: [
+                        _buildStatusSection(
+                          S.of(context).inProgress,
+                          _by(TravelStatus.inProgress),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildStatusSection(
+                          S.of(context).scheduled,
+                          _by(TravelStatus.scheduled),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildStatusSection(
+                          S.of(context).completed,
+                          _by(TravelStatus.completed),
+                        ),
+                      ],
+                    ),
             ],
           ),
         ),

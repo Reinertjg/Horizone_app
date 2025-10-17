@@ -65,7 +65,7 @@ class ImagePickerSheet extends StatelessWidget {
                 children: [
                   _ImageOption(
                     icon: HugeIcons.strokeRoundedCameraAdd03,
-                    label: 'title',
+                    label: 'Camera',
                     onTap: onCameraTap,
                     backgroundColor: colors.secondary.withValues(alpha: 0.5),
                     iconColor: colors.secondary,

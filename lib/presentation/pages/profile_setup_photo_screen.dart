@@ -69,7 +69,7 @@ class ProfileSetupPhotoScreen extends StatelessWidget {
                             onVisualizeTap: () {
                               showDialogImage(
                                 context,
-                                profile.photo!,
+                                profileProvider.photo,
                                 MainAxisAlignment.start,
                               );
                             },
@@ -211,11 +211,11 @@ class _SubmitProfileFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = context.watch<ProfileProvider>();
+    final profileProvider = context.watch<ProfileProvider>();
     return InterviewFab(
       nameButton: S.of(context).continueButton,
       onPressed: () async {
-        if (formProvider.photo == null) {
+        if (profileProvider.photo == null) {
           final shouldContinue = await showDialog(
             context: context,
             builder: (context) => OptionDialog(
@@ -224,22 +224,21 @@ class _SubmitProfileFab extends StatelessWidget {
               buttonText: S.of(context).continueButton,
             ),
           );
-          if (shouldContinue == true) {
-            if (!context.mounted) return;
-            await _submitAndNavigate(context, formProvider);
+          if (shouldContinue == false) {
+            return;
           }
-        } else {
-          await _submitAndNavigate(context, formProvider);
         }
+        if (!context.mounted) return;
+        await _submitAndNavigate(context, profileProvider);
       },
     );
   }
 
   Future<void> _submitAndNavigate(
     BuildContext context,
-    ProfileProvider formProvider,
+    ProfileProvider profileProvider,
   ) async {
-    await formProvider.submitProfile(context);
+    await profileProvider.submitProfile(context);
     if (!context.mounted) return;
     await Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const HomeScreen()),

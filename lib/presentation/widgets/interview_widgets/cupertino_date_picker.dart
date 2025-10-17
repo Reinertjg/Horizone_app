@@ -72,12 +72,9 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
   @override
   void initState() {
     super.initState();
-    _updateEffectiveInitialDate();
     // Defer the state update until after the first frame is built.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && widget.controller.text.isEmpty) {
-        widget.controller.text =
-            '${widget.initialDate.day.toString().padLeft(2, '0')}/${widget.initialDate.month.toString().padLeft(2, '0')}/${widget.initialDate.year}';
         if (widget.onDateChanged != null) {
           widget.onDateChanged!(widget.initialDate);
         }
@@ -88,6 +85,7 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
   void _showDatePicker() {
     final colors = Theme.of(context).extension<AppColors>()!;
     _updateEffectiveInitialDate();
+
     showCupertinoModalPopup(
       context: context,
       builder: (_) => Container(
@@ -122,6 +120,15 @@ class _CupertinoDatePickerFieldState extends State<CupertinoDatePickerField> {
   }
 
   void _updateEffectiveInitialDate() {
+    var today = DateTime.now();
+
+    if(widget.controller.text.isEmpty) {
+      setState(() {
+        widget.controller.text =
+        '${today.day.toString().padLeft(2, '0')}/${today.month.toString().padLeft(2, '0')}/${today.year}';
+      });
+    }
+
     if (widget.initialDate.isBefore(widget.minDate)) {
       _effectiveInitialDate = widget.minDate;
     } else {
